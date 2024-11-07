@@ -6,10 +6,12 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://www.home-assistant.io/integrations/haseiq",
+  "documentation": "https://github.com/Xsez/haseiq/",
+  "issue_tracker": "https://github.com/Xsez/haseiq/issues",
   "homekit": {},
   "iot_class": "local_polling",
   "requirements": ["websockets==13.1"],
   "ssdp": [],
-  "zeroconf": []
+  "zeroconf": [],
+  "version": 0.1
 }

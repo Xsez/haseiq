@@ -66,6 +66,8 @@ class IQstoveBinarySensor(CoordinatorEntity, BinarySensorEntity):
 
     @property
     def device_class(self) -> str | None:
+        if self.cmd == "appErr":
+            return BinarySensorDeviceClass.PROBLEM
         return None
 
     @property

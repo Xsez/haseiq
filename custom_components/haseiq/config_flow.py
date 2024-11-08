@@ -20,16 +20,18 @@ class haseiqConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(self, info):
-        error = False
+        errors: dict[str, str] = {}
         if info is not None:
             try:
-                pass
-                # stove = await IQstove("192.168.1.158")
-                # serial = stove.serial
+                stove = IQstove(info["host"], 8080)
+                await stove.connect()
             except Exception as e:
-                error = True
-            if not error:
+                print(e)
+                errors["base"] = "Could not connect"
+            if "base" not in errors:
                 self.data = info
                 return self.async_create_entry(title="Hase iQ Stove", data=self.data)
 
-        return self.async_show_form(step_id="user", data_schema=SETUP_SCHEMA)
+        return self.async_show_form(
+            step_id="user", data_schema=SETUP_SCHEMA, errors=errors
+        )

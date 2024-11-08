@@ -8,15 +8,10 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntries
-from homeassistant.const import PERCENTAGE, UnitOfTemperature
+from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-    UpdateFailed,
-)
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 from .coordinator import IQStoveCoordinator
@@ -28,10 +23,13 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ):
     """Setup sensors from a config entry created in the integrations UI."""
-    # print("Sensor Async Setup")
+    # get coordinator object from hass.data
     coordinator: IQStoveCoordinator = hass.data[DOMAIN][config_entry.entry_id]
+    # create a IQStoveSensor entity for all state commands except 'appErr'
     sensors = [
-        IQstoveSensor(coordinator, cmd) for cmd in coordinator.stove.Commands.state
+        IQstoveSensor(coordinator, cmd)
+        for cmd in coordinator.stove.Commands.state
+        if cmd != "appErr"
     ]
     async_add_entities(sensors, update_before_add=True)
 
@@ -51,13 +49,13 @@ class IQstoveSensor(CoordinatorEntity, SensorEntity):
                 "add wood",
                 "don't add wood",
             ]
-        # print(f"{cmd} sensor init")
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        # print("Sensor Handle Coordinator Update", self.coordinator.data)
+        # set native value to latest value
         self._attr_native_value = self.coordinator.data[self.cmd]
+        # tell homeassistant to update state
         self.async_write_ha_state()
 
     @property
@@ -78,11 +76,7 @@ class IQstoveSensor(CoordinatorEntity, SensorEntity):
     @property
     def native_value(self) -> int | float:
         """Return the state of the entity."""
-        # Using native value and native unit of measurement, allows you to change units
-        # in Lovelace and HA will automatically calculate the correct value.
-        # await self.coordinator.async_request_refresh()
-        # print("Sensor Native Value", self.coordinator.data[self.cmd])
-        # return float(self.coordinator.getValue("appT"))
+        # for appPhase return a string from optionsEnums
         if self.cmd == "appPhase":
             return self.optionEnums[int(self.coordinator.data[self.cmd])]
         return float(self.coordinator.data[self.cmd])
@@ -137,103 +131,3 @@ class IQstoveSensor(CoordinatorEntity, SensorEntity):
             "model": self.coordinator.data["_oemdev"],
             "name": f"Stove {self.coordinator.data["_oemser"]}",
         }
-
-    # @property
-    # def device_info(self):
-    #     """Return device information about this entity."""
-    #     return {
-    #         "identifiers": {
-    #             # Unique identifiers within a specific domain
-    #             (DOMAIN, 1234)
-    #         },
-    #         "manufacturer": "Hase",
-    #         "model": 123,
-    #         "name": "Stove 123",
-    #     }
-
-
-# # class phaseSensor(SensorEntity):
-# #     """Phase Sensor."""
-
-# #     _attr_name = "IQStove Phase"
-# #     _attr_device_class = SensorDeviceClass.ENUM
-# #     _attr_options = ["idle", "heating up", "burning", "add wood", "don't add wood"]
-# #     _attr_unique_id = f"stove{stove.serial}+{_attr_name}"
-
-# #     def update(self) -> None:
-# #         """Fetch new state data for the sensor.
-
-# #         This is the only method that should fetch new data for Home Assistant.
-# #         """
-# #         # phase = stove.phase
-# #         # self._attr_native_value = self._attr_options[int(phase)]
-# #         # if (int(phase) == 0):
-# #         #     self._attr_icon = "mdi:fireplace-off"
-# #         # else:
-# #         #     self._attr_icon = "mdi:fireplace"
-
-# #     @property
-# #     def device_info(self):
-# #         """Return device information about this entity."""
-# #         return {
-# #             "identifiers": {
-# #                 # Unique identifiers within a specific domain
-# #                 (DOMAIN, stove.serial)
-# #             }
-# #         }
-
-
-# # class performanceSensor(SensorEntity):
-# #     """Performance Sensor."""
-
-# #     _attr_name = "IQStove Performance"
-# #     _attr_native_unit_of_measurement = PERCENTAGE
-# #     _attr_state_class = SensorStateClass.MEASUREMENT
-# #     _attr_unique_id = f"stove{stove.serial}+{_attr_name}"
-# #     _attr_icon = "mdi:gauge"
-
-# #     def update(self) -> None:
-# #         """Fetch new state data for the sensor.
-
-# #         This is the only method that should fetch new data for Home Assistant.
-# #         """
-
-# #         # self._attr_native_value = stove.performance
-
-# #     @property
-# #     def device_info(self):
-# #         """Return device information about this entity."""
-# #         return {
-# #             "identifiers": {
-# #                 # Unique identifiers within a specific domain
-# #                 (DOMAIN, stove.serial)
-# #             }
-# #         }
-
-
-# # class heatingUpSensor(SensorEntity):
-# #     """Performance Sensor."""
-
-# #     _attr_name = "IQStove Heating Up"
-# #     _attr_native_unit_of_measurement = PERCENTAGE
-# #     _attr_state_class = SensorStateClass.MEASUREMENT
-# #     _attr_unique_id = f"stove{stove.serial}+{_attr_name}"
-# #     _attr_icon = "mdi:elevation-rise"
-
-# #     def update(self) -> None:
-# #         """Fetch new state data for the sensor.
-
-# #         This is the only method that should fetch new data for Home Assistant.
-# #         """
-
-# #         # self._attr_native_value = stove.heatingPercentage
-
-# #     @property
-# #     def device_info(self):
-# #         """Return device information about this entity."""
-# #         return {
-# #             "identifiers": {
-# #                 # Unique identifiers within a specific domain
-# #                 (DOMAIN, stove.serial)
-# #             }
-# #         }

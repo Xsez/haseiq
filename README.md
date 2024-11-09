@@ -14,12 +14,15 @@ Custom component to integrate Hase IQ Stoves into Home Assistant. This allows yo
 
 2. **Add the custom repository**:
    - Go to **HACS** in the Home Assistant interface.
-   - Click on **Integrations** and then the **+** icon at the bottom right.
-   - Search for `Xiaomi 5G CPE CB0401V2` or directly add the repository URL:
+   - Add a Custom Repository with the following url
+repository URL:
      ```
      https://github.com/Xsez/haseiq
      ```
+   - Select type **Integration**
    - Click **Add**.
+   - Search for **Hase IQ** 
+   - **install**
 
 3. **Restart Home Assistant**:
    - Go to **Settings** > **System** > **Restart** and restart Home Assistant.
@@ -48,7 +51,7 @@ This integration uses a **Config Flow**, so no manual `configuration.yaml` chang
    - Click the **+** icon at the bottom right.
    - Search for `Hase IQ` and select it.
 
-2. **Enter credentials**:
+2. **Enter connection details**:
    - Input the stove IP address.
    - Click **Submit**.
 

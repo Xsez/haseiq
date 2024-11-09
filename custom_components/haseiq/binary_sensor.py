@@ -59,9 +59,6 @@ class IQstoveBinarySensor(CoordinatorEntity, BinarySensorEntity):
         """Return the state of the entity."""
         # Using native value and native unit of measurement, allows you to change units
         # in Lovelace and HA will automatically calculate the correct value.
-        # await self.coordinator.async_request_refresh()
-        # print("Sensor Native Value", self.coordinator.data[self.cmd])
-        # return float(self.coordinator.getValue("appT"))
         return bool(int(float(self.coordinator.data[self.cmd])))
 
     @property

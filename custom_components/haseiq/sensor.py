@@ -19,12 +19,12 @@ from .coordinator import IQStoveCoordinator
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntries.ConfigEntry,
+    entry: ConfigEntries.ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ):
     """Setup sensors from a config entry created in the integrations UI."""
     # get coordinator object from hass.data
-    coordinator: IQStoveCoordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator: IQStoveCoordinator = entry.runtime_data
     # create a IQStoveSensor entity for all state commands except 'appErr'
     sensors = [
         IQstoveSensor(coordinator, cmd)
@@ -128,6 +128,10 @@ class IQstoveSensor(CoordinatorEntity, SensorEntity):
                 (DOMAIN, self.coordinator.data["_oemser"])
             },
             "manufacturer": "Hase",
-            "model": self.coordinator.data["_oemdev"],
+            "model": "Sila Plus" if self.coordinator.data["_oemdev"] == "6" else None,
+            "model_id": self.coordinator.data["_oemdev"],
             "name": f"Stove {self.coordinator.data["_oemser"]}",
+            "serial_number": self.coordinator.data["_oemser"],
+            "sw_version": f"Wifi {self.coordinator.data["_wversion"]}",
+            "hw_version": f"Controller {self.coordinator.data["_oemver"]}",
         }

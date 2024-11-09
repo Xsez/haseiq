@@ -18,7 +18,7 @@ class IQStoveCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: HomeAssistant,
-        config_entry: ConfigEntry,
+        entry: ConfigEntry,
         stove: IQstove,
         update_interval: int = 30,
     ):
@@ -29,8 +29,7 @@ class IQStoveCoordinator(DataUpdateCoordinator):
         super().__init__(
             hass,
             _LOGGER,
-            name=f"{DOMAIN} ({config_entry.unique_id})",
-            update_method=self.async_update_data,
+            name=f"{DOMAIN} ({entry.unique_id})",
             update_interval=timedelta(seconds=update_interval),
         )
 
@@ -48,7 +47,7 @@ class IQStoveCoordinator(DataUpdateCoordinator):
         # give a litle bit of time for the stove to respond and updated values
         await asyncio.sleep(0.5)
 
-    async def async_update_data(self):
+    async def _async_update_data(self):
         """Fetch data from the IQ Stove. Return data to callback '_handle_coordinator_update' in platform"""
         # if stove not connected, await reconnect and restart listener task
         if not self.stove.connected:

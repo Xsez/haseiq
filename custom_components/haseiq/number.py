@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorStateClass,
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberDeviceClass,
 )
 from homeassistant.config_entries import ConfigEntries
 from homeassistant.const import UnitOfTemperature
@@ -25,31 +24,20 @@ async def async_setup_entry(
     """Setup sensors from a config entry created in the integrations UI."""
     # get coordinator object from hass.data
     coordinator: IQStoveCoordinator = entry.runtime_data
-    # create a IQStoveSensor entity for all state commands except 'appErr'
-    validCommands = ["appT", "appPhase", "appP", "appAufheiz"]
-    sensors = [
-        IQstoveSensor(coordinator, cmd)
-        for cmd in coordinator.stove.Commands.state
-        if (cmd in validCommands)
-    ]
+    # create a IQStoveNumberEntity for _ledBri
+    sensors = [IQstoveNumberEntity(coordinator, "_ledBri")]
     async_add_entities(sensors, update_before_add=True)
 
 
-class IQstoveSensor(CoordinatorEntity, SensorEntity):
+class IQstoveNumberEntity(CoordinatorEntity, NumberEntity):
     """Representation of a Sensor."""
 
     def __init__(self, coordinator: IQStoveCoordinator, cmd):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator)
         self.cmd = cmd
-        if self.cmd == "appPhase":
-            self.optionEnums = [
-                "idle",
-                "heating up",
-                "burning",
-                "add wood",
-                "don't add wood",
-            ]
+        self._attr_native_max_value = 100
+        self._attr_native_min_value = 0
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -62,56 +50,18 @@ class IQstoveSensor(CoordinatorEntity, SensorEntity):
     @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        if self.cmd == "appT":
-            return "Temperature"
-        if self.cmd == "appPhase":
-            return "Phase"
-        if self.cmd == "appP":
-            return "Performance"
-        if self.cmd == "appAufheiz":
-            return "Heating up"
-        if self.cmd == "appErr":
-            return "Error"
+        if self.cmd == "_ledBri":
+            return "LED Brightness"
         return "undefined"
 
     @property
     def native_value(self) -> int | float:
         """Return the state of the entity."""
-        # for appPhase return a string from optionsEnums
-        if self.cmd == "appPhase":
-            return self.optionEnums[int(self.coordinator.data[self.cmd])]
         return float(self.coordinator.data[self.cmd])
 
-    @property
-    def native_unit_of_measurement(self) -> str | None:
-        """Return unit of measurment."""
-        if self.cmd == "appT":
-            return UnitOfTemperature.CELSIUS
-        return None
-
-    @property
-    def state_class(self) -> str | None:
-        """Return state class."""
-        # https://developers.home-assistant.io/docs/core/entity/sensor/#available-state-classes
-        if not self.cmd == "appPhase":
-            return SensorStateClass.MEASUREMENT
-        return None
-
-    @property
-    def device_class(self) -> str | None:
-        """Return device class."""
-        if self.cmd == "appT":
-            return SensorDeviceClass.TEMPERATURE
-        if self.cmd == "appPhase":
-            return SensorDeviceClass.ENUM
-        return None
-
-    @property
-    def options(self) -> str | None:
-        """Return ENUM options."""
-        if self.cmd == "appPhase":
-            return ["idle", "heating up", "burning", "add wood", "don't add wood"]
-        return None
+    async def async_set_native_value(self, value: float) -> None:
+        """Update the current value."""
+        self.coordinator.stove.setValue(self.cmd, value)
 
     @property
     def unique_id(self) -> str:

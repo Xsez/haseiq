@@ -21,10 +21,10 @@ class haseiqConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, info):
         errors: dict[str, str] = {}
-        #see if user províded data
+        # see if user províded data
         if info is not None:
             try:
-                #try to connect
+                # try to connect
                 stove = IQstove(info["host"], 8080)
                 await stove.connect()
             except IQStoveConnectionError as e:
@@ -33,7 +33,7 @@ class haseiqConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 print(e)
                 errors["base"] = "unknown Error occured"
             if "base" not in errors:
-                #no errors occured, create config entry
+                # no errors occured, create config entry
                 self.data = info
                 return self.async_create_entry(title="Hase iQ Stove", data=self.data)
 

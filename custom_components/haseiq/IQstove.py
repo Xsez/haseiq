@@ -13,6 +13,7 @@ class IQstove:
             "appAufheiz",  # heating percentage - on first heating it seems to correlate with target temperature 470c. doesnt seem to only correlate with temperature afterwards
             "appP",  # performance in percent
             "appErr",  # error state
+            "_ledBri",  # led brightness
         ]
 
         statistics = [
@@ -28,7 +29,6 @@ class IQstove:
             "_oemver",  # controller version
             "_wversion",  # wifi version
             "_oemser",  # serialnumber
-            "_ledBri",  # led brightness
         ]
 
         unknown = [
@@ -53,6 +53,12 @@ class IQstove:
         requestB64Bytes = base64.b64encode(requestString.encode("ascii"))
         requestB64String = requestB64Bytes.decode("ascii") + "\r"
         return requestB64String
+
+    def createB64SetString(self, command, value):
+        setString = command + "=" + str(int(value))
+        setB64Bytes = base64.b64encode(setString.encode("ascii"))
+        setB64String = setB64Bytes.decode("ascii") + "\r"
+        return setB64String
 
     async def connect(self):
         """Establishes a connection to the WebSocket server."""
@@ -131,16 +137,25 @@ class IQstove:
     # drive the client connection
     async def sendRequest(self, command):
         """Send Request with provided command"""
-        # open a connection to the server
         if self.websocket is not None and self.websocket.open:
-            # send a message to server
             try:
                 await self.websocket.send(self.createB64RequestString(command))
             except Exception as e:
                 print(f"Error on send: {e}")
 
+    async def sendSet(self, command, value):
+        """Send Request with provided command"""
+        if self.websocket is not None and self.websocket.open:
+            try:
+                await self.websocket.send(self.createB64SetString(command, value))
+            except Exception as e:
+                print(f"Error on send: {e}")
+
     def getValue(self, command):
         return asyncio.create_task(self.sendRequest(command))
+
+    def setValue(self, command, value):
+        return asyncio.create_task(self.sendSet(command, value))
 
 
 class IQStoveConnectionError(Exception):

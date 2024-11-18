@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN
-from .IQstove import IQstove
+from .IQstove import IQstove, IQStoveConnectionError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -49,12 +49,17 @@ class IQStoveCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Fetch data from the IQ Stove. Return data to callback '_handle_coordinator_update' in platform"""
-        # if stove not connected, await reconnect and restart listener task
-        if not self.stove.connected:
-            await self.stove.connect()
-        # get all state data from stove
-        for cmd in self.stove.Commands.state:
-            self.stove.getValue(cmd)
-        # give a litle bit of time for the stove to respond and updated values
-        await asyncio.sleep(0.1)
+        try:
+            # if stove not connected, await reconnect and restart listener task
+            if not self.stove.connected:
+                await self.stove.connect()
+            # get all state data from stove
+            for cmd in self.stove.Commands.state:
+                self.stove.getValue(cmd)
+            # give a litle bit of time for the stove to respond and updated values
+            await asyncio.sleep(0.1)
+        except IQStoveConnectionError as e:
+            print("Connection error from IQStove", e)
+        except Exception as e:
+            print("Unknown Error from IQStove", e)
         return self.stove.values

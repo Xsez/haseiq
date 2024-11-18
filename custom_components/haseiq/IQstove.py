@@ -2,7 +2,12 @@ import asyncio
 import base64
 
 import websockets
-from websockets.exceptions import ConnectionClosedError, InvalidHandshake, InvalidURI
+from websockets.exceptions import (
+    ConnectionClosedError,
+    InvalidHandshake,
+    InvalidURI,
+    InvalidMessage,
+)
 
 
 class IQstove:
@@ -66,7 +71,12 @@ class IQstove:
             self.websocket = await websockets.connect(self.uri)
             self.listenerTask = asyncio.create_task(self.listen())
             self.connected = True
-        except (ConnectionClosedError, InvalidURI, InvalidHandshake) as e:
+        except (
+            ConnectionClosedError,
+            InvalidURI,
+            InvalidHandshake,
+            InvalidMessage,
+        ) as e:
             raise IQStoveConnectionError from e
         except Exception as e:
             print(f"An unexpected error occurred: {e}")

@@ -29,3 +29,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: config_entries.ConfigEnt
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     # finish
     return True
+
+
+async def async_unload_entry(
+    hass: HomeAssistant, entry: config_entries.ConfigEntry
+) -> bool:
+    """Handle removal of an entry."""
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def async_reload_entry(
+    hass: HomeAssistant, entry: config_entries.ConfigEntry
+) -> None:
+    """Reload config entry."""
+    await async_unload_entry(hass, entry)
+    await async_setup_entry(hass, entry)

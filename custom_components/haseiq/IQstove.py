@@ -124,6 +124,7 @@ class IQstove:
                 self.connected = False
                 print("Connection closed by the server.")
             except Exception as e:
+                self.connected = False
                 print(f"An error occurred: {e}")
 
     async def sendPeriodicRequest(self, interval):

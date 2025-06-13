@@ -1,43 +1,46 @@
 import asyncio
 import base64
+import logging
 
 import websockets
 from websockets.exceptions import (
     ConnectionClosedError,
     InvalidHandshake,
-    InvalidURI,
     InvalidMessage,
+    InvalidURI,
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class IQstove:
     class Commands:
         state = [
-            "appPhase",  # current phase. enum: 0=idle 1=heating up 2=burning 3=add wood 4=dont add wood
-            "appT",  # temperature in celsius
-            "appAufheiz",  # heating percentage - on first heating it seems to correlate with target temperature 470c. doesnt seem to only correlate with temperature afterwards
-            "appP",  # performance in percent
-            "appErr",  # error state
-            "_ledBri",  # led brightness
+            "appPhase",
+            "appT",
+            "appAufheiz",
+            "appP",
+            "appErr",
+            "_ledBri",
         ]
 
         statistics = [
-            "appPTx",  # length of availabe 1min performance history - should start at 0 on first heatup, goes to max 60
-            "appP30Tx",  # length of availabe heating cycle performance - if 30 cycles are reached it should stay at 30
-            "appPT[0;59]",  # performance history of last 60min
-            "appP30T[0;29]",  # performance history of last 30 cycles
-            "appIQDarst",  # ?intensity of iq logo during stop adding wood dialog in app?
+            "appPTx",
+            "appP30Tx",
+            "appPT[0;59]",
+            "appP30T[0;29]",
+            "appIQDarst",
         ]
 
         info = [
-            "_oemdev",  # stove model - enum: 6=sila (plus)
-            "_oemver",  # controller version
-            "_wversion",  # wifi version
-            "_oemser",  # serialnumber
+            "_oemdev",
+            "_oemver",
+            "_wversion",
+            "_oemser",
         ]
 
         unknown = [
-            "appNach",  # ??? always zero?
+            "appNach",
         ]
 
         all = []
@@ -50,123 +53,133 @@ class IQstove:
         self.uri = f"ws://{ip}:{port}"
         self.websocket = None
         self.values = {}
-        self.connected = False
         self.listenerTask = None
+        _LOGGER.debug("IQstove initialized with URI: %s", self.uri)
 
-    def createB64RequestString(self, command):
-        requestString = "_req=" + command
-        requestB64Bytes = base64.b64encode(requestString.encode("ascii"))
-        requestB64String = requestB64Bytes.decode("ascii") + "\r"
-        return requestB64String
+    @property
+    def connected(self):
+        """Checks if the WebSocket connection is currently open."""
+        status = self.websocket is not None and self.websocket.open
+        _LOGGER.debug("Checking connection status: %s", status)
+        return status
 
-    def createB64SetString(self, command, value):
-        setString = command + "=" + str(int(value))
-        setB64Bytes = base64.b64encode(setString.encode("ascii"))
-        setB64String = setB64Bytes.decode("ascii") + "\r"
-        return setB64String
+    def _createB64RequestString(self, command):
+        request = "_req=" + command
+        encoded = base64.b64encode(request.encode("ascii")).decode("ascii") + "\r"
+        _LOGGER.debug("Encoded request for '%s': %s", command, encoded.strip())
+        return encoded
+
+    def _createB64SetString(self, command, value):
+        request = f"{command}={int(value)}"
+        encoded = base64.b64encode(request.encode("ascii")).decode("ascii") + "\r"
+        _LOGGER.debug("Encoded set for '%s': %s", command, encoded.strip())
+        return encoded
 
     async def connect(self):
         """Establishes a connection to the WebSocket server."""
         try:
+            _LOGGER.debug("Attempting to connect to stove at %s", self.uri)
             self.websocket = await websockets.connect(self.uri)
             self.listenerTask = asyncio.create_task(self.listen())
-            self.connected = True
+            _LOGGER.debug("Successfully connected to stove at %s", self.uri)
         except (
             ConnectionClosedError,
             InvalidURI,
             InvalidHandshake,
             InvalidMessage,
         ) as e:
+            _LOGGER.error("WebSocket connection error: %s", e)
             raise IQStoveConnectionError from e
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            _LOGGER.exception("Unexpected error during connection:")
             raise UnknownException from e
-
-        # self.listener_task = asyncio.create_task(self.listen())
-        # self.connected = True
-        # # print("Connected to the server.")
-        # self.values["connected"] = True
-        # self.values["appT"] = 123
 
     async def listen(self):
         """Listens for messages and responds to pings with pongs."""
-        if self.websocket is not None and self.websocket.open:
-            # print("Start listening for messages.")
+        if self.websocket and self.websocket.open:
             try:
+                _LOGGER.debug("Starting listen task.")
                 await self.websocket.send(
-                    self.createB64RequestString("_oemdev")
-                    + self.createB64RequestString("_oemver")
-                    + self.createB64RequestString("_wversion")
-                    + self.createB64RequestString("_oemser")
+                    self._createB64RequestString("_oemdev")
+                    + self._createB64RequestString("_oemver")
+                    + self._createB64RequestString("_wversion")
+                    + self._createB64RequestString("_oemser")
                 )
-                while self.websocket is not None and self.websocket.open:
-                    message = await self.websocket.recv()
-                    # print(f"Received message: {message}")
+                _LOGGER.debug("Sent initial info requests.")
 
-                    # Check if the message is a ping and respond with a pong
-                    if (
-                        isinstance(message, bytes) and message == b"\x89"
-                    ):  # Ping opcode is 0x89
+                while self.websocket and self.websocket.open:
+                    message = await self.websocket.recv()
+                    _LOGGER.debug("Received raw message: %s", message)
+
+                    if isinstance(message, bytes) and message == b"\x89":
                         await self.websocket.pong()
-                        print("Received ping, sent pong")
+                        _LOGGER.debug("Received ping, sent pong")
                     else:
-                        # Decode and handle other messages
                         try:
-                            message_b64 = base64.b64decode(message).decode("ascii")
+                            decoded = base64.b64decode(message).decode("ascii")
+                            _LOGGER.debug("Decoded message: %s", decoded)
                             for cmd in self.Commands.all:
-                                if message_b64.startswith(cmd + "="):
-                                    self.values[cmd] = message_b64[len(cmd) + 1 :]
-                                    # print(f"Received and updated {cmd}: {self.values[cmd]}")
+                                if decoded.startswith(cmd + "="):
+                                    value = decoded[len(cmd) + 1 :]
+                                    self.values[cmd] = value
+                                    _LOGGER.debug("Updated value: %s = %s", cmd, value)
                         except Exception as decode_error:
-                            print(f"Error decoding message: {decode_error}")
+                            _LOGGER.warning("Error decoding message: %s", decode_error)
 
             except websockets.ConnectionClosed:
-                self.connected = False
-                print("Connection closed by the server.")
+                _LOGGER.warning("WebSocket connection closed.")
             except Exception as e:
-                self.connected = False
-                print(f"An error occurred: {e}")
+                _LOGGER.error("Error in listen loop: %s", e)
 
     async def sendPeriodicRequest(self, interval):
         """Periodically sends a request to the server."""
-        while self.websocket is not None and self.websocket.open:
-            await self.websocket.send(
-                self.createB64RequestString("appT")
-                + self.createB64RequestString("appPhase")
-                + self.createB64RequestString("appP")
-                + self.createB64RequestString("appAufheiz")
-                + self.createB64RequestString("appErr")
-            )
-            # print("Sent Periodic Request", self.values)
-            await asyncio.sleep(interval)  # Send a ping every 5 seconds
-
-    async def connectAndUpdate(self):
-        """Main method to run the WebSocket client."""
-        await self.connect()
-        await asyncio.gather(self.listen(), self.sendPeriodicRequest())
-
-    # drive the client connection
-    async def sendRequest(self, command):
-        """Send Request with provided command"""
-        if self.websocket is not None and self.websocket.open:
+        _LOGGER.debug("Starting periodic request loop with interval: %s", interval)
+        while self.websocket and self.websocket.open:
             try:
-                await self.websocket.send(self.createB64RequestString(command))
+                await self.websocket.send(
+                    self._createB64RequestString("appT")
+                    + self._createB64RequestString("appPhase")
+                    + self._createB64RequestString("appP")
+                    + self._createB64RequestString("appAufheiz")
+                    + self._createB64RequestString("appErr")
+                )
+                _LOGGER.debug("Sent periodic request batch.")
             except Exception as e:
-                print(f"Error on send: {e}")
+                _LOGGER.warning("Error sending periodic request: %s", e)
+            await asyncio.sleep(interval)
+
+    async def sendRequest(self, command):
+        if self.websocket and self.websocket.open:
+            try:
+                await self.websocket.send(self._createB64RequestString(command))
+                _LOGGER.debug("Sent request: %s", command)
+            except Exception as e:
+                _LOGGER.warning("Error sending request '%s': %s", command, e)
 
     async def sendSet(self, command, value):
-        """Send Request with provided command"""
-        if self.websocket is not None and self.websocket.open:
+        if self.websocket and self.websocket.open:
             try:
-                await self.websocket.send(self.createB64SetString(command, value))
+                await self.websocket.send(self._createB64SetString(command, value))
+                _LOGGER.debug("Sent set command: %s = %s", command, value)
             except Exception as e:
-                print(f"Error on send: {e}")
+                _LOGGER.warning("Error sending set command '%s': %s", command, e)
 
     def getValue(self, command):
-        return asyncio.create_task(self.sendRequest(command))
+        _LOGGER.debug("getValue called for: %s", command)
+        task = asyncio.create_task(self.sendRequest(command))
+        task.add_done_callback(self._handle_task_error)
+        return task
 
     def setValue(self, command, value):
-        return asyncio.create_task(self.sendSet(command, value))
+        """Set a value on the stove by sending a command and value."""
+        _LOGGER.debug("setValue called for: %s = %s", command, value)
+        task = asyncio.create_task(self.sendSet(command, value))
+        task.add_done_callback(self._handle_task_error)
+        return task
+
+    def _handle_task_error(self, task):
+        if task.exception():
+            _LOGGER.error("Task failed with exception: %s", task.exception())
 
 
 class IQStoveConnectionError(Exception):
@@ -174,4 +187,4 @@ class IQStoveConnectionError(Exception):
 
 
 class UnknownException(Exception):
-    """Error to indicate we cannot connect."""
+    """Error to indicate unknown exception occurred."""

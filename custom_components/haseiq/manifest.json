@@ -11,7 +11,10 @@
   "iot_class": "local_polling",
   "requirements": ["websockets==13.1"],
   "zeroconf": [
-    "_ws._tcp.local."
-  ],
-  "version": "0.2.1"
+    {
+      "type": "_http._tcp.local.",
+      "name": "HASE*"
+    }
+    ],
+  "version": "0.2.2"
 }

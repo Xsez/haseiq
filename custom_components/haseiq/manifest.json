@@ -9,7 +9,7 @@
   "documentation": "https://github.com/Xsez/haseiq/",
   "issue_tracker": "https://github.com/Xsez/haseiq/issues",
   "iot_class": "local_polling",
-  "requirements": ["websockets==13.1"],
+  "requirements": ["websockets>=13.1"],
   "zeroconf": [
     {
       "type": "_http._tcp.local.",

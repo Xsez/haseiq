@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Gen 2 stove",
-        "description": "In the HASE iQ app, open your stove and use \"Share stove\". Paste the link (or the text of the QR code) here.",
+        "description": "In the HASE iQ app, open your stove and use \"Share stove\". The app shows a QR code that contains the share link. Scan it with your phone camera, or decode a screenshot of it with a QR decoder such as [this one]({qr_decoder_url}). Paste the link here.",
         "data": {
           "share_link": "Share link"
         },
         "data_description": {
-          "share_link": "Looks like https://iq-applink.web.app/new?data=…"
+          "share_link": "The link contained in the QR code, starting with https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "IP address or hostname of the stove in your network.",
-          "share_link": "Looks like https://iq-applink.web.app/new?data=…"
+          "share_link": "The link contained in the QR code, starting with https://iq-applink.web.app/new?data="
         }
       }
     },

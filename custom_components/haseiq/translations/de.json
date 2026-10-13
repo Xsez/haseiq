@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Ofen der 2. Generation",
-        "description": "Öffne in der HASE iQ-App deinen Ofen und wähle „Ofen teilen“. Füge den Link (oder den Text des QR-Codes) hier ein.",
+        "description": "Öffne in der HASE iQ-App deinen Ofen und wähle „Ofen teilen“. Die App zeigt einen QR-Code, der den Teilen-Link enthält. Scanne ihn mit der Handykamera oder lies einen Screenshot mit einem QR-Decoder aus, z. B. [diesem]({qr_decoder_url}). Füge den Link hier ein.",
         "data": {
           "share_link": "Teilen-Link"
         },
         "data_description": {
-          "share_link": "Sieht aus wie https://iq-applink.web.app/new?data=…"
+          "share_link": "Der Link aus dem QR-Code, beginnt mit https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "IP-Adresse oder Hostname des Ofens in deinem Netzwerk.",
-          "share_link": "Sieht aus wie https://iq-applink.web.app/new?data=…"
+          "share_link": "Der Link aus dem QR-Code, beginnt mit https://iq-applink.web.app/new?data="
         }
       }
     },

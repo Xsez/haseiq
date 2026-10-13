@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Estufa de 2.ª generación",
-        "description": "En la app HASE iQ, abre tu estufa y usa «Compartir estufa». Pega aquí el enlace (o el texto del código QR).",
+        "description": "En la app HASE iQ, abre tu estufa y usa «Compartir estufa». La app muestra un código QR que contiene el enlace para compartir. Escanéalo con la cámara del móvil o decodifica una captura de pantalla con un decodificador QR, por ejemplo [este]({qr_decoder_url}). Pega aquí el enlace.",
         "data": {
           "share_link": "Enlace para compartir"
         },
         "data_description": {
-          "share_link": "Tiene este aspecto: https://iq-applink.web.app/new?data=…"
+          "share_link": "El enlace contenido en el código QR, que empieza por https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Dirección IP o nombre de host de la estufa en tu red.",
-          "share_link": "Tiene este aspecto: https://iq-applink.web.app/new?data=…"
+          "share_link": "El enlace contenido en el código QR, que empieza por https://iq-applink.web.app/new?data="
         }
       }
     },

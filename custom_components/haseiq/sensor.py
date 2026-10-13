@@ -109,10 +109,6 @@ GEN1_SENSORS: tuple[IQStoveSensorDescription, ...] = (
     ),
 )
 
-# Gen 1 statistics keys, exposed raw until their meaning is known.
-GEN1_STATISTICS_NUMERIC = ("appPTx", "appP30Tx", "appIQDarst")
-GEN1_STATISTICS_SERIES = ("appPT", "appP30T")
-
 GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
     IQStoveSensorDescription(
         key="temperature",
@@ -193,18 +189,9 @@ async def async_setup_entry(
     coordinator: IQStoveAnyCoordinator = entry.runtime_data
 
     if coordinator.generation == GEN1:
-        entities: list[SensorEntity] = [
+        async_add_entities(
             IQStoveSensor(coordinator, description) for description in GEN1_SENSORS
-        ]
-        entities += [
-            IQStoveRawSensor(coordinator, key, key, _gen1_getter(key), numeric=True)
-            for key in GEN1_STATISTICS_NUMERIC
-        ]
-        entities += [
-            IQStoveRawSensor(coordinator, key, key, _gen1_getter(key))
-            for key in GEN1_STATISTICS_SERIES
-        ]
-        async_add_entities(entities)
+        )
         return
 
     async_add_entities(
@@ -235,10 +222,6 @@ async def async_setup_entry(
 
     _async_add_raw_sensors()
     entry.async_on_unload(coordinator.async_add_listener(_async_add_raw_sensors))
-
-
-def _gen1_getter(key: str) -> Callable[[dict[str, Any]], Any]:
-    return lambda data: data.get(key)
 
 
 def _leaf_paths(tree: Any, prefix: str = "") -> list[str]:

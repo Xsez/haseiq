@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Kachel van de 2e generatie",
-        "description": "Open in de HASE iQ-app je kachel en kies 'Kachel delen'. Plak hier de link (of de tekst van de QR-code).",
+        "description": "Open in de HASE iQ-app je kachel en kies 'Kachel delen'. De app toont een QR-code met de deellink. Scan deze met de camera van je telefoon of decodeer een screenshot met een QR-decoder, bijvoorbeeld [deze]({qr_decoder_url}). Plak de link hier.",
         "data": {
           "share_link": "Deellink"
         },
         "data_description": {
-          "share_link": "Ziet eruit als https://iq-applink.web.app/new?data=…"
+          "share_link": "De link uit de QR-code, begint met https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "IP-adres of hostnaam van de kachel in je netwerk.",
-          "share_link": "Ziet eruit als https://iq-applink.web.app/new?data=…"
+          "share_link": "De link uit de QR-code, begint met https://iq-applink.web.app/new?data="
         }
       }
     },

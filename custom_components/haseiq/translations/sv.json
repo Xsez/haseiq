@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Kamin av generation 2",
-        "description": "Öppna din kamin i HASE iQ-appen och välj ”Dela kamin”. Klistra in länken (eller texten från QR-koden) här.",
+        "description": "Öppna din kamin i HASE iQ-appen och välj ”Dela kamin”. Appen visar en QR-kod som innehåller delningslänken. Skanna den med mobilkameran eller avkoda en skärmbild med en QR-avkodare, till exempel [den här]({qr_decoder_url}). Klistra in länken här.",
         "data": {
           "share_link": "Delningslänk"
         },
         "data_description": {
-          "share_link": "Ser ut som https://iq-applink.web.app/new?data=…"
+          "share_link": "Länken i QR-koden, som börjar med https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Kaminens IP-adress eller värdnamn i ditt nätverk.",
-          "share_link": "Ser ut som https://iq-applink.web.app/new?data=…"
+          "share_link": "Länken i QR-koden, som börjar med https://iq-applink.web.app/new?data="
         }
       }
     },

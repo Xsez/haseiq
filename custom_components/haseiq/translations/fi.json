@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "2. sukupolven takka",
-        "description": "Avaa takkasi HASE iQ -sovelluksessa ja valitse ”Jaa takka”. Liitä linkki (tai QR-koodin teksti) tähän.",
+        "description": "Avaa takkasi HASE iQ -sovelluksessa ja valitse ”Jaa takka”. Sovellus näyttää QR-koodin, joka sisältää jakolinkin. Skannaa se puhelimen kameralla tai pura kuvakaappaus QR-dekooderilla, esimerkiksi [tällä]({qr_decoder_url}). Liitä linkki tähän.",
         "data": {
           "share_link": "Jakolinkki"
         },
         "data_description": {
-          "share_link": "Näyttää tältä: https://iq-applink.web.app/new?data=…"
+          "share_link": "QR-koodin sisältämä linkki, joka alkaa https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Takan IP-osoite tai isäntänimi verkossasi.",
-          "share_link": "Näyttää tältä: https://iq-applink.web.app/new?data=…"
+          "share_link": "QR-koodin sisältämä linkki, joka alkaa https://iq-applink.web.app/new?data="
         }
       }
     },

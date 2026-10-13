@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Brændeovn af 2. generation",
-        "description": "Åbn din brændeovn i HASE iQ-appen, og vælg \"Del brændeovn\". Indsæt linket (eller teksten fra QR-koden) her.",
+        "description": "Åbn din brændeovn i HASE iQ-appen, og vælg \"Del brændeovn\". Appen viser en QR-kode, der indeholder delingslinket. Scan den med telefonens kamera, eller afkod et skærmbillede med en QR-dekoder, f.eks. [denne]({qr_decoder_url}). Indsæt linket her.",
         "data": {
           "share_link": "Delingslink"
         },
         "data_description": {
-          "share_link": "Ser ud som https://iq-applink.web.app/new?data=…"
+          "share_link": "Linket fra QR-koden, der starter med https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Brændeovnens IP-adresse eller værtsnavn på dit netværk.",
-          "share_link": "Ser ud som https://iq-applink.web.app/new?data=…"
+          "share_link": "Linket fra QR-koden, der starter med https://iq-applink.web.app/new?data="
         }
       }
     },

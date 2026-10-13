@@ -28,7 +28,6 @@ from .IQstove import IQstove
 _LOGGER = logging.getLogger(__name__)
 
 GEN1_UPDATE_INTERVAL = timedelta(seconds=5)
-GEN1_STATISTICS_INTERVAL = 300  # seconds
 GEN1_SETUP_TIMEOUT = 10  # seconds to wait for the first answers
 GEN1_STALE_AFTER = 30  # seconds without any frame before the stove counts as gone
 PUSH_DELAY = 0.3  # batch frames/events arriving close together into one update
@@ -54,7 +53,6 @@ class IQStoveCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self.stove = stove
         self._unsub_stove: CALLBACK_TYPE | None = None
         self._push_handle: asyncio.TimerHandle | None = None
-        self._statistics_due = 0.0
 
     @property
     def serial(self) -> str:
@@ -102,11 +100,7 @@ class IQStoveCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         try:
             if not self.stove.connected:
                 await self.stove.connect()
-            keys = list(self.stove.Commands.state)
-            if time.monotonic() >= self._statistics_due:
-                keys += self.stove.Commands.statistics
-                self._statistics_due = time.monotonic() + GEN1_STATISTICS_INTERVAL
-            await self._async_request(keys)
+            await self._async_request(self.stove.Commands.state)
         except Exception as err:
             raise UpdateFailed(f"Cannot reach the stove: {err}") from err
 

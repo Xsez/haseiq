@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Ovn av 2. generasjon",
-        "description": "Åpne ovnen din i HASE iQ-appen og velg «Del ovn». Lim inn lenken (eller teksten fra QR-koden) her.",
+        "description": "Åpne ovnen din i HASE iQ-appen og velg «Del ovn». Appen viser en QR-kode som inneholder delingslenken. Skann den med mobilkameraet, eller dekod et skjermbilde med en QR-dekoder, for eksempel [denne]({qr_decoder_url}). Lim inn lenken her.",
         "data": {
           "share_link": "Delingslenke"
         },
         "data_description": {
-          "share_link": "Ser ut som https://iq-applink.web.app/new?data=…"
+          "share_link": "Lenken i QR-koden, som starter med https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Ovnens IP-adresse eller vertsnavn i nettverket ditt.",
-          "share_link": "Ser ut som https://iq-applink.web.app/new?data=…"
+          "share_link": "Lenken i QR-koden, som starter med https://iq-applink.web.app/new?data="
         }
       }
     },

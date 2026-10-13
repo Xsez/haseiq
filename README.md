@@ -57,7 +57,7 @@ This integration uses a **Config Flow**, so no manual `configuration.yaml` chang
 
 2. **Choose your stove generation**:
    - **Gen 1**: enter the IP address or hostname of the stove. Gen 1 stoves are also discovered automatically on your network.
-   - **Gen 2**: in the HASE iQ app open your stove, use **"Ofen teilen" (share stove)** and paste the link here (it looks like `https://iq-applink.web.app/new?data=…`). Treat this link like a key – anyone who has it can read your stove's data.
+   - **Gen 2**: in the HASE iQ app open your stove and use **"Ofen teilen" (share stove)**. The app shows a QR code that contains the share link. Scan it with your phone camera, or decode a screenshot with a QR decoder such as [this one](https://www.w3schools.com/tools/tool_qr_decoder.php), and paste the link (`https://iq-applink.web.app/new?data=…`). Treat this link like a key – anyone who has it can read your stove's data.
 
 3. **Verify connection**:
    - If successful, the stove device and sensors will be automatically added.
@@ -76,7 +76,6 @@ The host (Gen 1) or share link (Gen 2) can be changed later with **Reconfigure**
 - **Error**
 - **Heating up**
 - **LED brightness** (adjustable)
-- Statistics values `appPTx`, `appP30Tx`, `appIQDarst`, `appPT`, `appP30T` (raw, meaning not yet known)
 
 Device information: serial number, firmware version, hardware model, model designation.
 

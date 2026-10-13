@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Piec 2. generacji",
-        "description": "W aplikacji HASE iQ otwórz swój piec i wybierz „Udostępnij piec”. Wklej tutaj link (lub tekst kodu QR).",
+        "description": "W aplikacji HASE iQ otwórz swój piec i wybierz „Udostępnij piec”. Aplikacja wyświetli kod QR zawierający link udostępniania. Zeskanuj go aparatem telefonu lub odczytaj zrzut ekranu dekoderem QR, np. [tym]({qr_decoder_url}). Wklej tutaj link.",
         "data": {
           "share_link": "Link udostępniania"
         },
         "data_description": {
-          "share_link": "Wygląda jak https://iq-applink.web.app/new?data=…"
+          "share_link": "Link zawarty w kodzie QR, zaczynający się od https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Adres IP lub nazwa hosta pieca w Twojej sieci.",
-          "share_link": "Wygląda jak https://iq-applink.web.app/new?data=…"
+          "share_link": "Link zawarty w kodzie QR, zaczynający się od https://iq-applink.web.app/new?data="
         }
       }
     },

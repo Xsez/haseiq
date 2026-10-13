@@ -22,12 +22,12 @@
       },
       "gen2": {
         "title": "Poêle de 2e génération",
-        "description": "Dans l'application HASE iQ, ouvrez votre poêle et utilisez « Partager le poêle ». Collez ici le lien (ou le texte du code QR).",
+        "description": "Dans l'application HASE iQ, ouvrez votre poêle et utilisez « Partager le poêle ». L'application affiche un code QR qui contient le lien de partage. Scannez-le avec l'appareil photo de votre téléphone ou décodez une capture d'écran avec un décodeur QR, par exemple [celui-ci]({qr_decoder_url}). Collez le lien ici.",
         "data": {
           "share_link": "Lien de partage"
         },
         "data_description": {
-          "share_link": "Ressemble à https://iq-applink.web.app/new?data=…"
+          "share_link": "Le lien contenu dans le code QR, commençant par https://iq-applink.web.app/new?data="
         }
       },
       "zeroconf_confirm": {
@@ -42,7 +42,7 @@
         },
         "data_description": {
           "host": "Adresse IP ou nom d'hôte du poêle sur votre réseau.",
-          "share_link": "Ressemble à https://iq-applink.web.app/new?data=…"
+          "share_link": "Le lien contenu dans le code QR, commençant par https://iq-applink.web.app/new?data="
         }
       }
     },

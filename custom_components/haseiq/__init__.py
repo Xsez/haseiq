@@ -28,6 +28,8 @@ LEGACY_GEN1_KEYS = {
     "appErr": "error",
     "_ledBri": "led_brightness",
 }
+# Gen 1 raw statistics sensors of 0.4.0b1, dropped again
+REMOVED_GEN1_KEYS = ("appPTx", "appP30Tx", "appIQDarst", "appPT", "appP30T")
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -101,6 +103,7 @@ def _async_migrate_gen1(hass: HomeAssistant, entry: ConfigEntry, serial: str) ->
     """Give a Gen 1 entry and its entities serial-based unique IDs.
 
     Only the unique IDs change; entity IDs, history and customizations stay.
+    Entities that were dropped again are removed.
     """
     if not serial:
         return
@@ -112,6 +115,9 @@ def _async_migrate_gen1(hass: HomeAssistant, entry: ConfigEntry, serial: str) ->
         hass.config_entries.async_update_entry(entry, unique_id=serial)
 
     registry = er.async_get(hass)
+    for key in REMOVED_GEN1_KEYS:
+        if entity_id := registry.async_get_entity_id("sensor", DOMAIN, f"{serial}-{key}"):
+            registry.async_remove(entity_id)
     for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
         legacy_key = entity.unique_id.removeprefix(f"{DOMAIN}-sensor-")
         if legacy_key == entity.unique_id or legacy_key not in LEGACY_GEN1_KEYS:

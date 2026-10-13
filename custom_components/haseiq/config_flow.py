@@ -37,6 +37,7 @@ _LOGGER = logging.getLogger(__name__)
 
 HOST_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$|^[a-zA-Z0-9.-]+$")
 PROBE_TIMEOUT = 10  # seconds
+QR_DECODER_URL = "https://www.w3schools.com/tools/tool_qr_decoder.php"
 
 GEN1_SCHEMA = vol.Schema({vol.Required(CONF_HOST): str})
 GEN2_SCHEMA = vol.Schema({vol.Required(CONF_SHARE_LINK): str})
@@ -177,6 +178,7 @@ class HaseIQConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="gen2",
             data_schema=self.add_suggested_values_to_schema(GEN2_SCHEMA, user_input),
             errors=errors,
+            description_placeholders={"qr_decoder_url": QR_DECODER_URL},
         )
 
     async def _async_try_gen2(

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
 
 from homeassistant.config_entries import ConfigEntry
@@ -10,8 +11,16 @@ from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .cloud import FirebaseAuth, IQstoveCloud
-from .const import CONF_GENERATION, CONF_OVEN_ID, CONF_REFRESH_TOKEN, DOMAIN, GEN1, GEN2
+from .cloud import FirebaseAuth, HaseCloudError, IQstoveCloud
+from .const import (
+    CONF_GENERATION,
+    CONF_KEEPALIVE_HELD,
+    CONF_OVEN_ID,
+    CONF_REFRESH_TOKEN,
+    DOMAIN,
+    GEN1,
+    GEN2,
+)
 from .coordinator import IQStoveCloudCoordinator, IQStoveCoordinator
 from .IQstove import IQstove
 
@@ -84,6 +93,21 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if unloaded:
         await entry.runtime_data.async_close(release=True)
     return unloaded
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Give back a keep-alive count left by an entry that was not loaded.
+
+    A loaded entry releases it on unload. One stuck in setup retry still holds
+    it (setup keeps it for the next attempt) and is never unloaded.
+    """
+    if entry.data.get(CONF_GENERATION) != GEN2 or not entry.data.get(CONF_KEEPALIVE_HELD):
+        return
+    session = async_get_clientsession(hass)
+    auth = FirebaseAuth(session, entry.data.get(CONF_REFRESH_TOKEN))
+    client = IQstoveCloud(session, entry.data[CONF_OVEN_ID], auth)
+    with contextlib.suppress(HaseCloudError):
+        await client.async_add_keepalive(-1)
 
 
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

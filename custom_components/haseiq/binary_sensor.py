@@ -1,92 +1,89 @@
-"""Platform for sensor integration."""
+"""Binary sensor platform for the Hase iQ integration."""
 
 from __future__ import annotations
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
+    BinarySensorEntityDescription,
 )
-from homeassistant.config_entries import ConfigEntries
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import DOMAIN
-from .coordinator import IQStoveCoordinator
+from .const import GEN1, GEN2_PHASE_ERROR
+from .entity import IQStoveAnyCoordinator, IQStoveEntity, live_data
+
+
+@dataclass(frozen=True, kw_only=True)
+class IQStoveBinarySensorDescription(BinarySensorEntityDescription):
+    """Describes a stove binary sensor."""
+
+    value_fn: Callable[[dict[str, Any]], bool | None]
+    node: str | None = None
+
+
+def _gen1_error(data: dict[str, Any]) -> bool | None:
+    try:
+        return bool(int(float(data["appErr"])))
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+GEN1_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
+    IQStoveBinarySensorDescription(
+        key="error",
+        translation_key="error",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=_gen1_error,
+    ),
+)
+
+GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
+    IQStoveBinarySensorDescription(
+        key="error",
+        translation_key="error",
+        node="liveData",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda data: live_data(data).get("P") == GEN2_PHASE_ERROR,
+    ),
+)
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntries.ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-):
-    """Setup sensors from a config entry created in the integrations UI."""
-    # print("Sensor Async Setup")
-    coordinator: IQStoveCoordinator = entry.runtime_data
-    sensors = [
-        IQstoveBinarySensor(coordinator, cmd)
-        for cmd in coordinator.stove.Commands.state
-        if cmd == "appErr"
-    ]
-    async_add_entities(sensors, update_before_add=True)
+    entry: ConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
+) -> None:
+    """Set up the binary sensors of a stove."""
+    coordinator: IQStoveAnyCoordinator = entry.runtime_data
+    descriptions = (
+        GEN1_BINARY_SENSORS if coordinator.generation == GEN1 else GEN2_BINARY_SENSORS
+    )
+    async_add_entities(
+        IQStoveBinarySensor(coordinator, description) for description in descriptions
+    )
 
 
-class IQstoveBinarySensor(CoordinatorEntity, BinarySensorEntity):
-    """Representation of a Sensor."""
+class IQStoveBinarySensor(IQStoveEntity, BinarySensorEntity):
+    """A stove binary sensor."""
 
-    def __init__(self, coordinator: IQStoveCoordinator, cmd):
-        """Pass coordinator to CoordinatorEntity."""
-        super().__init__(coordinator)
-        self.cmd = cmd
-        # print(f"{cmd} sensor init")
+    entity_description: IQStoveBinarySensorDescription
 
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
-        # print("Sensor Handle Coordinator Update", self.coordinator.data)
-        self._attr_native_value = self.coordinator.data[self.cmd]
-        self.async_write_ha_state()
+    def __init__(
+        self,
+        coordinator: IQStoveAnyCoordinator,
+        description: IQStoveBinarySensorDescription,
+    ) -> None:
+        """Initialize the binary sensor."""
+        super().__init__(coordinator, description.key, description.node)
+        self.entity_description = description
 
     @property
-    def name(self) -> str:
-        """Return the name of the sensor."""
-        if self.cmd == "appErr":
-            return "Error"
-        return "undefined"
-
-    @property
-    def is_on(self) -> int | float:
-        """Return the state of the entity."""
-        # Using native value and native unit of measurement, allows you to change units
-        # in Lovelace and HA will automatically calculate the correct value.
-        return bool(int(float(self.coordinator.data[self.cmd])))
-
-    @property
-    def device_class(self) -> str | None:
-        if self.cmd == "appErr":
-            return BinarySensorDeviceClass.PROBLEM
-        return None
-
-    @property
-    def unique_id(self) -> str:
-        """Return unique id."""
-        # All entities must have a unique id.  Think carefully what you want this to be as
-        # changing it later will cause HA to create new entities.
-        return f"{DOMAIN}-sensor-{self.cmd}"
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {
-                # Unique identifiers within a specific domain
-                (DOMAIN, self.coordinator.data["_oemser"])
-            },
-            "manufacturer": "Hase",
-            "model": "Sila Plus" if self.coordinator.data["_oemdev"] == "6" else None,
-            "model_id": self.coordinator.data["_oemdev"],
-            "name": f"Stove {self.coordinator.data["_oemser"]}",
-            "serial_number": self.coordinator.data["_oemser"],
-            "sw_version": f"Wifi {self.coordinator.data["_wversion"]}",
-            "hw_version": f"Controller {self.coordinator.data["_oemver"]}",
-        }
+    def is_on(self) -> bool | None:
+        """Return True if the stove reports a problem."""
+        return self.entity_description.value_fn(self.coordinator.data or {})

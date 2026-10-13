@@ -19,6 +19,7 @@ import asyncio
 import base64
 import contextlib
 from dataclasses import dataclass
+import time
 from datetime import datetime, timezone
 import logging
 from typing import Any, Awaitable, Callable, Dict, List, Optional, Union
@@ -133,6 +134,9 @@ class IQstove:
         # with a few convenience aliases (see `_store_value`).
         self.values: Dict[str, Any] = {}
 
+        # Monotonic time of the last frame received (None until the first one)
+        self.last_message: Optional[float] = None
+
         # Optional subscribers (useful for diagnostics)
         self._listeners: List[
             Callable[[Dict[str, Any]], Union[Awaitable[None], None]]
@@ -196,13 +200,17 @@ class IQstove:
     def add_listener(
         self,
         cb: Callable[[Dict[str, Any]], Union[Awaitable[None], None]],
-    ) -> None:
+    ) -> Callable[[], None]:
         """Subscribe to snapshots of `self.values` after each update.
 
         Args:
             cb: Callback invoked with `{"values": snapshot, "last": {key: value}}`.
+
+        Returns:
+            A function that removes the listener again.
         """
         self._listeners.append(cb)
+        return lambda: self._listeners.remove(cb)
 
     # ── internals ───────────────────────────────────────────────────────────────
 
@@ -351,6 +359,8 @@ class IQstove:
         key, value = decoded.split("=", 1)
         key = key.strip()
         value = value.strip()
+
+        self.last_message = time.monotonic()
 
         self._store_value(key, value)
 

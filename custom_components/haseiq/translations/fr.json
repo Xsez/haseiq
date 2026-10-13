@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Choisir la génération du poêle",
+        "description": "Les poêles de 1re génération sont joints directement sur le réseau local. Les poêles de 2e génération (régulations HASE iQ à partir de novembre 2024, p. ex. LIMA iQ) ne sont accessibles que via le cloud HASE.",
+        "menu_options": {
+          "gen1": "Gen 1 – réseau local",
+          "gen2": "Gen 2 – cloud HASE"
+        }
+      },
+      "gen1": {
+        "title": "Poêle de 1re génération",
+        "description": "Saisissez l'adresse IP ou le nom d'hôte du poêle.",
+        "data": {
+          "host": "Hôte"
+        },
+        "data_description": {
+          "host": "Adresse IP ou nom d'hôte du poêle sur votre réseau."
+        }
+      },
+      "gen2": {
+        "title": "Poêle de 2e génération",
+        "description": "Dans l'application HASE iQ, ouvrez votre poêle et utilisez « Partager le poêle ». Collez ici le lien (ou le texte du code QR).",
+        "data": {
+          "share_link": "Lien de partage"
+        },
+        "data_description": {
+          "share_link": "Ressemble à https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Voulez-vous ajouter {name} ({host}) ?"
+      },
+      "reconfigure": {
+        "title": "Reconfigurer le poêle",
+        "description": "Mettre à jour les informations de connexion du poêle.",
+        "data": {
+          "host": "Hôte",
+          "share_link": "Lien de partage"
+        },
+        "data_description": {
+          "host": "Adresse IP ou nom d'hôte du poêle sur votre réseau.",
+          "share_link": "Ressemble à https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Adresse IP ou nom d'hôte invalide.",
+      "cannot_connect": "Impossible de se connecter au poêle.",
+      "invalid_share_link": "Ce n'est pas un lien de partage HASE iQ valide.",
+      "oven_not_found": "Ce poêle est inconnu du cloud HASE.",
+      "cannot_connect_cloud": "Impossible de se connecter au cloud HASE.",
+      "unknown": "Erreur inattendue."
+    },
+    "abort": {
+      "already_configured": "Ce poêle est déjà configuré.",
+      "cannot_connect": "Impossible de se connecter au poêle.",
+      "reconfigure_successful": "Le poêle a été reconfiguré.",
+      "wrong_device": "Il s'agit d'un autre poêle que celui configuré."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Erreur"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "Luminosité LED"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Température"
+      },
+      "performance": {
+        "name": "Puissance"
+      },
+      "heating_up": {
+        "name": "Montée en température"
+      },
+      "primary_air": {
+        "name": "Air primaire"
+      },
+      "secondary_air": {
+        "name": "Air secondaire"
+      },
+      "refuel": {
+        "name": "Indicateur de rechargement"
+      },
+      "firing_count": {
+        "name": "Flambées"
+      },
+      "last_firing": {
+        "name": "Dernière flambée"
+      },
+      "last_firing_value": {
+        "name": "Valeur de la dernière flambée"
+      },
+      "phase": {
+        "name": "Phase",
+        "state": {
+          "off": "Arrêt",
+          "heating_up": "Montée en température",
+          "burning": "Combustion",
+          "add_wood": "Recharger",
+          "dont_add_wood": "Ne plus recharger",
+          "kindling": "Allumage",
+          "residual_heat": "Chaleur résiduelle",
+          "error": "Erreur"
+        }
+      }
+    }
+  }
+}

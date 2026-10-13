@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Choose your stove generation",
+        "description": "Gen 1 stoves are reached directly in your network. Gen 2 stoves (HASE iQ controllers from November 2024, e.g. LIMA iQ) are only reachable through the HASE cloud.",
+        "menu_options": {
+          "gen1": "Gen 1 – local network",
+          "gen2": "Gen 2 – HASE cloud"
+        }
+      },
+      "gen1": {
+        "title": "Gen 1 stove",
+        "description": "Enter the IP address or hostname of the stove.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "IP address or hostname of the stove in your network."
+        }
+      },
+      "gen2": {
+        "title": "Gen 2 stove",
+        "description": "In the HASE iQ app, open your stove and use \"Share stove\". Paste the link (or the text of the QR code) here.",
+        "data": {
+          "share_link": "Share link"
+        },
+        "data_description": {
+          "share_link": "Looks like https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Do you want to add {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Reconfigure stove",
+        "description": "Update the connection details of the stove.",
+        "data": {
+          "host": "Host",
+          "share_link": "Share link"
+        },
+        "data_description": {
+          "host": "IP address or hostname of the stove in your network.",
+          "share_link": "Looks like https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Invalid IP address or hostname.",
+      "cannot_connect": "Cannot connect to the stove.",
+      "invalid_share_link": "This is not a valid HASE iQ share link.",
+      "oven_not_found": "The HASE cloud does not know this stove.",
+      "cannot_connect_cloud": "Cannot connect to the HASE cloud.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This stove is already configured.",
+      "cannot_connect": "Cannot connect to the stove.",
+      "reconfigure_successful": "The stove was reconfigured.",
+      "wrong_device": "This is a different stove than the one configured."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Error"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "LED brightness"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "performance": {
+        "name": "Performance"
+      },
+      "heating_up": {
+        "name": "Heating up"
+      },
+      "primary_air": {
+        "name": "Primary air"
+      },
+      "secondary_air": {
+        "name": "Secondary air"
+      },
+      "refuel": {
+        "name": "Refuel indicator"
+      },
+      "firing_count": {
+        "name": "Firings"
+      },
+      "last_firing": {
+        "name": "Last firing"
+      },
+      "last_firing_value": {
+        "name": "Last firing value"
+      },
+      "phase": {
+        "name": "Phase",
+        "state": {
+          "off": "Off",
+          "heating_up": "Heating up",
+          "burning": "Burning",
+          "add_wood": "Add wood",
+          "dont_add_wood": "Don't add wood",
+          "kindling": "Kindling",
+          "residual_heat": "Residual heat",
+          "error": "Error"
+        }
+      }
+    }
+  }
+}

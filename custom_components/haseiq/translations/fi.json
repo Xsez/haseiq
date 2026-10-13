@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Valitse takan sukupolvi",
+        "description": "1. sukupolven takat tavoitetaan suoraan lähiverkossa. 2. sukupolven takat (HASE iQ -ohjaimet marraskuusta 2024 alkaen, esim. LIMA iQ) ovat tavoitettavissa vain HASE-pilven kautta.",
+        "menu_options": {
+          "gen1": "Gen 1 – lähiverkko",
+          "gen2": "Gen 2 – HASE-pilvi"
+        }
+      },
+      "gen1": {
+        "title": "1. sukupolven takka",
+        "description": "Anna takan IP-osoite tai isäntänimi.",
+        "data": {
+          "host": "Isäntä"
+        },
+        "data_description": {
+          "host": "Takan IP-osoite tai isäntänimi verkossasi."
+        }
+      },
+      "gen2": {
+        "title": "2. sukupolven takka",
+        "description": "Avaa takkasi HASE iQ -sovelluksessa ja valitse ”Jaa takka”. Liitä linkki (tai QR-koodin teksti) tähän.",
+        "data": {
+          "share_link": "Jakolinkki"
+        },
+        "data_description": {
+          "share_link": "Näyttää tältä: https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Haluatko lisätä laitteen {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Määritä takka uudelleen",
+        "description": "Päivitä takan yhteystiedot.",
+        "data": {
+          "host": "Isäntä",
+          "share_link": "Jakolinkki"
+        },
+        "data_description": {
+          "host": "Takan IP-osoite tai isäntänimi verkossasi.",
+          "share_link": "Näyttää tältä: https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Virheellinen IP-osoite tai isäntänimi.",
+      "cannot_connect": "Takkaan ei saada yhteyttä.",
+      "invalid_share_link": "Tämä ei ole kelvollinen HASE iQ -jakolinkki.",
+      "oven_not_found": "HASE-pilvi ei tunne tätä takkaa.",
+      "cannot_connect_cloud": "HASE-pilveen ei saada yhteyttä.",
+      "unknown": "Odottamaton virhe."
+    },
+    "abort": {
+      "already_configured": "Tämä takka on jo määritetty.",
+      "cannot_connect": "Takkaan ei saada yhteyttä.",
+      "reconfigure_successful": "Takka määritettiin uudelleen.",
+      "wrong_device": "Tämä on eri takka kuin määritetty."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Virhe"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "LED-kirkkaus"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Lämpötila"
+      },
+      "performance": {
+        "name": "Teho"
+      },
+      "heating_up": {
+        "name": "Lämpeneminen"
+      },
+      "primary_air": {
+        "name": "Primääri-ilma"
+      },
+      "secondary_air": {
+        "name": "Sekundääri-ilma"
+      },
+      "refuel": {
+        "name": "Puiden lisäyksen ilmaisin"
+      },
+      "firing_count": {
+        "name": "Lämmityskerrat"
+      },
+      "last_firing": {
+        "name": "Viimeisin lämmitys"
+      },
+      "last_firing_value": {
+        "name": "Viimeisimmän lämmityksen arvo"
+      },
+      "phase": {
+        "name": "Vaihe",
+        "state": {
+          "off": "Pois",
+          "heating_up": "Lämpeneminen",
+          "burning": "Palaminen",
+          "add_wood": "Lisää puita",
+          "dont_add_wood": "Älä lisää puita",
+          "kindling": "Sytytys",
+          "residual_heat": "Jälkilämpö",
+          "error": "Virhe"
+        }
+      }
+    }
+  }
+}

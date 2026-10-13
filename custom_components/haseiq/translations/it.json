@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Scegli la generazione della stufa",
+        "description": "Le stufe di 1ª generazione si raggiungono direttamente nella rete locale. Le stufe di 2ª generazione (controller HASE iQ da novembre 2024, ad es. LIMA iQ) sono raggiungibili solo tramite il cloud HASE.",
+        "menu_options": {
+          "gen1": "Gen 1 – rete locale",
+          "gen2": "Gen 2 – cloud HASE"
+        }
+      },
+      "gen1": {
+        "title": "Stufa di 1ª generazione",
+        "description": "Inserisci l'indirizzo IP o il nome host della stufa.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "Indirizzo IP o nome host della stufa nella tua rete."
+        }
+      },
+      "gen2": {
+        "title": "Stufa di 2ª generazione",
+        "description": "Nell'app HASE iQ apri la tua stufa e usa «Condividi stufa». Incolla qui il link (o il testo del codice QR).",
+        "data": {
+          "share_link": "Link di condivisione"
+        },
+        "data_description": {
+          "share_link": "Ha questo aspetto: https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Vuoi aggiungere {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Riconfigura la stufa",
+        "description": "Aggiorna i dati di connessione della stufa.",
+        "data": {
+          "host": "Host",
+          "share_link": "Link di condivisione"
+        },
+        "data_description": {
+          "host": "Indirizzo IP o nome host della stufa nella tua rete.",
+          "share_link": "Ha questo aspetto: https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Indirizzo IP o nome host non valido.",
+      "cannot_connect": "Impossibile connettersi alla stufa.",
+      "invalid_share_link": "Questo non è un link di condivisione HASE iQ valido.",
+      "oven_not_found": "Questa stufa non è nota al cloud HASE.",
+      "cannot_connect_cloud": "Impossibile connettersi al cloud HASE.",
+      "unknown": "Errore imprevisto."
+    },
+    "abort": {
+      "already_configured": "Questa stufa è già configurata.",
+      "cannot_connect": "Impossibile connettersi alla stufa.",
+      "reconfigure_successful": "La stufa è stata riconfigurata.",
+      "wrong_device": "Questa è una stufa diversa da quella configurata."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Errore"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "Luminosità LED"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "performance": {
+        "name": "Potenza"
+      },
+      "heating_up": {
+        "name": "Riscaldamento"
+      },
+      "primary_air": {
+        "name": "Aria primaria"
+      },
+      "secondary_air": {
+        "name": "Aria secondaria"
+      },
+      "refuel": {
+        "name": "Indicatore di ricarica"
+      },
+      "firing_count": {
+        "name": "Accensioni"
+      },
+      "last_firing": {
+        "name": "Ultima accensione"
+      },
+      "last_firing_value": {
+        "name": "Valore ultima accensione"
+      },
+      "phase": {
+        "name": "Fase",
+        "state": {
+          "off": "Spenta",
+          "heating_up": "Riscaldamento",
+          "burning": "Combustione",
+          "add_wood": "Aggiungere legna",
+          "dont_add_wood": "Non aggiungere legna",
+          "kindling": "Accensione",
+          "residual_heat": "Calore residuo",
+          "error": "Errore"
+        }
+      }
+    }
+  }
+}

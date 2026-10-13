@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Vælg brændeovnens generation",
+        "description": "Brændeovne af 1. generation tilgås direkte på det lokale netværk. Brændeovne af 2. generation (HASE iQ-styringer fra november 2024, f.eks. LIMA iQ) kan kun tilgås via HASE-skyen.",
+        "menu_options": {
+          "gen1": "Gen 1 – lokalt netværk",
+          "gen2": "Gen 2 – HASE-skyen"
+        }
+      },
+      "gen1": {
+        "title": "Brændeovn af 1. generation",
+        "description": "Indtast brændeovnens IP-adresse eller værtsnavn.",
+        "data": {
+          "host": "Vært"
+        },
+        "data_description": {
+          "host": "Brændeovnens IP-adresse eller værtsnavn på dit netværk."
+        }
+      },
+      "gen2": {
+        "title": "Brændeovn af 2. generation",
+        "description": "Åbn din brændeovn i HASE iQ-appen, og vælg \"Del brændeovn\". Indsæt linket (eller teksten fra QR-koden) her.",
+        "data": {
+          "share_link": "Delingslink"
+        },
+        "data_description": {
+          "share_link": "Ser ud som https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Vil du tilføje {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Omkonfigurer brændeovn",
+        "description": "Opdater brændeovnens forbindelsesoplysninger.",
+        "data": {
+          "host": "Vært",
+          "share_link": "Delingslink"
+        },
+        "data_description": {
+          "host": "Brændeovnens IP-adresse eller værtsnavn på dit netværk.",
+          "share_link": "Ser ud som https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Ugyldig IP-adresse eller ugyldigt værtsnavn.",
+      "cannot_connect": "Kan ikke oprette forbindelse til brændeovnen.",
+      "invalid_share_link": "Dette er ikke et gyldigt HASE iQ-delingslink.",
+      "oven_not_found": "HASE-skyen kender ikke denne brændeovn.",
+      "cannot_connect_cloud": "Kan ikke oprette forbindelse til HASE-skyen.",
+      "unknown": "Uventet fejl."
+    },
+    "abort": {
+      "already_configured": "Denne brændeovn er allerede konfigureret.",
+      "cannot_connect": "Kan ikke oprette forbindelse til brændeovnen.",
+      "reconfigure_successful": "Brændeovnen blev omkonfigureret.",
+      "wrong_device": "Dette er en anden brændeovn end den konfigurerede."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Fejl"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "LED-lysstyrke"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "performance": {
+        "name": "Effekt"
+      },
+      "heating_up": {
+        "name": "Opvarmning"
+      },
+      "primary_air": {
+        "name": "Primærluft"
+      },
+      "secondary_air": {
+        "name": "Sekundærluft"
+      },
+      "refuel": {
+        "name": "Påfyldningsindikator"
+      },
+      "firing_count": {
+        "name": "Fyringer"
+      },
+      "last_firing": {
+        "name": "Seneste fyring"
+      },
+      "last_firing_value": {
+        "name": "Værdi for seneste fyring"
+      },
+      "phase": {
+        "name": "Fase",
+        "state": {
+          "off": "Slukket",
+          "heating_up": "Opvarmning",
+          "burning": "Forbrænding",
+          "add_wood": "Læg brænde på",
+          "dont_add_wood": "Læg ikke mere brænde på",
+          "kindling": "Optænding",
+          "residual_heat": "Restvarme",
+          "error": "Fejl"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Vyberte generaci kamen",
+        "description": "Kamna 1. generace jsou dostupná přímo v místní síti. Kamna 2. generace (řídicí jednotky HASE iQ od listopadu 2024, např. LIMA iQ) jsou dostupná pouze přes cloud HASE.",
+        "menu_options": {
+          "gen1": "Gen 1 – místní síť",
+          "gen2": "Gen 2 – cloud HASE"
+        }
+      },
+      "gen1": {
+        "title": "Kamna 1. generace",
+        "description": "Zadejte IP adresu nebo název hostitele kamen.",
+        "data": {
+          "host": "Hostitel"
+        },
+        "data_description": {
+          "host": "IP adresa nebo název hostitele kamen ve vaší síti."
+        }
+      },
+      "gen2": {
+        "title": "Kamna 2. generace",
+        "description": "V aplikaci HASE iQ otevřete svá kamna a zvolte „Sdílet kamna“. Vložte sem odkaz (nebo text QR kódu).",
+        "data": {
+          "share_link": "Odkaz ke sdílení"
+        },
+        "data_description": {
+          "share_link": "Vypadá jako https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Chcete přidat {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Překonfigurovat kamna",
+        "description": "Aktualizujte údaje pro připojení kamen.",
+        "data": {
+          "host": "Hostitel",
+          "share_link": "Odkaz ke sdílení"
+        },
+        "data_description": {
+          "host": "IP adresa nebo název hostitele kamen ve vaší síti.",
+          "share_link": "Vypadá jako https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Neplatná IP adresa nebo název hostitele.",
+      "cannot_connect": "Nelze se připojit ke kamnům.",
+      "invalid_share_link": "Toto není platný odkaz ke sdílení HASE iQ.",
+      "oven_not_found": "Cloud HASE tato kamna nezná.",
+      "cannot_connect_cloud": "Nelze se připojit ke cloudu HASE.",
+      "unknown": "Neočekávaná chyba."
+    },
+    "abort": {
+      "already_configured": "Tato kamna jsou již nastavena.",
+      "cannot_connect": "Nelze se připojit ke kamnům.",
+      "reconfigure_successful": "Kamna byla překonfigurována.",
+      "wrong_device": "Jedná se o jiná kamna než nastavená."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Chyba"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "Jas LED"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Teplota"
+      },
+      "performance": {
+        "name": "Výkon"
+      },
+      "heating_up": {
+        "name": "Zahřívání"
+      },
+      "primary_air": {
+        "name": "Primární vzduch"
+      },
+      "secondary_air": {
+        "name": "Sekundární vzduch"
+      },
+      "refuel": {
+        "name": "Indikátor přiložení"
+      },
+      "firing_count": {
+        "name": "Zatopení"
+      },
+      "last_firing": {
+        "name": "Poslední zatopení"
+      },
+      "last_firing_value": {
+        "name": "Hodnota posledního zatopení"
+      },
+      "phase": {
+        "name": "Fáze",
+        "state": {
+          "off": "Vypnuto",
+          "heating_up": "Zahřívání",
+          "burning": "Hoření",
+          "add_wood": "Přiložit dřevo",
+          "dont_add_wood": "Nepřikládat dřevo",
+          "kindling": "Zatápění",
+          "residual_heat": "Zbytkové teplo",
+          "error": "Chyba"
+        }
+      }
+    }
+  }
+}

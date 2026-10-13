@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Velg ovnens generasjon",
+        "description": "Ovner av 1. generasjon nås direkte i det lokale nettverket. Ovner av 2. generasjon (HASE iQ-styringer fra november 2024, f.eks. LIMA iQ) kan bare nås via HASE-skyen.",
+        "menu_options": {
+          "gen1": "Gen 1 – lokalt nettverk",
+          "gen2": "Gen 2 – HASE-skyen"
+        }
+      },
+      "gen1": {
+        "title": "Ovn av 1. generasjon",
+        "description": "Skriv inn ovnens IP-adresse eller vertsnavn.",
+        "data": {
+          "host": "Vert"
+        },
+        "data_description": {
+          "host": "Ovnens IP-adresse eller vertsnavn i nettverket ditt."
+        }
+      },
+      "gen2": {
+        "title": "Ovn av 2. generasjon",
+        "description": "Åpne ovnen din i HASE iQ-appen og velg «Del ovn». Lim inn lenken (eller teksten fra QR-koden) her.",
+        "data": {
+          "share_link": "Delingslenke"
+        },
+        "data_description": {
+          "share_link": "Ser ut som https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Vil du legge til {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Konfigurer ovnen på nytt",
+        "description": "Oppdater ovnens tilkoblingsdetaljer.",
+        "data": {
+          "host": "Vert",
+          "share_link": "Delingslenke"
+        },
+        "data_description": {
+          "host": "Ovnens IP-adresse eller vertsnavn i nettverket ditt.",
+          "share_link": "Ser ut som https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Ugyldig IP-adresse eller vertsnavn.",
+      "cannot_connect": "Kan ikke koble til ovnen.",
+      "invalid_share_link": "Dette er ikke en gyldig HASE iQ-delingslenke.",
+      "oven_not_found": "HASE-skyen kjenner ikke denne ovnen.",
+      "cannot_connect_cloud": "Kan ikke koble til HASE-skyen.",
+      "unknown": "Uventet feil."
+    },
+    "abort": {
+      "already_configured": "Denne ovnen er allerede konfigurert.",
+      "cannot_connect": "Kan ikke koble til ovnen.",
+      "reconfigure_successful": "Ovnen ble konfigurert på nytt.",
+      "wrong_device": "Dette er en annen ovn enn den som er konfigurert."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Feil"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "LED-lysstyrke"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "performance": {
+        "name": "Effekt"
+      },
+      "heating_up": {
+        "name": "Oppvarming"
+      },
+      "primary_air": {
+        "name": "Primærluft"
+      },
+      "secondary_air": {
+        "name": "Sekundærluft"
+      },
+      "refuel": {
+        "name": "Påfyllingsindikator"
+      },
+      "firing_count": {
+        "name": "Fyringer"
+      },
+      "last_firing": {
+        "name": "Siste fyring"
+      },
+      "last_firing_value": {
+        "name": "Verdi siste fyring"
+      },
+      "phase": {
+        "name": "Fase",
+        "state": {
+          "off": "Av",
+          "heating_up": "Oppvarming",
+          "burning": "Forbrenning",
+          "add_wood": "Legg i ved",
+          "dont_add_wood": "Ikke legg i mer ved",
+          "kindling": "Opptenning",
+          "residual_heat": "Restvarme",
+          "error": "Feil"
+        }
+      }
+    }
+  }
+}

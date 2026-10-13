@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Wybierz generację pieca",
+        "description": "Piece 1. generacji są dostępne bezpośrednio w sieci lokalnej. Piece 2. generacji (sterowniki HASE iQ od listopada 2024, np. LIMA iQ) są dostępne tylko przez chmurę HASE.",
+        "menu_options": {
+          "gen1": "Gen 1 – sieć lokalna",
+          "gen2": "Gen 2 – chmura HASE"
+        }
+      },
+      "gen1": {
+        "title": "Piec 1. generacji",
+        "description": "Wprowadź adres IP lub nazwę hosta pieca.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "Adres IP lub nazwa hosta pieca w Twojej sieci."
+        }
+      },
+      "gen2": {
+        "title": "Piec 2. generacji",
+        "description": "W aplikacji HASE iQ otwórz swój piec i wybierz „Udostępnij piec”. Wklej tutaj link (lub tekst kodu QR).",
+        "data": {
+          "share_link": "Link udostępniania"
+        },
+        "data_description": {
+          "share_link": "Wygląda jak https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Czy chcesz dodać {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Ponownie skonfiguruj piec",
+        "description": "Zaktualizuj dane połączenia pieca.",
+        "data": {
+          "host": "Host",
+          "share_link": "Link udostępniania"
+        },
+        "data_description": {
+          "host": "Adres IP lub nazwa hosta pieca w Twojej sieci.",
+          "share_link": "Wygląda jak https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Nieprawidłowy adres IP lub nazwa hosta.",
+      "cannot_connect": "Nie można połączyć się z piecem.",
+      "invalid_share_link": "To nie jest prawidłowy link udostępniania HASE iQ.",
+      "oven_not_found": "Chmura HASE nie zna tego pieca.",
+      "cannot_connect_cloud": "Nie można połączyć się z chmurą HASE.",
+      "unknown": "Nieoczekiwany błąd."
+    },
+    "abort": {
+      "already_configured": "Ten piec jest już skonfigurowany.",
+      "cannot_connect": "Nie można połączyć się z piecem.",
+      "reconfigure_successful": "Piec został ponownie skonfigurowany.",
+      "wrong_device": "To jest inny piec niż skonfigurowany."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Błąd"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "Jasność LED"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "performance": {
+        "name": "Moc"
+      },
+      "heating_up": {
+        "name": "Nagrzewanie"
+      },
+      "primary_air": {
+        "name": "Powietrze pierwotne"
+      },
+      "secondary_air": {
+        "name": "Powietrze wtórne"
+      },
+      "refuel": {
+        "name": "Wskaźnik dokładania"
+      },
+      "firing_count": {
+        "name": "Rozpalenia"
+      },
+      "last_firing": {
+        "name": "Ostatnie rozpalenie"
+      },
+      "last_firing_value": {
+        "name": "Wartość ostatniego rozpalenia"
+      },
+      "phase": {
+        "name": "Faza",
+        "state": {
+          "off": "Wyłączony",
+          "heating_up": "Nagrzewanie",
+          "burning": "Spalanie",
+          "add_wood": "Dołóż drewna",
+          "dont_add_wood": "Nie dokładaj drewna",
+          "kindling": "Rozpalanie",
+          "residual_heat": "Ciepło resztkowe",
+          "error": "Błąd"
+        }
+      }
+    }
+  }
+}

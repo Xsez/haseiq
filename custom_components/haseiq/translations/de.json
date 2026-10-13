@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Ofen-Generation wählen",
+        "description": "Öfen der 1. Generation werden direkt im Netzwerk angesprochen. Öfen der 2. Generation (HASE iQ-Steuerungen ab November 2024, z. B. LIMA iQ) sind nur über die HASE-Cloud erreichbar.",
+        "menu_options": {
+          "gen1": "Gen 1 – lokales Netzwerk",
+          "gen2": "Gen 2 – HASE-Cloud"
+        }
+      },
+      "gen1": {
+        "title": "Ofen der 1. Generation",
+        "description": "Gib die IP-Adresse oder den Hostnamen des Ofens ein.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "IP-Adresse oder Hostname des Ofens in deinem Netzwerk."
+        }
+      },
+      "gen2": {
+        "title": "Ofen der 2. Generation",
+        "description": "Öffne in der HASE iQ-App deinen Ofen und wähle „Ofen teilen“. Füge den Link (oder den Text des QR-Codes) hier ein.",
+        "data": {
+          "share_link": "Teilen-Link"
+        },
+        "data_description": {
+          "share_link": "Sieht aus wie https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Möchtest du {name} ({host}) hinzufügen?"
+      },
+      "reconfigure": {
+        "title": "Ofen neu konfigurieren",
+        "description": "Verbindungsdaten des Ofens aktualisieren.",
+        "data": {
+          "host": "Host",
+          "share_link": "Teilen-Link"
+        },
+        "data_description": {
+          "host": "IP-Adresse oder Hostname des Ofens in deinem Netzwerk.",
+          "share_link": "Sieht aus wie https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Ungültige IP-Adresse oder ungültiger Hostname.",
+      "cannot_connect": "Keine Verbindung zum Ofen möglich.",
+      "invalid_share_link": "Das ist kein gültiger HASE iQ-Teilen-Link.",
+      "oven_not_found": "Dieser Ofen ist der HASE-Cloud nicht bekannt.",
+      "cannot_connect_cloud": "Keine Verbindung zur HASE-Cloud möglich.",
+      "unknown": "Unerwarteter Fehler."
+    },
+    "abort": {
+      "already_configured": "Dieser Ofen ist bereits eingerichtet.",
+      "cannot_connect": "Keine Verbindung zum Ofen möglich.",
+      "reconfigure_successful": "Der Ofen wurde neu konfiguriert.",
+      "wrong_device": "Das ist ein anderer Ofen als der eingerichtete."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Fehler"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "LED-Helligkeit"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "performance": {
+        "name": "Leistung"
+      },
+      "heating_up": {
+        "name": "Aufheizen"
+      },
+      "primary_air": {
+        "name": "Primärluft"
+      },
+      "secondary_air": {
+        "name": "Sekundärluft"
+      },
+      "refuel": {
+        "name": "Nachlegeanzeige"
+      },
+      "firing_count": {
+        "name": "Abbrände"
+      },
+      "last_firing": {
+        "name": "Letzter Abbrand"
+      },
+      "last_firing_value": {
+        "name": "Wert letzter Abbrand"
+      },
+      "phase": {
+        "name": "Phase",
+        "state": {
+          "off": "Aus",
+          "heating_up": "Aufheizen",
+          "burning": "Brennphase",
+          "add_wood": "Nachlegen",
+          "dont_add_wood": "Nicht mehr nachlegen",
+          "kindling": "Anheizen",
+          "residual_heat": "Restwärme",
+          "error": "Fehler"
+        }
+      }
+    }
+  }
+}

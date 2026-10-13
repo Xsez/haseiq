@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Elige la generación de la estufa",
+        "description": "Las estufas de 1.ª generación se conectan directamente en la red local. Las estufas de 2.ª generación (controladores HASE iQ desde noviembre de 2024, p. ej. LIMA iQ) solo son accesibles a través de la nube de HASE.",
+        "menu_options": {
+          "gen1": "Gen 1 – red local",
+          "gen2": "Gen 2 – nube de HASE"
+        }
+      },
+      "gen1": {
+        "title": "Estufa de 1.ª generación",
+        "description": "Introduce la dirección IP o el nombre de host de la estufa.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "Dirección IP o nombre de host de la estufa en tu red."
+        }
+      },
+      "gen2": {
+        "title": "Estufa de 2.ª generación",
+        "description": "En la app HASE iQ, abre tu estufa y usa «Compartir estufa». Pega aquí el enlace (o el texto del código QR).",
+        "data": {
+          "share_link": "Enlace para compartir"
+        },
+        "data_description": {
+          "share_link": "Tiene este aspecto: https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "¿Quieres añadir {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Reconfigurar la estufa",
+        "description": "Actualiza los datos de conexión de la estufa.",
+        "data": {
+          "host": "Host",
+          "share_link": "Enlace para compartir"
+        },
+        "data_description": {
+          "host": "Dirección IP o nombre de host de la estufa en tu red.",
+          "share_link": "Tiene este aspecto: https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Dirección IP o nombre de host no válido.",
+      "cannot_connect": "No se puede conectar con la estufa.",
+      "invalid_share_link": "Este no es un enlace para compartir de HASE iQ válido.",
+      "oven_not_found": "La nube de HASE no conoce esta estufa.",
+      "cannot_connect_cloud": "No se puede conectar con la nube de HASE.",
+      "unknown": "Error inesperado."
+    },
+    "abort": {
+      "already_configured": "Esta estufa ya está configurada.",
+      "cannot_connect": "No se puede conectar con la estufa.",
+      "reconfigure_successful": "La estufa se ha reconfigurado.",
+      "wrong_device": "Esta es una estufa distinta de la configurada."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Error"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "Brillo LED"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "performance": {
+        "name": "Potencia"
+      },
+      "heating_up": {
+        "name": "Calentamiento"
+      },
+      "primary_air": {
+        "name": "Aire primario"
+      },
+      "secondary_air": {
+        "name": "Aire secundario"
+      },
+      "refuel": {
+        "name": "Indicador de recarga"
+      },
+      "firing_count": {
+        "name": "Encendidos"
+      },
+      "last_firing": {
+        "name": "Último encendido"
+      },
+      "last_firing_value": {
+        "name": "Valor del último encendido"
+      },
+      "phase": {
+        "name": "Fase",
+        "state": {
+          "off": "Apagada",
+          "heating_up": "Calentamiento",
+          "burning": "Combustión",
+          "add_wood": "Añadir leña",
+          "dont_add_wood": "No añadir más leña",
+          "kindling": "Encendido",
+          "residual_heat": "Calor residual",
+          "error": "Error"
+        }
+      }
+    }
+  }
+}

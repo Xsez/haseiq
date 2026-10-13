@@ -1,0 +1,118 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Kies de kachelgeneratie",
+        "description": "Kachels van de 1e generatie zijn direct in het lokale netwerk bereikbaar. Kachels van de 2e generatie (HASE iQ-besturingen vanaf november 2024, bijv. LIMA iQ) zijn alleen via de HASE-cloud bereikbaar.",
+        "menu_options": {
+          "gen1": "Gen 1 – lokaal netwerk",
+          "gen2": "Gen 2 – HASE-cloud"
+        }
+      },
+      "gen1": {
+        "title": "Kachel van de 1e generatie",
+        "description": "Voer het IP-adres of de hostnaam van de kachel in.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "IP-adres of hostnaam van de kachel in je netwerk."
+        }
+      },
+      "gen2": {
+        "title": "Kachel van de 2e generatie",
+        "description": "Open in de HASE iQ-app je kachel en kies 'Kachel delen'. Plak hier de link (of de tekst van de QR-code).",
+        "data": {
+          "share_link": "Deellink"
+        },
+        "data_description": {
+          "share_link": "Ziet eruit als https://iq-applink.web.app/new?data=…"
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Wil je {name} ({host}) toevoegen?"
+      },
+      "reconfigure": {
+        "title": "Kachel opnieuw configureren",
+        "description": "Werk de verbindingsgegevens van de kachel bij.",
+        "data": {
+          "host": "Host",
+          "share_link": "Deellink"
+        },
+        "data_description": {
+          "host": "IP-adres of hostnaam van de kachel in je netwerk.",
+          "share_link": "Ziet eruit als https://iq-applink.web.app/new?data=…"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Ongeldig IP-adres of ongeldige hostnaam.",
+      "cannot_connect": "Kan geen verbinding maken met de kachel.",
+      "invalid_share_link": "Dit is geen geldige HASE iQ-deellink.",
+      "oven_not_found": "Deze kachel is niet bekend bij de HASE-cloud.",
+      "cannot_connect_cloud": "Kan geen verbinding maken met de HASE-cloud.",
+      "unknown": "Onverwachte fout."
+    },
+    "abort": {
+      "already_configured": "Deze kachel is al geconfigureerd.",
+      "cannot_connect": "Kan geen verbinding maken met de kachel.",
+      "reconfigure_successful": "De kachel is opnieuw geconfigureerd.",
+      "wrong_device": "Dit is een andere kachel dan de geconfigureerde."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "error": {
+        "name": "Fout"
+      }
+    },
+    "number": {
+      "led_brightness": {
+        "name": "LED-helderheid"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatuur"
+      },
+      "performance": {
+        "name": "Vermogen"
+      },
+      "heating_up": {
+        "name": "Opwarmen"
+      },
+      "primary_air": {
+        "name": "Primaire lucht"
+      },
+      "secondary_air": {
+        "name": "Secundaire lucht"
+      },
+      "refuel": {
+        "name": "Bijvulindicator"
+      },
+      "firing_count": {
+        "name": "Stookbeurten"
+      },
+      "last_firing": {
+        "name": "Laatste stookbeurt"
+      },
+      "last_firing_value": {
+        "name": "Waarde laatste stookbeurt"
+      },
+      "phase": {
+        "name": "Fase",
+        "state": {
+          "off": "Uit",
+          "heating_up": "Opwarmen",
+          "burning": "Branden",
+          "add_wood": "Hout bijvullen",
+          "dont_add_wood": "Geen hout meer bijvullen",
+          "kindling": "Aansteken",
+          "residual_heat": "Restwarmte",
+          "error": "Fout"
+        }
+      }
+    }
+  }
+}

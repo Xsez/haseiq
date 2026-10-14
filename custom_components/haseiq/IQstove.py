@@ -79,8 +79,8 @@ class IQstove:
     Requests:
         base64("_req=<key>")
 
-    (Optional) Sets:
-        base64("_set=<key>;<value>")
+    Sets:
+        base64("<key>=<value>")
 
     Behavior
     --------
@@ -186,7 +186,7 @@ class IQstove:
         return asyncio.create_task(self._send_req(cmd))
 
     def setValue(self, cmd: str, value: Union[int, float, str]) -> asyncio.Task:
-        """Send `_set=<cmd>;<value>` (optional, for writable entities).
+        """Send `<cmd>=<value>` to change a writable value (e.g. `_ledBri`).
 
         Args:
             cmd: Device key to set.
@@ -323,7 +323,7 @@ class IQstove:
         await self._ws.send_str(encoded)
 
     async def _send_set(self, key: str, value: Union[int, float, str]) -> None:
-        """Send base64('_set=KEY;VALUE') as a text frame.
+        """Send base64('KEY=VALUE') as a text frame.
 
         Args:
             key: Device key to set.
@@ -331,7 +331,7 @@ class IQstove:
         """
         if not self.connected:
             raise IQStoveConnectionError("WebSocket not connected")
-        line = f"_set={key};{value}"
+        line = f"{key}={value}"
         encoded = base64.b64encode(line.encode("ascii")).decode("ascii")
         await self._ws.send_str(encoded)
 

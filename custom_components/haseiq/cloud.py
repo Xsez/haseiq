@@ -66,6 +66,9 @@ REQUEST_TIMEOUT = ClientTimeout(total=20)
 # Firebase sends a keep-alive event every ~30 s; no data for this long = dead.
 STREAM_TIMEOUT = ClientTimeout(total=None, sock_connect=20, sock_read=90)
 BACKOFF_MAX = 300
+# A dropped stream (hourly token expiry, server-side close) usually reconnects
+# within a second; only a node down for this long counts as disconnected.
+DISCONNECT_GRACE = 60
 
 
 class HaseCloudError(Exception):
@@ -307,8 +310,10 @@ class IQstoveCloud:
     """Gen 2 stove client.
 
     `data` holds one local tree per node in `NODES` (None until received or
-    when the node is empty). `connected` tells per node whether its stream is
-    currently up. Listeners are called with the node name after every change.
+    when the node is empty). `connected` tells per node whether its data is
+    current; it stays True while a dropped stream reconnects within
+    `DISCONNECT_GRACE`. Listeners are called with the node name after every
+    change.
     """
 
     def __init__(
@@ -326,6 +331,8 @@ class IQstoveCloud:
 
         self.data: Dict[str, Any] = {name: None for name in NODES}
         self.connected: Dict[str, bool] = {name: False for name in NODES}
+        self._streaming: Dict[str, bool] = {name: False for name in NODES}
+        self._down_handles: Dict[str, asyncio.TimerHandle] = {}
         self._ready: Dict[str, asyncio.Event] = {name: asyncio.Event() for name in NODES}
         self._listeners: List[Callable[[str], None]] = []
         self._tasks: List[asyncio.Task] = []
@@ -364,7 +371,11 @@ class IQstoveCloud:
         for task in tasks:
             with contextlib.suppress(asyncio.CancelledError):
                 await task
+        for handle in self._down_handles.values():
+            handle.cancel()
+        self._down_handles.clear()
         for name in NODES:
+            self._streaming[name] = False
             self.connected[name] = False
 
     def add_listener(self, callback: Callable[[str], None]) -> Callable[[], None]:
@@ -436,9 +447,9 @@ class IQstoveCloud:
             except asyncio.CancelledError:
                 raise
             except _RenewToken:
-                was_connected = self.connected[name]
-                self._set_connected(name, False)
-                immediate = was_connected or rejected is None
+                was_streaming = self._streaming[name]
+                self._stream_down(name)
+                immediate = was_streaming or rejected is None
                 rejected = token
                 if immediate:
                     # Expired token: reconnect right away with a fresh one.
@@ -449,9 +460,9 @@ class IQstoveCloud:
             except Exception as err:  # noqa: BLE001
                 _LOGGER.debug("Stream %s: %s", name, self._redact(repr(err)))
                 rejected = token if isinstance(err, CloudAuthError) else None
-                if self.connected[name]:
+                if self._streaming[name]:
                     backoff = 1
-                self._set_connected(name, False)
+                self._stream_down(name)
             await asyncio.sleep(backoff)
             backoff = min(backoff * 2, BACKOFF_MAX)
 
@@ -479,7 +490,7 @@ class IQstoveCloud:
                 self.data[name], event, message.get("path", "/"), message.get("data")
             )
             self._ready[name].set()
-            self.connected[name] = True
+            self._stream_up(name)
             self._notify(name)
         elif event == "auth_revoked":
             raise _RenewToken
@@ -487,9 +498,25 @@ class IQstoveCloud:
             raise CloudAuthError(f"stream cancelled: {data}")
         # "keep-alive" and unknown events are ignored
 
-    def _set_connected(self, name: str, connected: bool) -> None:
-        if self.connected[name] != connected:
-            self.connected[name] = connected
+    def _stream_up(self, name: str) -> None:
+        self._streaming[name] = True
+        handle = self._down_handles.pop(name, None)
+        if handle is not None:
+            handle.cancel()
+        self.connected[name] = True
+
+    def _stream_down(self, name: str) -> None:
+        """Note a dropped stream; the node counts as down after the grace."""
+        self._streaming[name] = False
+        if self.connected[name] and name not in self._down_handles:
+            self._down_handles[name] = asyncio.get_running_loop().call_later(
+                DISCONNECT_GRACE, self._set_disconnected, name
+            )
+
+    def _set_disconnected(self, name: str) -> None:
+        self._down_handles.pop(name, None)
+        if self.connected[name]:
+            self.connected[name] = False
             self._notify(name)
 
     def _notify(self, name: str) -> None:

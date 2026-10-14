@@ -19,7 +19,7 @@ class IQStoveEntity(CoordinatorEntity[IQStoveAnyCoordinator]):
 
     `key` makes the unique ID (`<serial>-<key>`). For Gen 2, `node` names the
     cloud node the entity reads; the entity is unavailable while that node's
-    stream is down.
+    stream is down (short reconnects are bridged, see `cloud.DISCONNECT_GRACE`).
     """
 
     _attr_has_entity_name = True

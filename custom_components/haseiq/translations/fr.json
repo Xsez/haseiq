@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Air de vitre"
       },
+      "grate_air": {
+        "name": "Air de grille"
+      },
       "rear_wall_air": {
         "name": "Air de paroi arrière"
       },

@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Rudeluft"
       },
+      "grate_air": {
+        "name": "Ristluft"
+      },
       "rear_wall_air": {
         "name": "Bagvægsluft"
       },

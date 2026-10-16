@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Aire del cristal"
       },
+      "grate_air": {
+        "name": "Aire de la rejilla"
+      },
       "rear_wall_air": {
         "name": "Aire de pared trasera"
       },

@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Vzduch skla"
       },
+      "grate_air": {
+        "name": "Vzduch roštu"
+      },
       "rear_wall_air": {
         "name": "Vzduch zadní stěny"
       },

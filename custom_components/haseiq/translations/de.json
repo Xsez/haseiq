@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Scheibenluft"
       },
+      "grate_air": {
+        "name": "Rostluft"
+      },
       "rear_wall_air": {
         "name": "Rückwandluft"
       },

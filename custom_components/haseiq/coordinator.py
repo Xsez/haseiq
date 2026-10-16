@@ -178,6 +178,7 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._firing_count: int | None = None
         self._firing_task: asyncio.Task | None = None
         self._sw_version: str | None = None
+        self._air_flap_threshold: int | None = None
         # pulses of `konstant_app/n` seen so far (see `_check_notification`)
         self.notification_count = 0
         self._notification_pending = False
@@ -241,6 +242,23 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if not any(self.client.connected.values()):
             raise UpdateFailed("Cannot stream from the HASE cloud")
 
+        await self._async_load_air_flap_threshold()
+
+    async def _async_load_air_flap_threshold(self) -> None:
+        """Look up the model's air-flap threshold K once (splits PL into window/grate)."""
+        app = self.client.data.get("konstant_app")
+        article = app.get("a") if isinstance(app, dict) else None
+        if article is None:
+            return
+        try:
+            threshold = await self.client.async_get_air_flap_threshold(str(article))
+        except HaseCloudError as err:
+            _LOGGER.debug("Cannot load the air-flap threshold: %s", err)
+            return
+        if isinstance(threshold, int) and 0 < threshold < 100:
+            self._air_flap_threshold = threshold
+            _LOGGER.debug("Air-flap threshold K=%s (article %s)", threshold, article)
+
     async def _async_update_data(self) -> dict[str, Any]:
         """Return the current snapshot (data itself is pushed)."""
         return self._snapshot()
@@ -260,7 +278,11 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise HomeAssistantError(f"Cannot write to the HASE cloud: {err}") from err
 
     def _snapshot(self) -> dict[str, Any]:
-        return {**self.client.data, "firing": self._firing}
+        return {
+            **self.client.data,
+            "firing": self._firing,
+            "air_flap_threshold": self._air_flap_threshold,
+        }
 
     def _on_client_change(self, node: str) -> None:
         if node == "konstant":

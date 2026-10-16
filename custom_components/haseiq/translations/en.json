@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Window air"
       },
+      "grate_air": {
+        "name": "Grate air"
+      },
       "rear_wall_air": {
         "name": "Rear wall air"
       },

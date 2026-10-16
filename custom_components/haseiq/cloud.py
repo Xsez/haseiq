@@ -51,6 +51,15 @@ SHARE_LINK_KEY = bytes.fromhex("0c89e74a0f31d4d76184c13f04cd2970")
 SIGN_UP_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp"
 REFRESH_URL = "https://securetoken.googleapis.com/v1/token"
 RTDB_URL = "https://hase-iq-default-rtdb.europe-west1.firebasedatabase.app"
+# Firestore collection with per-model data, incl. the air-flap threshold K that
+# splits the combined PL flap value into window air (0..K) and grate air (K..100).
+STOVE_MODELS_URL = (
+    "https://firestore.googleapis.com/v1/projects/hase-iq/databases/(default)"
+    "/documents/stove_models"
+)
+# The app remaps this article number before the model lookup.
+ARTICLE_REMAP = {"1020666": "1020667"}
+DEFAULT_AIR_FLAP_THRESHOLD = 80  # the app's fallback before a model loads
 
 # RTDB nodes streamed per oven: short name → path template.
 NODES: Dict[str, str] = {
@@ -451,6 +460,33 @@ class IQstoveCloud:
     async def async_get_firing(self, start: str) -> Any:
         """Return the samples of one firing (see `firing_stats`)."""
         return await self.async_get(f"{HISTORY_PATH.format(oven_id=self.oven_id)}/{start}")
+
+    async def async_get_air_flap_threshold(self, article_number: str) -> Optional[int]:
+        """Return the model's air-flap threshold K from Firestore `stove_models`.
+
+        K splits the combined `PL` flap value: 0..K is window air (Scheibe),
+        K..100 is grate air (Rost). Returns None if the model is not found.
+        """
+        article = ARTICLE_REMAP.get(article_number, article_number)
+        token = await self._auth.async_get_token()
+        try:
+            async with self._session.get(
+                STOVE_MODELS_URL,
+                params={"pageSize": "300"},
+                headers={**ANDROID_HEADERS, "Authorization": f"Bearer {token}"},
+                timeout=REQUEST_TIMEOUT,
+            ) as resp:
+                if resp.status != 200:
+                    raise CloudConnectionError(f"stove_models: HTTP {resp.status}")
+                body = await resp.json(content_type=None)
+        except (ClientError, asyncio.TimeoutError, ValueError) as err:
+            raise CloudConnectionError(f"stove_models failed: {err!r}") from err
+        for doc in body.get("documents", []) if isinstance(body, dict) else []:
+            fields = doc.get("fields", {})
+            if fields.get("article_number", {}).get("stringValue") == article:
+                value = fields.get("air_flap_threshold", {}).get("integerValue")
+                return int(value) if value is not None else None
+        return None
 
     async def async_get_error_log(self) -> Any:
         """Return the error log (see `ERROR_LOG_PATH`)."""

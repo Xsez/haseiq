@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Lasin ilma"
       },
+      "grate_air": {
+        "name": "Arinailma"
+      },
       "rear_wall_air": {
         "name": "Takaseinän ilma"
       },

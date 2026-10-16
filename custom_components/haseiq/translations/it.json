@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Aria vetro"
       },
+      "grate_air": {
+        "name": "Aria griglia"
+      },
       "rear_wall_air": {
         "name": "Aria parete posteriore"
       },

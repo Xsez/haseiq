@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Ruitlucht"
       },
+      "grate_air": {
+        "name": "Roosterlucht"
+      },
       "rear_wall_air": {
         "name": "Achterwandlucht"
       },

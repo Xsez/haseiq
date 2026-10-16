@@ -123,6 +123,9 @@
       "window_air": {
         "name": "Powietrze szyby"
       },
+      "grate_air": {
+        "name": "Powietrze rusztu"
+      },
       "rear_wall_air": {
         "name": "Powietrze tylnej ściany"
       },

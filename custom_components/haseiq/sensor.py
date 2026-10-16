@@ -15,11 +15,17 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory, UnitOfTemperature, UnitOfTime
+from homeassistant.const import (
+    PERCENTAGE,
+    EntityCategory,
+    UnitOfTemperature,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
+from .cloud import DEFAULT_AIR_FLAP_THRESHOLD
 from .const import GEN1, PHASES_GEN1, PHASES_GEN2
 from .entity import (
     MAX_STATE_LENGTH,
@@ -107,6 +113,36 @@ def _firing(data: dict[str, Any]) -> dict[str, Any]:
     return firing if isinstance(firing, dict) else {}
 
 
+def _air_threshold(data: dict[str, Any]) -> int:
+    """Return the model's air-flap threshold K (fallback to the app's default)."""
+    k = data.get("air_flap_threshold")
+    return k if isinstance(k, int) and 0 < k < 100 else DEFAULT_AIR_FLAP_THRESHOLD
+
+
+def _window_air(data: dict[str, Any]) -> int | None:
+    """Window air (Scheibe): the part of the combined `PL` flap below K, as 0-100%."""
+    pl = _number(live_data(data).get("PL"))
+    if pl is None:
+        return None
+    k = _air_threshold(data)
+    return round(min(pl, k) / k * 100)
+
+
+def _grate_air(data: dict[str, Any]) -> int | None:
+    """Grate air (Rost): the part of the combined `PL` flap above K, as 0-100%."""
+    pl = _number(live_data(data).get("PL"))
+    if pl is None:
+        return None
+    k = _air_threshold(data)
+    return round(min(max(pl - k, 0) / (100 - k) * 100, 100))
+
+
+def _rear_air(data: dict[str, Any]) -> int | None:
+    """Rear wall air (Rückwand): `SL`, 0-100%."""
+    sl = _number(live_data(data).get("SL"))
+    return round(min(sl, 100)) if sl is not None else None
+
+
 GEN1_SENSORS: tuple[IQStoveSensorDescription, ...] = (
     IQStoveSensorDescription(
         key="temperature",
@@ -190,20 +226,31 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _number(live_data(data).get("P")),
     ),
     IQStoveSensorDescription(
-        # key kept for the unique ID; PL is the app's "window air" (Scheibe)
+        # key kept for the unique ID; window air = PL below the threshold K
         key="primary_air",
         translation_key="window_air",
         node="liveData",
+        native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda data: _number(live_data(data).get("PL")),
+        value_fn=_window_air,
+    ),
+    IQStoveSensorDescription(
+        # grate air = PL above the threshold K (same combined flap as window)
+        key="grate_air",
+        translation_key="grate_air",
+        node="liveData",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_grate_air,
     ),
     IQStoveSensorDescription(
         # key kept for the unique ID; SL is the app's "rear wall air" (Rückwand)
         key="secondary_air",
         translation_key="rear_wall_air",
         node="liveData",
+        native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda data: _number(live_data(data).get("SL")),
+        value_fn=_rear_air,
     ),
     IQStoveSensorDescription(
         key="refuel",

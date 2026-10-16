@@ -76,6 +76,11 @@
         "name": "Firmware-update"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Extra lucht"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "App-melding",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Opwarmen"
       },
-      "primary_air": {
-        "name": "Primaire lucht"
+      "window_air": {
+        "name": "Ruitlucht"
       },
-      "secondary_air": {
-        "name": "Secundaire lucht"
+      "rear_wall_air": {
+        "name": "Achterwandlucht"
       },
       "refuel": {
         "name": "Urgentie bijvullen"

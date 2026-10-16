@@ -76,6 +76,11 @@
         "name": "Firmwareopdatering"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Ekstra luft"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "App-notifikation",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Opvarmning"
       },
-      "primary_air": {
-        "name": "Primærluft"
+      "window_air": {
+        "name": "Rudeluft"
       },
-      "secondary_air": {
-        "name": "Sekundærluft"
+      "rear_wall_air": {
+        "name": "Bagvægsluft"
       },
       "refuel": {
         "name": "Påfyldningshast"

@@ -190,15 +190,17 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _number(live_data(data).get("P")),
     ),
     IQStoveSensorDescription(
+        # key kept for the unique ID; PL is the app's "window air" (Scheibe)
         key="primary_air",
-        translation_key="primary_air",
+        translation_key="window_air",
         node="liveData",
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _number(live_data(data).get("PL")),
     ),
     IQStoveSensorDescription(
+        # key kept for the unique ID; SL is the app's "rear wall air" (Rückwand)
         key="secondary_air",
-        translation_key="secondary_air",
+        translation_key="rear_wall_air",
         node="liveData",
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _number(live_data(data).get("SL")),

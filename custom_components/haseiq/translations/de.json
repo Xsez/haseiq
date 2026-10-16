@@ -76,6 +76,11 @@
         "name": "Firmware-Update"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Extra-Luft"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "App-Benachrichtigung",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Aufheizen"
       },
-      "primary_air": {
-        "name": "Primärluft"
+      "window_air": {
+        "name": "Scheibenluft"
       },
-      "secondary_air": {
-        "name": "Sekundärluft"
+      "rear_wall_air": {
+        "name": "Rückwandluft"
       },
       "refuel": {
         "name": "Nachlegedringlichkeit"

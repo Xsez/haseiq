@@ -76,6 +76,11 @@
         "name": "Firmwareuppdatering"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Extra luft"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "Appavisering",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Uppvärmning"
       },
-      "primary_air": {
-        "name": "Primärluft"
+      "window_air": {
+        "name": "Rutluft"
       },
-      "secondary_air": {
-        "name": "Sekundärluft"
+      "rear_wall_air": {
+        "name": "Bakväggsluft"
       },
       "refuel": {
         "name": "Brådska att fylla på"

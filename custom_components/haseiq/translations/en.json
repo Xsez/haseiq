@@ -76,6 +76,11 @@
         "name": "Firmware update"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Extra air"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "App notification",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Heating up"
       },
-      "primary_air": {
-        "name": "Primary air"
+      "window_air": {
+        "name": "Window air"
       },
-      "secondary_air": {
-        "name": "Secondary air"
+      "rear_wall_air": {
+        "name": "Rear wall air"
       },
       "refuel": {
         "name": "Refuel urgency"

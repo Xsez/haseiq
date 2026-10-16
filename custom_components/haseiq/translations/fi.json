@@ -76,6 +76,11 @@
         "name": "Laiteohjelmistopäivitys"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Lisäilma"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "Sovellusilmoitus",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Lämpeneminen"
       },
-      "primary_air": {
-        "name": "Primääri-ilma"
+      "window_air": {
+        "name": "Lasin ilma"
       },
-      "secondary_air": {
-        "name": "Sekundääri-ilma"
+      "rear_wall_air": {
+        "name": "Takaseinän ilma"
       },
       "refuel": {
         "name": "Puiden lisäyksen kiireellisyys"

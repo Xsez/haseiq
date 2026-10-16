@@ -76,6 +76,11 @@
         "name": "Aktualizacja oprogramowania"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Dodatkowe powietrze"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "Powiadomienie aplikacji",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Nagrzewanie"
       },
-      "primary_air": {
-        "name": "Powietrze pierwotne"
+      "window_air": {
+        "name": "Powietrze szyby"
       },
-      "secondary_air": {
-        "name": "Powietrze wtórne"
+      "rear_wall_air": {
+        "name": "Powietrze tylnej ściany"
       },
       "refuel": {
         "name": "Pilność dokładania"

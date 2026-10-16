@@ -76,6 +76,11 @@
         "name": "Aktualizace firmwaru"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Vzduch navíc"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "Oznámení aplikace",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Zahřívání"
       },
-      "primary_air": {
-        "name": "Primární vzduch"
+      "window_air": {
+        "name": "Vzduch skla"
       },
-      "secondary_air": {
-        "name": "Sekundární vzduch"
+      "rear_wall_air": {
+        "name": "Vzduch zadní stěny"
       },
       "refuel": {
         "name": "Naléhavost přiložení"

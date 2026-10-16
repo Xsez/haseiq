@@ -76,6 +76,11 @@
         "name": "Fastvareoppdatering"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Ekstra luft"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "App-varsel",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Oppvarming"
       },
-      "primary_air": {
-        "name": "Primærluft"
+      "window_air": {
+        "name": "Ruteluft"
       },
-      "secondary_air": {
-        "name": "Sekundærluft"
+      "rear_wall_air": {
+        "name": "Bakveggsluft"
       },
       "refuel": {
         "name": "Hast med påfylling"

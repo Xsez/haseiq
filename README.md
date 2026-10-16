@@ -85,8 +85,10 @@ Device information: serial number, firmware version, hardware model, model desig
 - **Phase** – off, kindling, burning, add wood, heating up, residual heat, don't add wood, error
 - **Performance**
 - **Error** – on in the error phase or while the stove reports an error code
-- **Primary air**, **Secondary air**, **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
+- **Window air** (`PL`), **Rear wall air** (`SL`) – the two air flaps the stove reports; the app's grate-air bar is not published, so it is not exposed
+- **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
 - **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)
+- **Extra air** (button) – triggers the stove's air booster, like the app's "Extra air". The integration turns it off again after 5 minutes as a safety net; the stove normally ends it on its own.
 - For the current or last firing: **Last firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
 - **Firings** – the number of firings the HASE cloud keeps
 - **Firing** – running from the firing start until shortly after residual heat

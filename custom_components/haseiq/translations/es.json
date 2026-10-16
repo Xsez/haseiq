@@ -76,6 +76,11 @@
         "name": "Actualización de firmware"
       }
     },
+    "button": {
+      "extra_air": {
+        "name": "Aire adicional"
+      }
+    },
     "event": {
       "app_notification": {
         "name": "Notificación de la app",
@@ -115,11 +120,11 @@
       "heating_up": {
         "name": "Calentamiento"
       },
-      "primary_air": {
-        "name": "Aire primario"
+      "window_air": {
+        "name": "Aire del cristal"
       },
-      "secondary_air": {
-        "name": "Aire secundario"
+      "rear_wall_air": {
+        "name": "Aire de pared trasera"
       },
       "refuel": {
         "name": "Urgencia de recarga"

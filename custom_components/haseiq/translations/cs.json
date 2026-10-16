@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Aktualizace firmwaru"
+      },
+      "booster_available": {
+        "name": "Vzduch navíc k dispozici"
+      },
+      "booster_active": {
+        "name": "Vzduch navíc aktivní"
       }
     },
     "button": {

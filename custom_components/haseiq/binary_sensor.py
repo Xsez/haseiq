@@ -120,6 +120,22 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         recheck=timedelta(seconds=30),
     ),
     IQStoveBinarySensorDescription(
+        # `bv`: the stove offers the extra-air booster right now
+        key="booster_available",
+        translation_key="booster_available",
+        node="konstant_app",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_flag("konstant_app", "bv"),
+    ),
+    IQStoveBinarySensorDescription(
+        # `ba`: the extra-air booster is currently running
+        key="booster_active",
+        translation_key="booster_active",
+        node="konstant_app",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        value_fn=_flag("konstant_app", "ba"),
+    ),
+    IQStoveBinarySensorDescription(
         # `u`: an update waits to be installed; `f`: download progress in %
         key="firmware_update",
         translation_key="firmware_update",

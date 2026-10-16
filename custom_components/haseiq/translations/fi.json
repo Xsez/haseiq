@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Laiteohjelmistopäivitys"
+      },
+      "booster_available": {
+        "name": "Lisäilma saatavilla"
+      },
+      "booster_active": {
+        "name": "Lisäilma käytössä"
       }
     },
     "button": {

@@ -90,7 +90,7 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 - **Window air**, **Grate air**, **Rear wall air** (%) – the three air flaps, matching the app. The stove sends a combined window/grate flap value (`PL`) plus the rear flap (`SL`); the split point is looked up per stove model, so window and grate are derived like the app does.
 - **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
 - **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)
-- **Extra air** (button) – triggers the stove's air booster, like the app's "Extra air". The integration turns it off again after 5 minutes as a safety net; the stove normally ends it on its own.
+- **Extra air** (button) – requests the stove's air booster, like the app's "Extra air" (a short pulse; the stove runs it and returns to iQ mode on its own). Available only while the stove offers it. **Extra air available** / **Extra air active** show the booster status.
 - For the current or last firing: **Last firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
 - **Firings** – the number of firings the HASE cloud keeps
 - **App notification** – an event each time the stove has the HASE iQ app notified (so far: when wood should be added)

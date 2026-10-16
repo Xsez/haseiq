@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Mise à jour du firmware"
+      },
+      "booster_available": {
+        "name": "Air supplémentaire disponible"
+      },
+      "booster_active": {
+        "name": "Air supplémentaire actif"
       }
     },
     "button": {

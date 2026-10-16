@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Firmware-update"
+      },
+      "booster_available": {
+        "name": "Extra lucht beschikbaar"
+      },
+      "booster_active": {
+        "name": "Extra lucht actief"
       }
     },
     "button": {

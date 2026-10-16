@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Fastvareoppdatering"
+      },
+      "booster_available": {
+        "name": "Ekstra luft tilgjengelig"
+      },
+      "booster_active": {
+        "name": "Ekstra luft aktiv"
       }
     },
     "button": {

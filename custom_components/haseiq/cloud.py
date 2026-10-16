@@ -512,12 +512,6 @@ class IQstoveCloud:
         """Write one setting to `konstant`, where the app writes its settings."""
         await self._async_request("PUT", f"konstant/{self.oven_id}/{key}", json=value)
 
-    async def async_set_konstant_app(self, key: str, value: Any) -> None:
-        """Write one value to `konstant_app` (e.g. the booster flag `ba`)."""
-        await self._async_request(
-            "PUT", f"konstant_app/{self.oven_id}/{key}", json=value
-        )
-
     async def async_add_keepalive(self, delta: int) -> None:
         """Change the keep-alive counter `k` by `delta` (server-side increment)."""
         await self._async_request(

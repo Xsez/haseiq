@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Aggiornamento firmware"
+      },
+      "booster_available": {
+        "name": "Aria extra disponibile"
+      },
+      "booster_active": {
+        "name": "Aria extra attiva"
       }
     },
     "button": {

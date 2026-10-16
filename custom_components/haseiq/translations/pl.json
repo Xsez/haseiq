@@ -71,6 +71,12 @@
       },
       "firmware_update": {
         "name": "Aktualizacja oprogramowania"
+      },
+      "booster_available": {
+        "name": "Dodatkowe powietrze dostępne"
+      },
+      "booster_active": {
+        "name": "Dodatkowe powietrze aktywne"
       }
     },
     "button": {

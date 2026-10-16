@@ -285,12 +285,23 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except HaseCloudError as err:
             raise HomeAssistantError(f"Cannot write to the HASE cloud: {err}") from err
 
-    async def async_set_booster(self, on: bool) -> None:
-        """Turn the stove's air booster (`konstant_app/ba`) on or off."""
+    async def async_pulse_booster(self) -> None:
+        """Request extra air: pulse `konstant/b` true for ~2 s, then false.
+
+        `b` is the momentary command the app sends; the stove confirms by setting
+        `konstant_app/ba` (booster active) and returns to iQ mode on its own.
+        """
         try:
-            await self.client.async_set_konstant_app("ba", on)
+            await self.client.async_set_konstant("b", True)
         except HaseCloudError as err:
             raise HomeAssistantError(f"Cannot write to the HASE cloud: {err}") from err
+        try:
+            await asyncio.sleep(2)
+        finally:
+            try:
+                await self.client.async_set_konstant("b", False)
+            except HaseCloudError as err:
+                _LOGGER.warning("Could not reset the booster pulse `b`: %s", err)
 
     def _snapshot(self) -> dict[str, Any]:
         return {

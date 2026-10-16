@@ -2,21 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-
 from homeassistant.components.button import ButtonEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import CALLBACK_TYPE, HomeAssistant
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
-from homeassistant.helpers.event import async_call_later
 
 from .const import GEN2
 from .coordinator import IQStoveCloudCoordinator
-from .entity import IQStoveEntity
-
-# The stove clears the booster itself after ~70 s; this is only a safety ceiling
-# so a write can never leave it stuck on.
-BOOSTER_RESET = 300  # seconds
+from .entity import IQStoveEntity, app_data
 
 
 async def async_setup_entry(
@@ -31,7 +24,7 @@ async def async_setup_entry(
 
 
 class IQStoveBoosterButton(IQStoveEntity, ButtonEntity):
-    """Triggers the stove's "extra air" booster (a short burst of more air)."""
+    """Requests the stove's "extra air" booster (a short burst of more air)."""
 
     _attr_translation_key = "extra_air"
 
@@ -40,23 +33,15 @@ class IQStoveBoosterButton(IQStoveEntity, ButtonEntity):
     def __init__(self, coordinator: IQStoveCloudCoordinator) -> None:
         """Initialize the entity."""
         super().__init__(coordinator, "extra_air", "konstant_app")
-        self._cancel_reset: CALLBACK_TYPE | None = None
+
+    @property
+    def available(self) -> bool:
+        """Available only while the stove offers the booster and it is not running."""
+        if not super().available:
+            return False
+        app = app_data(self.coordinator.data)
+        return app.get("bv") is True and app.get("ba") is not True
 
     async def async_press(self) -> None:
-        """Start the booster and arm the safety reset."""
-        await self.coordinator.async_set_booster(True)
-        self._cancel_pending_reset()
-        self._cancel_reset = async_call_later(self.hass, BOOSTER_RESET, self._async_reset)
-
-    async def _async_reset(self, _now: datetime) -> None:
-        self._cancel_reset = None
-        await self.coordinator.async_set_booster(False)
-
-    def _cancel_pending_reset(self) -> None:
-        if self._cancel_reset is not None:
-            self._cancel_reset()
-            self._cancel_reset = None
-
-    async def async_will_remove_from_hass(self) -> None:
-        """Cancel the safety reset when the entity goes away."""
-        self._cancel_pending_reset()
+        """Pulse the booster command; the stove runs it and ends it on its own."""
+        await self.coordinator.async_pulse_booster()

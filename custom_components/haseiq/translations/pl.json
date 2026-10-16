@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Palenie"
+      },
+      "firmware_update": {
+        "name": "Aktualizacja oprogramowania"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Powiadomienie aplikacji",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Powiadomienie"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatura"
       },
+      "load_average_temperature": {
+        "name": "Średnia temperatura wsadu"
+      },
+      "controller_temperature": {
+        "name": "Temperatura sterownika"
+      },
       "performance": {
         "name": "Moc"
       },
@@ -98,25 +122,25 @@
         "name": "Powietrze wtórne"
       },
       "refuel": {
-        "name": "Wskaźnik dokładania"
+        "name": "Pilność dokładania"
       },
       "firing_count": {
         "name": "Rozpalenia"
       },
       "last_firing": {
-        "name": "Ostatnie rozpalenie"
+        "name": "Ostatnie palenie początek"
       },
       "firing_duration": {
-        "name": "Czas palenia"
+        "name": "Ostatnie palenie czas"
       },
       "firing_max_temperature": {
-        "name": "Maks. temperatura palenia"
+        "name": "Ostatnie palenie maks. temperatura"
       },
       "firing_average_temperature": {
-        "name": "Średnia temperatura palenia"
+        "name": "Ostatnie palenie średnia temperatura"
       },
       "firing_wood_loads": {
-        "name": "Dokładania drewna"
+        "name": "Ostatnie palenie dokładania drewna"
       },
       "last_connection": {
         "name": "Ostatnie połączenie"

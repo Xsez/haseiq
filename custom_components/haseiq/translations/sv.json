@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Eldning"
+      },
+      "firmware_update": {
+        "name": "Firmwareuppdatering"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Appavisering",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Avisering"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatur"
       },
+      "load_average_temperature": {
+        "name": "Medeltemperatur för laddning"
+      },
+      "controller_temperature": {
+        "name": "Styrenhetens temperatur"
+      },
       "performance": {
         "name": "Effekt"
       },
@@ -98,25 +122,25 @@
         "name": "Sekundärluft"
       },
       "refuel": {
-        "name": "Påfyllningsindikator"
+        "name": "Brådska att fylla på"
       },
       "firing_count": {
         "name": "Eldningar"
       },
       "last_firing": {
-        "name": "Senaste eldning"
+        "name": "Senaste eldning start"
       },
       "firing_duration": {
-        "name": "Eldningens längd"
+        "name": "Senaste eldning längd"
       },
       "firing_max_temperature": {
-        "name": "Max. temperatur eldning"
+        "name": "Senaste eldning max. temperatur"
       },
       "firing_average_temperature": {
-        "name": "Medeltemperatur eldning"
+        "name": "Senaste eldning medeltemperatur"
       },
       "firing_wood_loads": {
-        "name": "Vedpåfyllningar"
+        "name": "Senaste eldning vedpåfyllningar"
       },
       "last_connection": {
         "name": "Senaste anslutning"

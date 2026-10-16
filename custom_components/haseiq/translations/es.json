@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "En línea"
+      },
+      "firing": {
+        "name": "Encendido"
+      },
+      "firmware_update": {
+        "name": "Actualización de firmware"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Notificación de la app",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Notificación"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatura"
       },
+      "load_average_temperature": {
+        "name": "Temperatura media de la carga"
+      },
+      "controller_temperature": {
+        "name": "Temperatura del controlador"
+      },
       "performance": {
         "name": "Potencia"
       },
@@ -98,25 +122,25 @@
         "name": "Aire secundario"
       },
       "refuel": {
-        "name": "Indicador de recarga"
+        "name": "Urgencia de recarga"
       },
       "firing_count": {
         "name": "Encendidos"
       },
       "last_firing": {
-        "name": "Último encendido"
+        "name": "Último encendido inicio"
       },
       "firing_duration": {
-        "name": "Duración del encendido"
+        "name": "Último encendido duración"
       },
       "firing_max_temperature": {
-        "name": "Temperatura máxima del encendido"
+        "name": "Último encendido temperatura máxima"
       },
       "firing_average_temperature": {
-        "name": "Temperatura media del encendido"
+        "name": "Último encendido temperatura media"
       },
       "firing_wood_loads": {
-        "name": "Cargas de leña"
+        "name": "Último encendido cargas de leña"
       },
       "last_connection": {
         "name": "Última conexión"

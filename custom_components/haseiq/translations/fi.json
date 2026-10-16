@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Verkossa"
+      },
+      "firing": {
+        "name": "Lämmitys"
+      },
+      "firmware_update": {
+        "name": "Laiteohjelmistopäivitys"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Sovellusilmoitus",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Ilmoitus"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Lämpötila"
       },
+      "load_average_temperature": {
+        "name": "Panoksen keskilämpötila"
+      },
+      "controller_temperature": {
+        "name": "Ohjaimen lämpötila"
+      },
       "performance": {
         "name": "Teho"
       },
@@ -98,25 +122,25 @@
         "name": "Sekundääri-ilma"
       },
       "refuel": {
-        "name": "Puiden lisäyksen ilmaisin"
+        "name": "Puiden lisäyksen kiireellisyys"
       },
       "firing_count": {
         "name": "Lämmityskerrat"
       },
       "last_firing": {
-        "name": "Viimeisin lämmitys"
+        "name": "Viimeisin lämmitys alku"
       },
       "firing_duration": {
-        "name": "Lämmityksen kesto"
+        "name": "Viimeisin lämmitys kesto"
       },
       "firing_max_temperature": {
-        "name": "Lämmityksen huippulämpötila"
+        "name": "Viimeisin lämmitys huippulämpötila"
       },
       "firing_average_temperature": {
-        "name": "Lämmityksen keskilämpötila"
+        "name": "Viimeisin lämmitys keskilämpötila"
       },
       "firing_wood_loads": {
-        "name": "Puiden lisäykset"
+        "name": "Viimeisin lämmitys puiden lisäykset"
       },
       "last_connection": {
         "name": "Viimeisin yhteys"

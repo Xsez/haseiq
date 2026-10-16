@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "En ligne"
+      },
+      "firing": {
+        "name": "Flambée"
+      },
+      "firmware_update": {
+        "name": "Mise à jour du firmware"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Notification de l'app",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Notification"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Température"
       },
+      "load_average_temperature": {
+        "name": "Température moyenne de la charge"
+      },
+      "controller_temperature": {
+        "name": "Température du contrôleur"
+      },
       "performance": {
         "name": "Puissance"
       },
@@ -98,25 +122,25 @@
         "name": "Air secondaire"
       },
       "refuel": {
-        "name": "Indicateur de rechargement"
+        "name": "Urgence de rechargement"
       },
       "firing_count": {
         "name": "Flambées"
       },
       "last_firing": {
-        "name": "Dernière flambée"
+        "name": "Dernière flambée début"
       },
       "firing_duration": {
-        "name": "Durée de la flambée"
+        "name": "Dernière flambée durée"
       },
       "firing_max_temperature": {
-        "name": "Température max. de la flambée"
+        "name": "Dernière flambée température max."
       },
       "firing_average_temperature": {
-        "name": "Température moyenne de la flambée"
+        "name": "Dernière flambée température moyenne"
       },
       "firing_wood_loads": {
-        "name": "Rechargements de la flambée"
+        "name": "Dernière flambée rechargements"
       },
       "last_connection": {
         "name": "Dernière connexion"

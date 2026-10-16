@@ -148,6 +148,30 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _number(live_data(data).get("T")),
     ),
     IQStoveSensorDescription(
+        # TQUER ("T quer", T̄): the mean temperature, restarts with each load of wood
+        key="load_average_temperature",
+        translation_key="load_average_temperature",
+        node="liveData",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(live_data(data).get("TQUER")),
+    ),
+    IQStoveSensorDescription(
+        # TC: hundredths of °C, rises slowly from room temperature while burning
+        key="controller_temperature",
+        translation_key="controller_temperature",
+        node="liveData",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=1,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: (
+            tc / 100 if (tc := _number(live_data(data).get("TC"))) is not None else None
+        ),
+    ),
+    IQStoveSensorDescription(
         key="phase",
         translation_key="phase",
         node="liveData",
@@ -204,10 +228,9 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         key="last_firing_value",
         translation_key="firing_duration",
         node="historienliste",
+        # no display precision: the frontend then shows durations as h/min/s
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.SECONDS,
-        suggested_unit_of_measurement=UnitOfTime.HOURS,
-        suggested_display_precision=2,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=_last_firing_duration,
     ),
@@ -258,11 +281,12 @@ LOG_LINES = 20  # log lines kept in the attributes of the log sensor
 
 # Keys with a dedicated entity, per node; they get no raw sensor
 GEN2_DEDICATED: dict[str, set[str]] = {
-    "liveData": {"T", "F", "P", "PL", "SL", "N"},
-    # the LED brightness numbers
-    "konstant": {"l", "s"},
-    # ping: the Online binary sensor
-    "konstant_app": {"ping", "tsfc"},
+    "liveData": {"T", "TQUER", "TC", "F", "P", "PL", "SL", "N"},
+    # l/s: the LED brightness numbers, u: the firmware update binary sensor
+    "konstant": {"l", "s", "u"},
+    # binary sensors (ping: online, bv: firing, f: firmware update progress)
+    # and the app notification event (n)
+    "konstant_app": {"ping", "tsfc", "bv", "f", "n"},
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")

@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Zatopení"
+      },
+      "firmware_update": {
+        "name": "Aktualizace firmwaru"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Oznámení aplikace",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Oznámení"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Teplota"
       },
+      "load_average_temperature": {
+        "name": "Průměrná teplota náložky"
+      },
+      "controller_temperature": {
+        "name": "Teplota řídicí jednotky"
+      },
       "performance": {
         "name": "Výkon"
       },
@@ -98,25 +122,25 @@
         "name": "Sekundární vzduch"
       },
       "refuel": {
-        "name": "Indikátor přiložení"
+        "name": "Naléhavost přiložení"
       },
       "firing_count": {
         "name": "Zatopení"
       },
       "last_firing": {
-        "name": "Poslední zatopení"
+        "name": "Poslední zatopení začátek"
       },
       "firing_duration": {
-        "name": "Doba hoření"
+        "name": "Poslední zatopení doba"
       },
       "firing_max_temperature": {
-        "name": "Max. teplota hoření"
+        "name": "Poslední zatopení max. teplota"
       },
       "firing_average_temperature": {
-        "name": "Průměrná teplota hoření"
+        "name": "Poslední zatopení průměrná teplota"
       },
       "firing_wood_loads": {
-        "name": "Přiložení dřeva"
+        "name": "Poslední zatopení přiložení dřeva"
       },
       "last_connection": {
         "name": "Poslední připojení"

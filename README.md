@@ -81,15 +81,18 @@ Device information: serial number, firmware version, hardware model, model desig
 
 ### Gen 2 (beta)
 
-- **Temperature**
+- **Temperature**, **Load average temperature** (mean temperature since the last load of wood), **Controller temperature**
 - **Phase** – off, kindling, burning, add wood, heating up, residual heat, don't add wood, error
 - **Performance**
-- **Error**
-- **Primary air**, **Secondary air**, **Refuel indicator**
+- **Error** – on in the error phase or while the stove reports an error code
+- **Primary air**, **Secondary air**, **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
 - **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)
-- **Last firing** (start time) and, for the current or last firing, **Firing duration**, **Firing peak temperature**, **Firing average temperature** and **Firing wood loads**
+- For the current or last firing: **Last firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
 - **Firings** – the number of firings the HASE cloud keeps
+- **Firing** – running from the firing start until shortly after residual heat
+- **App notification** – an event each time the stove has the HASE iQ app notified (so far: when wood should be added)
 - **Online** – off when the stove has not reported for 3 minutes; **Last connection**; the firmware version is shown on the device page
+- **Firmware update** – on while an update waits to be installed, with the download progress as attribute
 - **Last log entry** – the newest line of the stove's own log (restarts, firmware updates); the latest 20 lines are in its attributes
 - Every other value the cloud delivers is added as a raw sensor (`Live …`, `Konstant …`, `App …`) to help work out what it means.
 

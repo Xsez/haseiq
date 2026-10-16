@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Accensione"
+      },
+      "firmware_update": {
+        "name": "Aggiornamento firmware"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "Notifica app",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Notifica"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatura"
       },
+      "load_average_temperature": {
+        "name": "Temperatura media del carico"
+      },
+      "controller_temperature": {
+        "name": "Temperatura del controller"
+      },
       "performance": {
         "name": "Potenza"
       },
@@ -98,25 +122,25 @@
         "name": "Aria secondaria"
       },
       "refuel": {
-        "name": "Indicatore di ricarica"
+        "name": "Urgenza di ricarica"
       },
       "firing_count": {
         "name": "Accensioni"
       },
       "last_firing": {
-        "name": "Ultima accensione"
+        "name": "Ultima accensione inizio"
       },
       "firing_duration": {
-        "name": "Durata accensione"
+        "name": "Ultima accensione durata"
       },
       "firing_max_temperature": {
-        "name": "Temperatura massima accensione"
+        "name": "Ultima accensione temperatura massima"
       },
       "firing_average_temperature": {
-        "name": "Temperatura media accensione"
+        "name": "Ultima accensione temperatura media"
       },
       "firing_wood_loads": {
-        "name": "Carichi di legna accensione"
+        "name": "Ultima accensione carichi di legna"
       },
       "last_connection": {
         "name": "Ultima connessione"

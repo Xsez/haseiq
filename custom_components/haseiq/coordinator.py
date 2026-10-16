@@ -178,6 +178,9 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._firing_count: int | None = None
         self._firing_task: asyncio.Task | None = None
         self._sw_version: str | None = None
+        # pulses of `konstant_app/n` seen so far (see `_check_notification`)
+        self.notification_count = 0
+        self._notification_pending = False
 
     @property
     def serial(self) -> str:
@@ -255,9 +258,25 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     def _on_client_change(self, node: str) -> None:
         if node == "konstant":
             self._check_keepalive()
+        elif node == "konstant_app":
+            self._check_notification()
         elif node == "historienliste":
             self._load_firing()
         self._schedule_push()
+
+    def _check_notification(self) -> None:
+        """Count app notifications.
+
+        The stove sets `n` to request a push notification to the app, and the
+        cloud resets it within about a second. That is shorter than the push
+        delay, so pulses are counted here, on every change, not in the pushed
+        snapshot.
+        """
+        app = self.client.data.get("konstant_app")
+        pending = bool(app.get("n")) if isinstance(app, dict) else False
+        if pending and not self._notification_pending:
+            self.notification_count += 1
+        self._notification_pending = pending
 
     def _schedule_push(self) -> None:
         if self._push_handle is None:

@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Fyring"
+      },
+      "firmware_update": {
+        "name": "Firmwareopdatering"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "App-notifikation",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Notifikation"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatur"
       },
+      "load_average_temperature": {
+        "name": "Gennemsnitstemperatur for påfyldning"
+      },
+      "controller_temperature": {
+        "name": "Styringens temperatur"
+      },
       "performance": {
         "name": "Effekt"
       },
@@ -98,25 +122,25 @@
         "name": "Sekundærluft"
       },
       "refuel": {
-        "name": "Påfyldningsindikator"
+        "name": "Påfyldningshast"
       },
       "firing_count": {
         "name": "Fyringer"
       },
       "last_firing": {
-        "name": "Seneste fyring"
+        "name": "Seneste fyring start"
       },
       "firing_duration": {
-        "name": "Fyringsvarighed"
+        "name": "Seneste fyring varighed"
       },
       "firing_max_temperature": {
-        "name": "Maks. temperatur for fyring"
+        "name": "Seneste fyring maks. temperatur"
       },
       "firing_average_temperature": {
-        "name": "Gennemsnitstemperatur for fyring"
+        "name": "Seneste fyring gennemsnitstemperatur"
       },
       "firing_wood_loads": {
-        "name": "Brændepåfyldninger"
+        "name": "Seneste fyring brændepåfyldninger"
       },
       "last_connection": {
         "name": "Seneste forbindelse"

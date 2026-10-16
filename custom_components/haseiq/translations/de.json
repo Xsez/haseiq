@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Abbrand"
+      },
+      "firmware_update": {
+        "name": "Firmware-Update"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "App-Benachrichtigung",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Benachrichtigung"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatur"
       },
+      "load_average_temperature": {
+        "name": "Durchschnittstemperatur Holzladung"
+      },
+      "controller_temperature": {
+        "name": "Controller-Temperatur"
+      },
       "performance": {
         "name": "Leistung"
       },
@@ -98,25 +122,25 @@
         "name": "Sekundärluft"
       },
       "refuel": {
-        "name": "Nachlegeanzeige"
+        "name": "Nachlegedringlichkeit"
       },
       "firing_count": {
         "name": "Abbrände"
       },
       "last_firing": {
-        "name": "Letzter Abbrand"
+        "name": "Letzter Abbrand Start"
       },
       "firing_duration": {
-        "name": "Abbranddauer"
+        "name": "Letzter Abbrand Dauer"
       },
       "firing_max_temperature": {
-        "name": "Abbrand Höchsttemperatur"
+        "name": "Letzter Abbrand Höchsttemperatur"
       },
       "firing_average_temperature": {
-        "name": "Abbrand Durchschnittstemperatur"
+        "name": "Letzter Abbrand Durchschnittstemperatur"
       },
       "firing_wood_loads": {
-        "name": "Abbrand Nachlegevorgänge"
+        "name": "Letzter Abbrand Nachlegevorgänge"
       },
       "last_connection": {
         "name": "Letzte Verbindung"

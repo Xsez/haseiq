@@ -33,6 +33,18 @@ class IQStoveBinarySensorDescription(BinarySensorEntityDescription):
     node: str | None = None
     # re-evaluate on this interval, for values that depend on the current time
     recheck: timedelta | None = None
+    attr_fn: Callable[[dict[str, Any]], dict[str, Any] | None] | None = None
+
+
+def _flag(node: str, key: str) -> Callable[[dict[str, Any]], bool | None]:
+    """Return a value function for a Gen 2 boolean `node/key`."""
+
+    def value(data: dict[str, Any]) -> bool | None:
+        tree = data.get(node)
+        flag = tree.get(key) if isinstance(tree, dict) else None
+        return flag if isinstance(flag, bool) else None
+
+    return value
 
 
 def _gen1_error(data: dict[str, Any]) -> bool | None:
@@ -40,6 +52,15 @@ def _gen1_error(data: dict[str, Any]) -> bool | None:
         return bool(int(float(data["appErr"])))
     except (KeyError, TypeError, ValueError):
         return None
+
+
+def _gen2_error(data: dict[str, Any]) -> bool:
+    """Return True in the error phase or while the live error code `E` is set."""
+    live = live_data(data)
+    code = live.get("E")
+    return live.get("F") == GEN2_PHASE_ERROR or (
+        isinstance(code, (int, float)) and code != 0
+    )
 
 
 def _gen2_online(data: dict[str, Any]) -> bool | None:
@@ -63,7 +84,7 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         translation_key="error",
         node="liveData",
         device_class=BinarySensorDeviceClass.PROBLEM,
-        value_fn=lambda data: live_data(data).get("F") == GEN2_PHASE_ERROR,
+        value_fn=_gen2_error,
     ),
     IQStoveBinarySensorDescription(
         key="online",
@@ -73,6 +94,24 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=_gen2_online,
         recheck=timedelta(seconds=30),
+    ),
+    IQStoveBinarySensorDescription(
+        # on from the firing start until shortly after residual heat
+        key="firing",
+        translation_key="firing",
+        node="konstant_app",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        value_fn=_flag("konstant_app", "bv"),
+    ),
+    IQStoveBinarySensorDescription(
+        # `u`: an update waits to be installed; `f`: download progress in %
+        key="firmware_update",
+        translation_key="firmware_update",
+        node="konstant",
+        device_class=BinarySensorDeviceClass.UPDATE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_flag("konstant", "u"),
+        attr_fn=lambda data: {"progress": app_data(data).get("f")},
     ),
 )
 
@@ -120,5 +159,12 @@ class IQStoveBinarySensor(IQStoveEntity, BinarySensorEntity):
 
     @property
     def is_on(self) -> bool | None:
-        """Return True if the stove reports a problem."""
+        """Return the state of the binary sensor."""
         return self.entity_description.value_fn(self.coordinator.data or {})
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Return extra values, if the description has any."""
+        if (attr_fn := self.entity_description.attr_fn) is None:
+            return None
+        return attr_fn(self.coordinator.data or {})

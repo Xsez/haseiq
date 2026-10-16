@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Tilkoblet"
+      },
+      "firing": {
+        "name": "Fyring"
+      },
+      "firmware_update": {
+        "name": "Fastvareoppdatering"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "App-varsel",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Varsel"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatur"
       },
+      "load_average_temperature": {
+        "name": "Gjennomsnittstemperatur for ladning"
+      },
+      "controller_temperature": {
+        "name": "Styringens temperatur"
+      },
       "performance": {
         "name": "Effekt"
       },
@@ -98,25 +122,25 @@
         "name": "Sekundærluft"
       },
       "refuel": {
-        "name": "Påfyllingsindikator"
+        "name": "Hast med påfylling"
       },
       "firing_count": {
         "name": "Fyringer"
       },
       "last_firing": {
-        "name": "Siste fyring"
+        "name": "Siste fyring start"
       },
       "firing_duration": {
-        "name": "Fyringsvarighet"
+        "name": "Siste fyring varighet"
       },
       "firing_max_temperature": {
-        "name": "Maks. temperatur fyring"
+        "name": "Siste fyring maks. temperatur"
       },
       "firing_average_temperature": {
-        "name": "Gjennomsnittstemperatur fyring"
+        "name": "Siste fyring gjennomsnittstemperatur"
       },
       "firing_wood_loads": {
-        "name": "Vedpåfyllinger"
+        "name": "Siste fyring vedpåfyllinger"
       },
       "last_connection": {
         "name": "Siste tilkobling"

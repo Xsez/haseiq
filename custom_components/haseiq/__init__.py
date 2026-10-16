@@ -25,7 +25,12 @@ from .coordinator import IQStoveCloudCoordinator, IQStoveCoordinator
 from .IQstove import IQstove
 
 _LOGGER = logging.getLogger(__name__)
-PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR, Platform.NUMBER, Platform.SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.EVENT,
+    Platform.NUMBER,
+    Platform.SENSOR,
+]
 
 # Gen 1 unique IDs before 0.4 were `haseiq-sensor-<device key>`, the same for
 # every stove. They are migrated to `<serial>-<key>`.
@@ -40,14 +45,21 @@ LEGACY_GEN1_KEYS = {
 # Gen 1 raw statistics sensors of 0.4.0b1, dropped again
 REMOVED_GEN1_KEYS = ("appPTx", "appP30Tx", "appIQDarst", "appPT", "appP30T")
 # Gen 2 raw sensors of earlier betas: liveData keys that do not exist (B, S) or
-# now have a dedicated entity (F: phase, l/s: LED numbers, ping: online,
-# tsfc: last connection)
+# now have a dedicated entity (F: phase, TQUER/TC: temperatures, l/s: LED
+# numbers, u/f: firmware update, ping: online, tsfc: last connection,
+# bv: firing, n: app notification)
 REMOVED_GEN2_KEYS = (
     "raw-liveData-B",
     "raw-liveData-F",
     "raw-liveData-S",
+    "raw-liveData-TQUER",
+    "raw-liveData-TC",
     "raw-konstant-l",
     "raw-konstant-s",
+    "raw-konstant-u",
+    "raw-konstant_app-bv",
+    "raw-konstant_app-f",
+    "raw-konstant_app-n",
     "raw-konstant_app-ping",
     "raw-konstant_app-tsfc",
 )

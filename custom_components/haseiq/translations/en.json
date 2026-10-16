@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Firing"
+      },
+      "firmware_update": {
+        "name": "Firmware update"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "App notification",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Notification"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperature"
       },
+      "load_average_temperature": {
+        "name": "Load average temperature"
+      },
+      "controller_temperature": {
+        "name": "Controller temperature"
+      },
       "performance": {
         "name": "Performance"
       },
@@ -98,25 +122,25 @@
         "name": "Secondary air"
       },
       "refuel": {
-        "name": "Refuel indicator"
+        "name": "Refuel urgency"
       },
       "firing_count": {
         "name": "Firings"
       },
       "last_firing": {
-        "name": "Last firing"
+        "name": "Last firing start"
       },
       "firing_duration": {
-        "name": "Firing duration"
+        "name": "Last firing duration"
       },
       "firing_max_temperature": {
-        "name": "Firing peak temperature"
+        "name": "Last firing peak temperature"
       },
       "firing_average_temperature": {
-        "name": "Firing average temperature"
+        "name": "Last firing average temperature"
       },
       "firing_wood_loads": {
-        "name": "Firing wood loads"
+        "name": "Last firing wood loads"
       },
       "last_connection": {
         "name": "Last connection"

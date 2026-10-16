@@ -68,6 +68,24 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firing": {
+        "name": "Stookbeurt"
+      },
+      "firmware_update": {
+        "name": "Firmware-update"
+      }
+    },
+    "event": {
+      "app_notification": {
+        "name": "App-melding",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "notification": "Melding"
+            }
+          }
+        }
       }
     },
     "number": {
@@ -85,6 +103,12 @@
       "temperature": {
         "name": "Temperatuur"
       },
+      "load_average_temperature": {
+        "name": "Gemiddelde temperatuur lading"
+      },
+      "controller_temperature": {
+        "name": "Temperatuur besturing"
+      },
       "performance": {
         "name": "Vermogen"
       },
@@ -98,25 +122,25 @@
         "name": "Secundaire lucht"
       },
       "refuel": {
-        "name": "Bijvulindicator"
+        "name": "Urgentie bijvullen"
       },
       "firing_count": {
         "name": "Stookbeurten"
       },
       "last_firing": {
-        "name": "Laatste stookbeurt"
+        "name": "Laatste stookbeurt start"
       },
       "firing_duration": {
-        "name": "Duur stookbeurt"
+        "name": "Laatste stookbeurt duur"
       },
       "firing_max_temperature": {
-        "name": "Maximumtemperatuur stookbeurt"
+        "name": "Laatste stookbeurt maximumtemperatuur"
       },
       "firing_average_temperature": {
-        "name": "Gemiddelde temperatuur stookbeurt"
+        "name": "Laatste stookbeurt gemiddelde temperatuur"
       },
       "firing_wood_loads": {
-        "name": "Houtbijvullingen stookbeurt"
+        "name": "Laatste stookbeurt houtbijvullingen"
       },
       "last_connection": {
         "name": "Laatste verbinding"

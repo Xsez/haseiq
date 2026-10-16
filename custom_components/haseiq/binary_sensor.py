@@ -49,7 +49,7 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         translation_key="error",
         node="liveData",
         device_class=BinarySensorDeviceClass.PROBLEM,
-        value_fn=lambda data: live_data(data).get("P") == GEN2_PHASE_ERROR,
+        value_fn=lambda data: live_data(data).get("F") == GEN2_PHASE_ERROR,
     ),
 )
 

@@ -83,12 +83,13 @@ Device information: serial number, firmware version, hardware model, model desig
 
 - **Temperature**
 - **Phase** – off, kindling, burning, add wood, heating up, residual heat, don't add wood, error
+- **Performance**
 - **Error**
 - **Primary air**, **Secondary air**, **Refuel indicator**
 - **Firings**, **Last firing**, **Last firing value** (from the firing history)
 - Every other value the cloud delivers is added as a raw sensor (`Live …`, `Konstant …`, `App …`) to help work out what it means.
 
-Field meanings for Gen 2 are still provisional. Most live values only appear while the stove is burning.
+Field meanings for Gen 2 are still provisional.
 
 ## Diagnostics
 

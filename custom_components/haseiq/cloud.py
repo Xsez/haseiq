@@ -53,7 +53,7 @@ RTDB_URL = "https://hase-iq-default-rtdb.europe-west1.firebasedatabase.app"
 
 # RTDB nodes streamed per oven: short name → path template.
 NODES: Dict[str, str] = {
-    "liveData": "temporaer/{oven_id}/liveData",
+    "liveData": "temporaer/{oven_id}",
     "konstant": "konstant/{oven_id}",
     "konstant_app": "konstant_app/{oven_id}",
     "historienliste": "historienliste/{oven_id}",

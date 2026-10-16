@@ -46,7 +46,7 @@ class IQStoveEntity(CoordinatorEntity[IQStoveAnyCoordinator]):
 
 
 def live_data(data: dict[str, Any] | None) -> dict[str, Any]:
-    """Return the Gen 2 `liveData` dict (empty while the stove is off)."""
+    """Return the Gen 2 live values (the `temporaer` node, empty if never sent)."""
     live = (data or {}).get("liveData")
     return live if isinstance(live, dict) else {}
 

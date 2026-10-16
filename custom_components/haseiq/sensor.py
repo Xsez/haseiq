@@ -48,10 +48,7 @@ def _number(value: Any) -> int | float | None:
 
 
 def _gen2_phase(data: dict[str, Any]) -> str | None:
-    live = live_data(data)
-    if not live:
-        return PHASES_GEN2[0]  # liveData is empty while the stove is off
-    return PHASES_GEN2.get(_number(live.get("P")))
+    return PHASES_GEN2.get(_number(live_data(data).get("F")))
 
 
 def _history(data: dict[str, Any]) -> dict[str, Any]:
@@ -128,6 +125,13 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=_gen2_phase,
     ),
     IQStoveSensorDescription(
+        key="performance",
+        translation_key="performance",
+        node="liveData",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(live_data(data).get("P")),
+    ),
+    IQStoveSensorDescription(
         key="primary_air",
         translation_key="primary_air",
         node="liveData",
@@ -172,10 +176,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
 )
 
 # liveData keys with a dedicated entity above
-GEN2_LIVE_DEDICATED = {"T", "P", "PL", "SL", "N"}
-# liveData keys of unknown meaning, created up front because liveData is empty
-# while the stove is off
-GEN2_LIVE_UNKNOWN = ("F", "B", "S")
+GEN2_LIVE_DEDICATED = {"T", "F", "P", "PL", "SL", "N"}
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")
 
@@ -207,7 +208,6 @@ async def async_setup_entry(
         for node in GEN2_RAW_NODES:
             paths = set(_leaf_paths(coordinator.data.get(node) if coordinator.data else None))
             if node == "liveData":
-                paths |= set(GEN2_LIVE_UNKNOWN)
                 paths -= GEN2_LIVE_DEDICATED
             for path in sorted(paths):
                 if (node, path) in known:

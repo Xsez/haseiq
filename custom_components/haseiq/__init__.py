@@ -39,6 +39,18 @@ LEGACY_GEN1_KEYS = {
 }
 # Gen 1 raw statistics sensors of 0.4.0b1, dropped again
 REMOVED_GEN1_KEYS = ("appPTx", "appP30Tx", "appIQDarst", "appPT", "appP30T")
+# Gen 2 raw sensors of earlier betas: liveData keys that do not exist (B, S) or
+# now have a dedicated entity (F: phase, l/s: LED numbers, ping: online,
+# tsfc: last connection)
+REMOVED_GEN2_KEYS = (
+    "raw-liveData-B",
+    "raw-liveData-F",
+    "raw-liveData-S",
+    "raw-konstant-l",
+    "raw-konstant-s",
+    "raw-konstant_app-ping",
+    "raw-konstant_app-tsfc",
+)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -72,6 +84,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     if coordinator.generation == GEN1:
         _async_migrate_gen1(hass, entry, coordinator.serial)
+    else:
+        _async_remove_entities(hass, coordinator.serial, REMOVED_GEN2_KEYS)
 
     entry.runtime_data = coordinator
 
@@ -123,6 +137,15 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 @callback
+def _async_remove_entities(hass: HomeAssistant, serial: str, keys: tuple[str, ...]) -> None:
+    """Remove sensors of a stove that are no longer created."""
+    registry = er.async_get(hass)
+    for key in keys:
+        if entity_id := registry.async_get_entity_id("sensor", DOMAIN, f"{serial}-{key}"):
+            registry.async_remove(entity_id)
+
+
+@callback
 def _async_migrate_gen1(hass: HomeAssistant, entry: ConfigEntry, serial: str) -> None:
     """Give a Gen 1 entry and its entities serial-based unique IDs.
 
@@ -138,10 +161,8 @@ def _async_migrate_gen1(hass: HomeAssistant, entry: ConfigEntry, serial: str) ->
     ):
         hass.config_entries.async_update_entry(entry, unique_id=serial)
 
+    _async_remove_entities(hass, serial, REMOVED_GEN1_KEYS)
     registry = er.async_get(hass)
-    for key in REMOVED_GEN1_KEYS:
-        if entity_id := registry.async_get_entity_id("sensor", DOMAIN, f"{serial}-{key}"):
-            registry.async_remove(entity_id)
     for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
         legacy_key = entity.unique_id.removeprefix(f"{DOMAIN}-sensor-")
         if legacy_key == entity.unique_id or legacy_key not in LEGACY_GEN1_KEYS:

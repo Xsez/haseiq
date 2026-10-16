@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Fejl"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "LED-lysstyrke"
+      },
+      "signal_led_brightness": {
+        "name": "Lysstyrke for signal-LED"
+      },
+      "switch_led_brightness": {
+        "name": "Lysstyrke for kontakt-LED"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Seneste fyring"
       },
-      "last_firing_value": {
-        "name": "Værdi for seneste fyring"
+      "firing_duration": {
+        "name": "Fyringsvarighed"
+      },
+      "firing_max_temperature": {
+        "name": "Maks. temperatur for fyring"
+      },
+      "firing_average_temperature": {
+        "name": "Gennemsnitstemperatur for fyring"
+      },
+      "firing_wood_loads": {
+        "name": "Brændepåfyldninger"
+      },
+      "last_connection": {
+        "name": "Seneste forbindelse"
+      },
+      "last_log_entry": {
+        "name": "Seneste logpost"
       },
       "phase": {
         "name": "Fase",

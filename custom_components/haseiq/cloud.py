@@ -35,6 +35,7 @@ __all__ = [
     "IQstoveCloud",
     "NODES",
     "decode_share_link",
+    "firing_stats",
 ]
 
 _LOGGER = logging.getLogger(__name__)
@@ -57,7 +58,17 @@ NODES: Dict[str, str] = {
     "konstant": "konstant/{oven_id}",
     "konstant_app": "konstant_app/{oven_id}",
     "historienliste": "historienliste/{oven_id}",
+    # the stove's event log: `{<unix time>: "<German text>"}`, a few KB
+    "logs": "logs/{oven_id}",
 }
+# Per-firing samples, read on demand (the tree grows with every firing):
+# `<firing start>/<seconds since start>/{T, F, ...}`.
+HISTORY_PATH = "historien/{oven_id}"
+# Every change of `ecode2`: `{<unix time>: {"ecode2": <code>}}`. Never
+# streamed, it can be several MB.
+ERROR_LOG_PATH = "fehler/{oven_id}"
+ERROR_LOG_TIMEOUT = ClientTimeout(total=120)
+PHASE_HEATING_UP = 4  # the phase `F` the stove enters after wood was added
 
 OVEN_ID_RE = re.compile(r"^\d{22}$")
 
@@ -266,6 +277,47 @@ def _set_path(tree: Any, keys: List[str], value: Any) -> Any:
     return tree if tree else None
 
 
+def firing_stats(samples: Any) -> Optional[Dict[str, Any]]:
+    """Summarise the samples of one firing from `historien`.
+
+    The stove writes a sample about every 60 s, keyed by the seconds since the
+    firing started. Samples are delta-encoded: each one only holds the values
+    that changed since the previous sample.
+    """
+    if isinstance(samples, list):
+        samples = {str(i): v for i, v in enumerate(samples) if v is not None}
+    if not isinstance(samples, dict):
+        return None
+    ordered = sorted(
+        (int(key), sample)
+        for key, sample in samples.items()
+        if key.isdigit() and isinstance(sample, dict)
+    )
+    state: Dict[str, Any] = {}
+    temperatures: List[float] = []
+    wood_loads = 0
+    for _, sample in ordered:
+        previous_phase = state.get("F")
+        state.update(sample)
+        if state.get("F") == PHASE_HEATING_UP and previous_phase not in (
+            None,
+            PHASE_HEATING_UP,
+        ):
+            wood_loads += 1
+        temperature = state.get("T")
+        if isinstance(temperature, (int, float)) and not isinstance(temperature, bool):
+            temperatures.append(temperature)
+    if not ordered:
+        return None
+    return {
+        "max_temperature": max(temperatures, default=None),
+        "average_temperature": (
+            round(sum(temperatures) / len(temperatures), 1) if temperatures else None
+        ),
+        "wood_loads": wood_loads,
+    }
+
+
 class _SSEParser:
     """Incremental `text/event-stream` parser."""
 
@@ -385,9 +437,30 @@ class IQstoveCloud:
 
     # ── REST ────────────────────────────────────────────────────────────────────
 
-    async def async_get(self, path: str) -> Any:
-        """Read a node once."""
-        return await self._async_request("GET", path)
+    async def async_get(self, path: str, shallow: bool = False) -> Any:
+        """Read a node once; `shallow` returns only its keys (`{key: true}`)."""
+        return await self._async_request(
+            "GET", path, params={"shallow": "true"} if shallow else None
+        )
+
+    async def async_get_firing_starts(self) -> List[str]:
+        """Return the start timestamps of all firings kept in `historien`."""
+        starts = await self.async_get(HISTORY_PATH.format(oven_id=self.oven_id), shallow=True)
+        return [key for key in starts if key.isdigit()] if isinstance(starts, dict) else []
+
+    async def async_get_firing(self, start: str) -> Any:
+        """Return the samples of one firing (see `firing_stats`)."""
+        return await self.async_get(f"{HISTORY_PATH.format(oven_id=self.oven_id)}/{start}")
+
+    async def async_get_error_log(self) -> Any:
+        """Return the error log (see `ERROR_LOG_PATH`)."""
+        return await self._async_request(
+            "GET", ERROR_LOG_PATH.format(oven_id=self.oven_id), timeout=ERROR_LOG_TIMEOUT
+        )
+
+    async def async_set_konstant(self, key: str, value: Any) -> None:
+        """Write one setting to `konstant`, where the app writes its settings."""
+        await self._async_request("PUT", f"konstant/{self.oven_id}/{key}", json=value)
 
     async def async_add_keepalive(self, delta: int) -> None:
         """Change the keep-alive counter `k` by `delta` (server-side increment)."""
@@ -397,7 +470,14 @@ class IQstoveCloud:
             json={".sv": {"increment": delta}},
         )
 
-    async def _async_request(self, method: str, path: str, **kwargs: Any) -> Any:
+    async def _async_request(
+        self,
+        method: str,
+        path: str,
+        params: Optional[Dict[str, str]] = None,
+        timeout: ClientTimeout = REQUEST_TIMEOUT,
+        **kwargs: Any,
+    ) -> Any:
         rejected: Optional[str] = None
         for attempt in range(2):
             token = await self._auth.async_get_token(rejected)
@@ -405,8 +485,8 @@ class IQstoveCloud:
                 async with self._session.request(
                     method,
                     self._url(path),
-                    params={"auth": token},
-                    timeout=REQUEST_TIMEOUT,
+                    params={**(params or {}), "auth": token},
+                    timeout=timeout,
                     **kwargs,
                 ) as resp:
                     status = resp.status

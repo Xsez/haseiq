@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Fehler"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "LED-Helligkeit"
+      },
+      "signal_led_brightness": {
+        "name": "Signal-LED-Helligkeit"
+      },
+      "switch_led_brightness": {
+        "name": "Schalter-LED-Helligkeit"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Letzter Abbrand"
       },
-      "last_firing_value": {
-        "name": "Wert letzter Abbrand"
+      "firing_duration": {
+        "name": "Abbranddauer"
+      },
+      "firing_max_temperature": {
+        "name": "Abbrand Höchsttemperatur"
+      },
+      "firing_average_temperature": {
+        "name": "Abbrand Durchschnittstemperatur"
+      },
+      "firing_wood_loads": {
+        "name": "Abbrand Nachlegevorgänge"
+      },
+      "last_connection": {
+        "name": "Letzte Verbindung"
+      },
+      "last_log_entry": {
+        "name": "Letzter Logeintrag"
       },
       "phase": {
         "name": "Phase",

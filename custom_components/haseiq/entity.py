@@ -51,6 +51,19 @@ def live_data(data: dict[str, Any] | None) -> dict[str, Any]:
     return live if isinstance(live, dict) else {}
 
 
+def app_data(data: dict[str, Any] | None) -> dict[str, Any]:
+    """Return the Gen 2 `konstant_app` dict (stove info written by the stove)."""
+    app = (data or {}).get("konstant_app")
+    return app if isinstance(app, dict) else {}
+
+
+def unix_time(value: Any) -> float | None:
+    """Return a stove timestamp (seconds or milliseconds) in seconds."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return value / 1000 if value > 10**11 else value
+
+
 def raw_state(value: Any) -> tuple[Any, bool]:
     """Turn any raw value into a sensor state.
 

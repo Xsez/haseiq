@@ -15,12 +15,21 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory, UnitOfTemperature
+from homeassistant.const import EntityCategory, UnitOfTemperature, UnitOfTime
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.util import dt as dt_util
 
 from .const import GEN1, PHASES_GEN1, PHASES_GEN2
-from .entity import IQStoveAnyCoordinator, IQStoveEntity, live_data, raw_state
+from .entity import (
+    MAX_STATE_LENGTH,
+    IQStoveAnyCoordinator,
+    IQStoveEntity,
+    app_data,
+    live_data,
+    raw_state,
+    unix_time,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,23 +66,45 @@ def _history(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def _last_firing(data: dict[str, Any]) -> tuple[int, Any] | None:
-    """Return `(start timestamp, value)` of the newest firing, if any."""
+    """Return `(start timestamp, seconds since start)` of the newest firing, if any.
+
+    The stove updates the seconds every minute while it burns, so after the
+    firing they hold its duration.
+    """
     firings = [(int(key), value) for key, value in _history(data).items() if key.isdigit()]
     return max(firings, default=None)
 
 
+def _datetime(value: Any) -> datetime | None:
+    timestamp = unix_time(value)
+    return datetime.fromtimestamp(timestamp, UTC) if timestamp is not None else None
+
+
 def _last_firing_start(data: dict[str, Any]) -> datetime | None:
-    if (last := _last_firing(data)) is None:
-        return None
-    timestamp = last[0]
-    if timestamp > 10**11:  # milliseconds
-        timestamp //= 1000
-    return datetime.fromtimestamp(timestamp, UTC)
+    last = _last_firing(data)
+    return _datetime(last[0]) if last else None
 
 
-def _last_firing_value(data: dict[str, Any]) -> Any:
+def _last_firing_duration(data: dict[str, Any]) -> Any:
     last = _last_firing(data)
     return _number(last[1]) if last else None
+
+
+def _log_entries(data: dict[str, Any]) -> list[tuple[int, str]]:
+    """Return the stove's log as `(unix time, text)`, newest first."""
+    logs = data.get("logs")
+    if not isinstance(logs, dict):
+        return []
+    return sorted(
+        ((int(key), str(text)) for key, text in logs.items() if key.isdigit()),
+        reverse=True,
+    )
+
+
+def _firing(data: dict[str, Any]) -> dict[str, Any]:
+    """Return the statistics of the newest firing (see the cloud coordinator)."""
+    firing = data.get("firing")
+    return firing if isinstance(firing, dict) else {}
 
 
 GEN1_SENSORS: tuple[IQStoveSensorDescription, ...] = (
@@ -153,11 +184,13 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _number(live_data(data).get("N")),
     ),
     IQStoveSensorDescription(
+        # firings kept in the cloud (`count` of the firing list is not a total);
+        # not TOTAL_INCREASING since the cloud may drop old firings
         key="firing_count",
         translation_key="firing_count",
         node="historienliste",
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        value_fn=lambda data: _number(_history(data).get("count")),
+        state_class=SensorStateClass.TOTAL,
+        value_fn=lambda data: _firing(data).get("count"),
     ),
     IQStoveSensorDescription(
         key="last_firing",
@@ -167,16 +200,70 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=_last_firing_start,
     ),
     IQStoveSensorDescription(
+        # the key keeps the unique ID of the entity from before the meaning was known
         key="last_firing_value",
-        translation_key="last_firing_value",
+        translation_key="firing_duration",
+        node="historienliste",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        suggested_display_precision=2,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_last_firing_duration,
+    ),
+    IQStoveSensorDescription(
+        key="firing_max_temperature",
+        translation_key="firing_max_temperature",
+        node="historienliste",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _firing(data).get("max_temperature"),
+    ),
+    IQStoveSensorDescription(
+        key="firing_average_temperature",
+        translation_key="firing_average_temperature",
+        node="historienliste",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _firing(data).get("average_temperature"),
+    ),
+    IQStoveSensorDescription(
+        key="firing_wood_loads",
+        translation_key="firing_wood_loads",
         node="historienliste",
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=_last_firing_value,
+        value_fn=lambda data: _firing(data).get("wood_loads"),
+    ),
+    IQStoveSensorDescription(
+        key="last_connection",
+        translation_key="last_connection",
+        node="konstant_app",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: _datetime(app_data(data).get("tsfc")),
     ),
 )
 
-# liveData keys with a dedicated entity above
-GEN2_LIVE_DEDICATED = {"T", "F", "P", "PL", "SL", "N"}
+GEN2_LOG_SENSOR = IQStoveSensorDescription(
+    key="last_log_entry",
+    translation_key="last_log_entry",
+    node="logs",
+    entity_category=EntityCategory.DIAGNOSTIC,
+    value_fn=lambda data: entries[0][1] if (entries := _log_entries(data)) else None,
+)
+LOG_LINES = 20  # log lines kept in the attributes of the log sensor
+
+# Keys with a dedicated entity, per node; they get no raw sensor
+GEN2_DEDICATED: dict[str, set[str]] = {
+    "liveData": {"T", "F", "P", "PL", "SL", "N"},
+    # the LED brightness numbers
+    "konstant": {"l", "s"},
+    # ping: the Online binary sensor
+    "konstant_app": {"ping", "tsfc"},
+}
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")
 
@@ -197,6 +284,7 @@ async def async_setup_entry(
 
     async_add_entities(
         [IQStoveSensor(coordinator, description) for description in GEN2_SENSORS]
+        + [IQStoveLogSensor(coordinator, GEN2_LOG_SENSOR)]
     )
 
     known: set[tuple[str, str]] = set()
@@ -207,8 +295,7 @@ async def async_setup_entry(
         new: list[IQStoveRawSensor] = []
         for node in GEN2_RAW_NODES:
             paths = set(_leaf_paths(coordinator.data.get(node) if coordinator.data else None))
-            if node == "liveData":
-                paths -= GEN2_LIVE_DEDICATED
+            paths -= GEN2_DEDICATED.get(node, set())
             for path in sorted(paths):
                 if (node, path) in known:
                     continue
@@ -277,6 +364,31 @@ class IQStoveSensor(IQStoveEntity, SensorEntity):
     def native_value(self) -> Any:
         """Return the state of the sensor."""
         return self.entity_description.value_fn(self.coordinator.data or {})
+
+
+class IQStoveLogSensor(IQStoveSensor):
+    """The newest line of the stove's event log, earlier lines as attributes."""
+
+    # the lines repeat with every new entry; keep them out of the database
+    _unrecorded_attributes = frozenset({"lines"})
+
+    @property
+    def native_value(self) -> str | None:
+        """Return the newest log text."""
+        value = super().native_value
+        return value[:MAX_STATE_LENGTH] if value is not None else None
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Return the time of the newest entry and the latest lines."""
+        entries = _log_entries(self.coordinator.data or {})
+        if not entries:
+            return None
+        lines = [
+            f"{dt_util.as_local(dt_util.utc_from_timestamp(time)):%Y-%m-%d %H:%M:%S} {text}"
+            for time, text in entries[:LOG_LINES]
+        ]
+        return {"time": dt_util.utc_from_timestamp(entries[0][0]), "lines": lines}
 
 
 class IQStoveRawSensor(IQStoveEntity, SensorEntity):

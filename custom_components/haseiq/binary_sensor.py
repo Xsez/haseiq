@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime, timedelta
+import time
 from typing import Any
 
 from homeassistant.components.binary_sensor import (
@@ -12,11 +14,15 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.const import EntityCategory
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.event import async_track_time_interval
 
 from .const import GEN1, GEN2_PHASE_ERROR
-from .entity import IQStoveAnyCoordinator, IQStoveEntity, live_data
+from .entity import IQStoveAnyCoordinator, IQStoveEntity, app_data, live_data, unix_time
+
+GEN2_ONLINE_TIMEOUT = 180  # seconds without a heartbeat before the stove is offline
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -25,6 +31,8 @@ class IQStoveBinarySensorDescription(BinarySensorEntityDescription):
 
     value_fn: Callable[[dict[str, Any]], bool | None]
     node: str | None = None
+    # re-evaluate on this interval, for values that depend on the current time
+    recheck: timedelta | None = None
 
 
 def _gen1_error(data: dict[str, Any]) -> bool | None:
@@ -32,6 +40,12 @@ def _gen1_error(data: dict[str, Any]) -> bool | None:
         return bool(int(float(data["appErr"])))
     except (KeyError, TypeError, ValueError):
         return None
+
+
+def _gen2_online(data: dict[str, Any]) -> bool | None:
+    """Return True while the stove's heartbeat `ping` (every 60 s) is recent."""
+    ping = unix_time(app_data(data).get("ping"))
+    return time.time() - ping < GEN2_ONLINE_TIMEOUT if ping is not None else None
 
 
 GEN1_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
@@ -50,6 +64,15 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         node="liveData",
         device_class=BinarySensorDeviceClass.PROBLEM,
         value_fn=lambda data: live_data(data).get("F") == GEN2_PHASE_ERROR,
+    ),
+    IQStoveBinarySensorDescription(
+        key="online",
+        translation_key="online",
+        node="konstant_app",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_gen2_online,
+        recheck=timedelta(seconds=30),
     ),
 )
 
@@ -82,6 +105,18 @@ class IQStoveBinarySensor(IQStoveEntity, BinarySensorEntity):
         """Initialize the binary sensor."""
         super().__init__(coordinator, description.key, description.node)
         self.entity_description = description
+
+    async def async_added_to_hass(self) -> None:
+        """Start the periodic re-check if the description asks for it."""
+        await super().async_added_to_hass()
+        if (interval := self.entity_description.recheck) is not None:
+            self.async_on_remove(
+                async_track_time_interval(self.hass, self._async_recheck, interval)
+            )
+
+    @callback
+    def _async_recheck(self, _now: datetime) -> None:
+        self.async_write_ha_state()
 
     @property
     def is_on(self) -> bool | None:

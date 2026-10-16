@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Error"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "LED brightness"
+      },
+      "signal_led_brightness": {
+        "name": "Signal LED brightness"
+      },
+      "switch_led_brightness": {
+        "name": "Switch LED brightness"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Last firing"
       },
-      "last_firing_value": {
-        "name": "Last firing value"
+      "firing_duration": {
+        "name": "Firing duration"
+      },
+      "firing_max_temperature": {
+        "name": "Firing peak temperature"
+      },
+      "firing_average_temperature": {
+        "name": "Firing average temperature"
+      },
+      "firing_wood_loads": {
+        "name": "Firing wood loads"
+      },
+      "last_connection": {
+        "name": "Last connection"
+      },
+      "last_log_entry": {
+        "name": "Last log entry"
       },
       "phase": {
         "name": "Phase",

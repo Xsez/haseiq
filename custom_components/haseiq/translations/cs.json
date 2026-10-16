@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Chyba"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "Jas LED"
+      },
+      "signal_led_brightness": {
+        "name": "Jas signální LED"
+      },
+      "switch_led_brightness": {
+        "name": "Jas LED vypínače"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Poslední zatopení"
       },
-      "last_firing_value": {
-        "name": "Hodnota posledního zatopení"
+      "firing_duration": {
+        "name": "Doba hoření"
+      },
+      "firing_max_temperature": {
+        "name": "Max. teplota hoření"
+      },
+      "firing_average_temperature": {
+        "name": "Průměrná teplota hoření"
+      },
+      "firing_wood_loads": {
+        "name": "Přiložení dřeva"
+      },
+      "last_connection": {
+        "name": "Poslední připojení"
+      },
+      "last_log_entry": {
+        "name": "Poslední záznam protokolu"
       },
       "phase": {
         "name": "Fáze",

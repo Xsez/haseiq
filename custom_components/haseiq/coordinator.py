@@ -18,10 +18,12 @@ from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
+from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .cloud import HaseCloudError, IQstoveCloud
+from .cloud import HaseCloudError, IQstoveCloud, firing_stats
 from .const import CONF_KEEPALIVE_HELD, DOMAIN, GEN1, GEN2, MANUFACTURER
 from .IQstove import IQstove
 
@@ -143,7 +145,10 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Gen 2 stove: HASE cloud (Firebase RTDB), push only.
 
     `data` maps every streamed node name (see `cloud.NODES`) to its current
-    tree. Per-node availability is in `client.connected`.
+    tree. Per-node availability is in `client.connected`. `data["firing"]`
+    holds statistics of the newest firing (see `cloud.firing_stats`) and the
+    number of firings the cloud keeps; it is reloaded whenever the firing
+    list changes, which happens every minute while the stove burns.
 
     The keep-alive counter `k` is incremented once and the fact is stored in
     the config entry. It survives restarts (the stove keeps streaming while
@@ -168,6 +173,11 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._push_handle: asyncio.TimerHandle | None = None
         self._keepalive_repaired = 0.0
         self._keepalive_task: asyncio.Task | None = None
+        self._firing: dict[str, Any] | None = None
+        self._firing_start: str | None = None
+        self._firing_count: int | None = None
+        self._firing_task: asyncio.Task | None = None
+        self._sw_version: str | None = None
 
     @property
     def serial(self) -> str:
@@ -179,13 +189,29 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Return the device registry info for this stove."""
         konstant = self.client.data.get("konstant")
         model = konstant.get("verz") if isinstance(konstant, dict) else None
+        app = self.client.data.get("konstant_app")
+        model_id = app.get("ofen") if isinstance(app, dict) else None
         return DeviceInfo(
             identifiers={(DOMAIN, self.serial)},
             manufacturer=MANUFACTURER,
             model=str(model) if model else None,
+            model_id=str(model_id) if model_id is not None else None,
             name=f"Stove {self.serial}",
             serial_number=self.serial,
+            sw_version=self._firmware(),
         )
+
+    def _firmware(self) -> str | None:
+        """Return the firmware version and build time of the stove.
+
+        The version is `vers` plus the letter `versu` ("19.08.26" + "e", as the
+        stove's own log calls it), the build time is `cz`.
+        """
+        app = self.client.data.get("konstant_app")
+        if not isinstance(app, dict) or not app.get("vers"):
+            return None
+        version = f"{app['vers']}{app.get('versu') or ''}"
+        return f"{version} ({app['cz']})" if app.get("cz") else version
 
     @property
     def keepalive_held(self) -> bool:
@@ -214,18 +240,73 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Return the current snapshot (data itself is pushed)."""
-        return dict(self.client.data)
+        return self._snapshot()
+
+    async def async_set_value(self, key: str, value: int | float | str) -> None:
+        """Write a setting to `konstant`; the stream brings the new value back."""
+        try:
+            await self.client.async_set_konstant(key, value)
+        except HaseCloudError as err:
+            raise HomeAssistantError(f"Cannot write to the HASE cloud: {err}") from err
+
+    def _snapshot(self) -> dict[str, Any]:
+        return {**self.client.data, "firing": self._firing}
 
     def _on_client_change(self, node: str) -> None:
         if node == "konstant":
             self._check_keepalive()
+        elif node == "historienliste":
+            self._load_firing()
+        self._schedule_push()
+
+    def _schedule_push(self) -> None:
         if self._push_handle is None:
             self._push_handle = self.hass.loop.call_later(PUSH_DELAY, self._push)
 
     @callback
     def _push(self) -> None:
         self._push_handle = None
-        self.async_set_updated_data(dict(self.client.data))
+        self._update_firmware()
+        self.async_set_updated_data(self._snapshot())
+
+    def _update_firmware(self) -> None:
+        """Keep the device's firmware current; the stove updates over the air."""
+        firmware = self._firmware()
+        if firmware == self._sw_version:
+            return
+        self._sw_version = firmware
+        registry = dr.async_get(self.hass)
+        if device := registry.async_get_device(identifiers={(DOMAIN, self.serial)}):
+            registry.async_update_device(device.id, sw_version=firmware)
+
+    def _load_firing(self) -> None:
+        """Reload the statistics of the newest firing in the background.
+
+        A change that arrives while a load runs is skipped; the next one comes
+        a minute later.
+        """
+        if self._firing_task is not None and not self._firing_task.done():
+            return
+        self._firing_task = self.config_entry.async_create_background_task(
+            self.hass, self._async_load_firing(), "haseiq firing statistics"
+        )
+
+    async def _async_load_firing(self) -> None:
+        history = self.client.data.get("historienliste")
+        starts = [key for key in history if key.isdigit()] if isinstance(history, dict) else []
+        if not starts:
+            return
+        newest = max(starts, key=int)
+        try:
+            if newest != self._firing_start or self._firing_count is None:
+                self._firing_count = len(await self.client.async_get_firing_starts())
+            samples = await self.client.async_get_firing(newest)
+        except HaseCloudError as err:
+            _LOGGER.debug("Cannot load the firing history: %s", err)
+            return
+        self._firing_start = newest
+        self._firing = {"count": self._firing_count, **(firing_stats(samples) or {})}
+        self._schedule_push()
 
     def _check_keepalive(self) -> None:
         """Re-take the keep-alive if `k` dropped below 1 while we hold it."""

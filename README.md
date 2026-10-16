@@ -86,14 +86,18 @@ Device information: serial number, firmware version, hardware model, model desig
 - **Performance**
 - **Error**
 - **Primary air**, **Secondary air**, **Refuel indicator**
-- **Firings**, **Last firing**, **Last firing value** (from the firing history)
+- **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)
+- **Last firing** (start time) and, for the current or last firing, **Firing duration**, **Firing peak temperature**, **Firing average temperature** and **Firing wood loads**
+- **Firings** – the number of firings the HASE cloud keeps
+- **Online** – off when the stove has not reported for 3 minutes; **Last connection**; the firmware version is shown on the device page
+- **Last log entry** – the newest line of the stove's own log (restarts, firmware updates); the latest 20 lines are in its attributes
 - Every other value the cloud delivers is added as a raw sensor (`Live …`, `Konstant …`, `App …`) to help work out what it means.
 
 Field meanings for Gen 2 are still provisional.
 
 ## Diagnostics
 
-**Download diagnostics** on the integration entry gives a dump of all values the stove reports, with the host, share-link data and cloud tokens removed. Please attach it when reporting an issue.
+**Download diagnostics** on the integration entry gives a dump of all values the stove reports, with the host, share-link data and cloud tokens removed. For Gen 2 stoves it also contains the stove's full error-code log (`error_log`), which can be a few MB. Please attach it when reporting an issue.
 
 ## Upgrading from 0.3
 

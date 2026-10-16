@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Errore"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "Luminosità LED"
+      },
+      "signal_led_brightness": {
+        "name": "Luminosità LED di segnalazione"
+      },
+      "switch_led_brightness": {
+        "name": "Luminosità LED interruttore"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Ultima accensione"
       },
-      "last_firing_value": {
-        "name": "Valore ultima accensione"
+      "firing_duration": {
+        "name": "Durata accensione"
+      },
+      "firing_max_temperature": {
+        "name": "Temperatura massima accensione"
+      },
+      "firing_average_temperature": {
+        "name": "Temperatura media accensione"
+      },
+      "firing_wood_loads": {
+        "name": "Carichi di legna accensione"
+      },
+      "last_connection": {
+        "name": "Ultima connessione"
+      },
+      "last_log_entry": {
+        "name": "Ultima voce del registro"
       },
       "phase": {
         "name": "Fase",

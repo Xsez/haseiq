@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Fout"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "LED-helderheid"
+      },
+      "signal_led_brightness": {
+        "name": "Helderheid signaal-LED"
+      },
+      "switch_led_brightness": {
+        "name": "Helderheid schakelaar-LED"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Laatste stookbeurt"
       },
-      "last_firing_value": {
-        "name": "Waarde laatste stookbeurt"
+      "firing_duration": {
+        "name": "Duur stookbeurt"
+      },
+      "firing_max_temperature": {
+        "name": "Maximumtemperatuur stookbeurt"
+      },
+      "firing_average_temperature": {
+        "name": "Gemiddelde temperatuur stookbeurt"
+      },
+      "firing_wood_loads": {
+        "name": "Houtbijvullingen stookbeurt"
+      },
+      "last_connection": {
+        "name": "Laatste verbinding"
+      },
+      "last_log_entry": {
+        "name": "Laatste logboekregel"
       },
       "phase": {
         "name": "Fase",

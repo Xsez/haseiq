@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Błąd"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "Jasność LED"
+      },
+      "signal_led_brightness": {
+        "name": "Jasność LED sygnalizacyjnej"
+      },
+      "switch_led_brightness": {
+        "name": "Jasność LED włącznika"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Ostatnie rozpalenie"
       },
-      "last_firing_value": {
-        "name": "Wartość ostatniego rozpalenia"
+      "firing_duration": {
+        "name": "Czas palenia"
+      },
+      "firing_max_temperature": {
+        "name": "Maks. temperatura palenia"
+      },
+      "firing_average_temperature": {
+        "name": "Średnia temperatura palenia"
+      },
+      "firing_wood_loads": {
+        "name": "Dokładania drewna"
+      },
+      "last_connection": {
+        "name": "Ostatnie połączenie"
+      },
+      "last_log_entry": {
+        "name": "Ostatni wpis dziennika"
       },
       "phase": {
         "name": "Faza",

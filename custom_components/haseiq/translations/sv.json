@@ -65,11 +65,20 @@
     "binary_sensor": {
       "error": {
         "name": "Fel"
+      },
+      "online": {
+        "name": "Online"
       }
     },
     "number": {
       "led_brightness": {
         "name": "LED-ljusstyrka"
+      },
+      "signal_led_brightness": {
+        "name": "Ljusstyrka signal-LED"
+      },
+      "switch_led_brightness": {
+        "name": "Ljusstyrka brytar-LED"
       }
     },
     "sensor": {
@@ -97,8 +106,23 @@
       "last_firing": {
         "name": "Senaste eldning"
       },
-      "last_firing_value": {
-        "name": "Värde senaste eldning"
+      "firing_duration": {
+        "name": "Eldningens längd"
+      },
+      "firing_max_temperature": {
+        "name": "Max. temperatur eldning"
+      },
+      "firing_average_temperature": {
+        "name": "Medeltemperatur eldning"
+      },
+      "firing_wood_loads": {
+        "name": "Vedpåfyllningar"
+      },
+      "last_connection": {
+        "name": "Senaste anslutning"
+      },
+      "last_log_entry": {
+        "name": "Senaste loggpost"
       },
       "phase": {
         "name": "Fas",

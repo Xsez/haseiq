@@ -461,11 +461,12 @@ class IQstoveCloud:
         """Return the samples of one firing (see `firing_stats`)."""
         return await self.async_get(f"{HISTORY_PATH.format(oven_id=self.oven_id)}/{start}")
 
-    async def async_get_air_flap_threshold(self, article_number: str) -> Optional[int]:
-        """Return the model's air-flap threshold K from Firestore `stove_models`.
+    async def async_get_stove_model(self, article_number: str) -> Optional[Dict[str, Any]]:
+        """Return the Firestore `stove_models` entry for an article number.
 
-        K splits the combined `PL` flap value: 0..K is window air (Scheibe),
-        K..100 is grate air (Rost). Returns None if the model is not found.
+        Keys: `name`, `air_flap_threshold` (K; splits `PL` into window 0..K and
+        grate K..100), `img_url`, `technical_data_url`,
+        `estimated_average_temperature`. Returns None if the model is not found.
         """
         article = ARTICLE_REMAP.get(article_number, article_number)
         token = await self._auth.async_get_token()
@@ -484,8 +485,21 @@ class IQstoveCloud:
         for doc in body.get("documents", []) if isinstance(body, dict) else []:
             fields = doc.get("fields", {})
             if fields.get("article_number", {}).get("stringValue") == article:
-                value = fields.get("air_flap_threshold", {}).get("integerValue")
-                return int(value) if value is not None else None
+
+                def _str(key: str) -> Optional[str]:
+                    return fields.get(key, {}).get("stringValue")
+
+                def _int(key: str) -> Optional[int]:
+                    value = fields.get(key, {}).get("integerValue")
+                    return int(value) if value is not None else None
+
+                return {
+                    "name": _str("name"),
+                    "air_flap_threshold": _int("air_flap_threshold"),
+                    "img_url": _str("img_url"),
+                    "technical_data_url": _str("technical_data_url"),
+                    "estimated_average_temperature": _int("estimated_average_temperature"),
+                }
         return None
 
     async def async_get_error_log(self) -> Any:

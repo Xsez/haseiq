@@ -179,6 +179,7 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._firing_task: asyncio.Task | None = None
         self._sw_version: str | None = None
         self._air_flap_threshold: int | None = None
+        self._model: dict[str, Any] | None = None
         # pulses of `konstant_app/n` seen so far (see `_check_notification`)
         self.notification_count = 0
         self._notification_pending = False
@@ -191,10 +192,14 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     @property
     def device_info(self) -> DeviceInfo:
         """Return the device registry info for this stove."""
-        konstant = self.client.data.get("konstant")
-        model = konstant.get("verz") if isinstance(konstant, dict) else None
         app = self.client.data.get("konstant_app")
         model_id = app.get("ofen") if isinstance(app, dict) else None
+        # prefer the real model name from stove_models; fall back to the verz tag
+        konstant = self.client.data.get("konstant")
+        model = (self._model or {}).get("name") or (
+            konstant.get("verz") if isinstance(konstant, dict) else None
+        )
+        docs_url = (self._model or {}).get("technical_data_url")
         return DeviceInfo(
             identifiers={(DOMAIN, self.serial)},
             manufacturer=MANUFACTURER,
@@ -203,6 +208,7 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             name=f"Stove {self.serial}",
             serial_number=self.serial,
             sw_version=self._firmware(),
+            configuration_url=docs_url or None,
         )
 
     def _firmware(self) -> str | None:
@@ -242,22 +248,31 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if not any(self.client.connected.values()):
             raise UpdateFailed("Cannot stream from the HASE cloud")
 
-        await self._async_load_air_flap_threshold()
+        await self._async_load_model()
 
-    async def _async_load_air_flap_threshold(self) -> None:
-        """Look up the model's air-flap threshold K once (splits PL into window/grate)."""
+    async def _async_load_model(self) -> None:
+        """Look up the stove model once (name, air-flap threshold K, image, docs)."""
         app = self.client.data.get("konstant_app")
         article = app.get("a") if isinstance(app, dict) else None
         if article is None:
             return
         try:
-            threshold = await self.client.async_get_air_flap_threshold(str(article))
+            model = await self.client.async_get_stove_model(str(article))
         except HaseCloudError as err:
-            _LOGGER.debug("Cannot load the air-flap threshold: %s", err)
+            _LOGGER.debug("Cannot load the stove model: %s", err)
             return
+        if not model:
+            return
+        self._model = model
+        threshold = model.get("air_flap_threshold")
         if isinstance(threshold, int) and 0 < threshold < 100:
             self._air_flap_threshold = threshold
-            _LOGGER.debug("Air-flap threshold K=%s (article %s)", threshold, article)
+        _LOGGER.debug("Stove model %s, K=%s (article %s)", model.get("name"), threshold, article)
+
+    @property
+    def model(self) -> dict[str, Any] | None:
+        """Return the stove_models entry (name, img_url, …), if loaded."""
+        return self._model
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Return the current snapshot (data itself is pushed)."""

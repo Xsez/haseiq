@@ -79,6 +79,8 @@ The host (Gen 1) or share link (Gen 2) can be changed later with **Reconfigure**
 
 Device information: serial number, firmware version, hardware model, model designation.
 
+For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet are looked up from the HASE cloud and shown on the device page.
+
 ### Gen 2 (beta)
 
 - **Temperature**, **Load average temperature** (mean temperature since the last load of wood), **Controller temperature**

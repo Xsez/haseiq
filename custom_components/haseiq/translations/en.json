@@ -117,6 +117,17 @@
       "performance": {
         "name": "Performance"
       },
+      "eco_value": {
+        "name": "ECO value"
+      },
+      "eco_rating": {
+        "name": "ECO rating",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optimal"
+        }
+      },
       "heating_up": {
         "name": "Heating up"
       },

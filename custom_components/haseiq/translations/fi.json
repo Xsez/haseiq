@@ -117,6 +117,17 @@
       "performance": {
         "name": "Teho"
       },
+      "eco_value": {
+        "name": "ECO-arvo"
+      },
+      "eco_rating": {
+        "name": "ECO-arvio",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optimaalinen"
+        }
+      },
       "heating_up": {
         "name": "Lämpeneminen"
       },

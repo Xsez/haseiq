@@ -117,6 +117,17 @@
       "performance": {
         "name": "Moc"
       },
+      "eco_value": {
+        "name": "Wartość ECO"
+      },
+      "eco_rating": {
+        "name": "Ocena ECO",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optymalne"
+        }
+      },
       "heating_up": {
         "name": "Nagrzewanie"
       },

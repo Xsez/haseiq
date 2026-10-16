@@ -19,8 +19,8 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.event import async_track_time_interval
 
-from .const import GEN1, GEN2_PHASE_ERROR
-from .entity import IQStoveAnyCoordinator, IQStoveEntity, app_data, live_data, unix_time
+from .const import GEN1
+from .entity import IQStoveAnyCoordinator, IQStoveEntity, app_data, unix_time
 
 GEN2_ONLINE_TIMEOUT = 180  # seconds without a heartbeat before the stove is offline
 
@@ -54,13 +54,36 @@ def _gen1_error(data: dict[str, Any]) -> bool | None:
         return None
 
 
-def _gen2_error(data: dict[str, Any]) -> bool:
-    """Return True in the error phase or while the live error code `E` is set."""
-    live = live_data(data)
-    code = live.get("E")
-    return live.get("F") == GEN2_PHASE_ERROR or (
-        isinstance(code, (int, float)) and code != 0
-    )
+# `konstant_app/ecode` is a bitmask; each set bit is one fault (app settings/error).
+GEN2_FAULTS = {
+    1: "motor_a_blocked",
+    2: "motor_a_slipping",
+    4: "motor_a_no_current",
+    8: "motor_b_blocked",
+    16: "motor_b_slipping",
+    32: "motor_b_no_current",
+    64: "temperature_sensor",
+    128: "battery",
+}
+
+
+def _ecode(data: dict[str, Any]) -> int | None:
+    code = app_data(data).get("ecode")
+    return int(code) if isinstance(code, (int, float)) and not isinstance(code, bool) else None
+
+
+def _gen2_error(data: dict[str, Any]) -> bool | None:
+    """Return True while the stove reports a fault (`ecode` bitmask != 0)."""
+    code = _ecode(data)
+    return code != 0 if code is not None else None
+
+
+def _gen2_error_attrs(data: dict[str, Any]) -> dict[str, Any] | None:
+    """List the active faults decoded from the `ecode` bitmask."""
+    code = _ecode(data)
+    if not code:
+        return None
+    return {"ecode": code, "faults": [n for bit, n in GEN2_FAULTS.items() if code & bit]}
 
 
 def _gen2_online(data: dict[str, Any]) -> bool | None:
@@ -82,9 +105,10 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
     IQStoveBinarySensorDescription(
         key="error",
         translation_key="error",
-        node="liveData",
+        node="konstant_app",
         device_class=BinarySensorDeviceClass.PROBLEM,
         value_fn=_gen2_error,
+        attr_fn=_gen2_error_attrs,
     ),
     IQStoveBinarySensorDescription(
         key="online",

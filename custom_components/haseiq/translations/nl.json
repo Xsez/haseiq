@@ -117,6 +117,17 @@
       "performance": {
         "name": "Vermogen"
       },
+      "eco_value": {
+        "name": "ECO-waarde"
+      },
+      "eco_rating": {
+        "name": "ECO-beoordeling",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optimaal"
+        }
+      },
       "heating_up": {
         "name": "Opwarmen"
       },

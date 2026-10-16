@@ -117,6 +117,17 @@
       "performance": {
         "name": "Potenza"
       },
+      "eco_value": {
+        "name": "Valore ECO"
+      },
+      "eco_rating": {
+        "name": "Valutazione ECO",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optimal"
+        }
+      },
       "heating_up": {
         "name": "Riscaldamento"
       },

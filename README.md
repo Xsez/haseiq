@@ -85,8 +85,8 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 
 - **Temperature**, **Load average temperature** (mean temperature since the last load of wood), **Controller temperature**
 - **Phase** – off, kindling, burning, add wood, heating up, residual heat, don't add wood, error
-- **Performance**
-- **Error** – on in the error phase or while the stove reports an error code
+- **ECO value** (the stove's 0–100 combustion-quality score) and **ECO rating** (ECO / ECO+ / ECO optimal, like the app's badge)
+- **Error** – on when the stove reports a fault; the active faults (motor, temperature sensor, battery) are listed in its attributes
 - **Window air**, **Grate air**, **Rear wall air** (%) – the three air flaps, matching the app. The stove sends a combined window/grate flap value (`PL`) plus the rear flap (`SL`); the split point is looked up per stove model, so window and grate are derived like the app does.
 - **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
 - **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)

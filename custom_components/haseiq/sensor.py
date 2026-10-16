@@ -63,7 +63,26 @@ def _number(value: Any) -> int | float | None:
 
 
 def _gen2_phase(data: dict[str, Any]) -> str | None:
-    return PHASES_GEN2.get(_number(live_data(data).get("F")))
+    num = _number(live_data(data).get("F"))
+    if num is None:
+        return None
+    # the app shows "error" for any F outside 0..6
+    return PHASES_GEN2.get(num, "error")
+
+
+# ECO badge bands (Firestore settings/performance): first threshold <= P wins.
+# P<=0 is residual heat, where the app hides the badge.
+def _eco_rating(data: dict[str, Any]) -> str | None:
+    p = _number(live_data(data).get("P"))
+    if p is None:
+        return None
+    if p >= 90:
+        return "eco_optimal"
+    if p >= 40:
+        return "eco_plus"
+    if p >= 1:
+        return "eco"
+    return None
 
 
 def _history(data: dict[str, Any]) -> dict[str, Any]:
@@ -219,11 +238,21 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=_gen2_phase,
     ),
     IQStoveSensorDescription(
+        # P is the ECO/combustion-quality score 0-100 (the app's "ECO-Stufe"),
+        # not heat output; key kept for the unique ID
         key="performance",
-        translation_key="performance",
+        translation_key="eco_value",
         node="liveData",
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _number(live_data(data).get("P")),
+    ),
+    IQStoveSensorDescription(
+        key="eco_rating",
+        translation_key="eco_rating",
+        node="liveData",
+        device_class=SensorDeviceClass.ENUM,
+        options=["eco", "eco_plus", "eco_optimal"],
+        value_fn=_eco_rating,
     ),
     IQStoveSensorDescription(
         # key kept for the unique ID; window air = PL below the threshold K

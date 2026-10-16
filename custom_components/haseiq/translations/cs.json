@@ -117,6 +117,17 @@
       "performance": {
         "name": "Výkon"
       },
+      "eco_value": {
+        "name": "Hodnota ECO"
+      },
+      "eco_rating": {
+        "name": "Hodnocení ECO",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optimální"
+        }
+      },
       "heating_up": {
         "name": "Zahřívání"
       },

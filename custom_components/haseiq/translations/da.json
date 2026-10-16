@@ -117,6 +117,17 @@
       "performance": {
         "name": "Effekt"
       },
+      "eco_value": {
+        "name": "ECO-værdi"
+      },
+      "eco_rating": {
+        "name": "ECO-vurdering",
+        "state": {
+          "eco": "ECO",
+          "eco_plus": "ECO+",
+          "eco_optimal": "ECO optimal"
+        }
+      },
       "heating_up": {
         "name": "Opvarmning"
       },

@@ -137,6 +137,7 @@ GEN1_SENSORS: tuple[IQStoveSensorDescription, ...] = (
     ),
 )
 
+# Gen 2 temperatures (T, TQUER) arrive in whole degrees
 GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
     IQStoveSensorDescription(
         key="temperature",
@@ -144,6 +145,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         node="liveData",
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _number(live_data(data).get("T")),
     ),
@@ -154,6 +156,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         node="liveData",
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _number(live_data(data).get("TQUER")),
     ),
@@ -240,6 +243,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         node="historienliste",
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _firing(data).get("max_temperature"),
     ),
@@ -268,6 +272,14 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda data: _datetime(app_data(data).get("tsfc")),
     ),
+    IQStoveSensorDescription(
+        # the stove's address in its Wi-Fi; informative only, Gen 2 has no local API
+        key="ip_address",
+        translation_key="ip_address",
+        node="konstant_app",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: app_data(data).get("ip") or None,
+    ),
 )
 
 GEN2_LOG_SENSOR = IQStoveSensorDescription(
@@ -284,9 +296,9 @@ GEN2_DEDICATED: dict[str, set[str]] = {
     "liveData": {"T", "TQUER", "TC", "F", "P", "PL", "SL", "N"},
     # l/s: the LED brightness numbers, u: the firmware update binary sensor
     "konstant": {"l", "s", "u"},
-    # binary sensors (ping: online, bv: firing, f: firmware update progress)
-    # and the app notification event (n)
-    "konstant_app": {"ping", "tsfc", "bv", "f", "n"},
+    # sensors (tsfc, ip), binary sensors (ping: online, bv: firing, f: firmware
+    # update progress) and the app notification event (n)
+    "konstant_app": {"ping", "tsfc", "ip", "bv", "f", "n"},
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")

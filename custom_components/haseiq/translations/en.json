@@ -145,6 +145,9 @@
       "last_connection": {
         "name": "Last connection"
       },
+      "ip_address": {
+        "name": "IP address"
+      },
       "last_log_entry": {
         "name": "Last log entry"
       },

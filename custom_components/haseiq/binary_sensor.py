@@ -137,18 +137,6 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=_flag("konstant_app", "ba"),
     ),
-    IQStoveBinarySensorDescription(
-        # `v`: a firmware update is available (the stove/backend sets it; the app
-        # starts the update by writing konstant/u, which we deliberately don't do).
-        # `f`: download progress in %, while an update runs.
-        key="firmware_update",
-        translation_key="firmware_update",
-        node="konstant_app",
-        device_class=BinarySensorDeviceClass.UPDATE,
-        entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=_flag("konstant_app", "v"),
-        attr_fn=lambda data: {"progress": app_data(data).get("f")},
-    ),
 )
 
 

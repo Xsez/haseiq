@@ -31,6 +31,7 @@ PLATFORMS: list[Platform] = [
     Platform.EVENT,
     Platform.NUMBER,
     Platform.SENSOR,
+    Platform.UPDATE,
 ]
 
 # Gen 1 unique IDs before 0.4 were `haseiq-sensor-<device key>`, the same for
@@ -104,6 +105,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _async_migrate_gen1(hass, entry, coordinator.serial)
     else:
         _async_remove_entities(hass, coordinator.serial, REMOVED_GEN2_KEYS)
+        # the firmware-update binary sensor was replaced by an update entity
+        _async_remove_entities(
+            hass, coordinator.serial, ("firmware_update",), "binary_sensor"
+        )
 
     entry.runtime_data = coordinator
 
@@ -155,11 +160,13 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 @callback
-def _async_remove_entities(hass: HomeAssistant, serial: str, keys: tuple[str, ...]) -> None:
-    """Remove sensors of a stove that are no longer created."""
+def _async_remove_entities(
+    hass: HomeAssistant, serial: str, keys: tuple[str, ...], domain: str = "sensor"
+) -> None:
+    """Remove entities of a stove that are no longer created."""
     registry = er.async_get(hass)
     for key in keys:
-        if entity_id := registry.async_get_entity_id("sensor", DOMAIN, f"{serial}-{key}"):
+        if entity_id := registry.async_get_entity_id(domain, DOMAIN, f"{serial}-{key}"):
             registry.async_remove(entity_id)
 
 

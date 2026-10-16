@@ -69,9 +69,6 @@
       "online": {
         "name": "Online"
       },
-      "firmware_update": {
-        "name": "Aktualizace firmwaru"
-      },
       "booster_available": {
         "name": "Vzduch navíc k dispozici"
       },
@@ -185,6 +182,11 @@
           "residual_heat": "Zbytkové teplo",
           "error": "Chyba"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     }
   }

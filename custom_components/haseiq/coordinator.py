@@ -285,6 +285,13 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except HaseCloudError as err:
             raise HomeAssistantError(f"Cannot write to the HASE cloud: {err}") from err
 
+    async def async_start_update(self) -> None:
+        """Start the firmware update (writes `konstant/u` = true, like the app)."""
+        try:
+            await self.client.async_set_konstant("u", True)
+        except HaseCloudError as err:
+            raise HomeAssistantError(f"Cannot write to the HASE cloud: {err}") from err
+
     async def async_pulse_booster(self) -> None:
         """Request extra air: pulse `konstant/b` true for ~2 s, then false.
 

@@ -69,9 +69,6 @@
       "online": {
         "name": "En línea"
       },
-      "firmware_update": {
-        "name": "Actualización de firmware"
-      },
       "booster_available": {
         "name": "Aire adicional disponible"
       },
@@ -185,6 +182,11 @@
           "residual_heat": "Calor residual",
           "error": "Error"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     }
   }

@@ -69,9 +69,6 @@
       "online": {
         "name": "En ligne"
       },
-      "firmware_update": {
-        "name": "Mise à jour du firmware"
-      },
       "booster_available": {
         "name": "Air supplémentaire disponible"
       },
@@ -185,6 +182,11 @@
           "residual_heat": "Chaleur résiduelle",
           "error": "Erreur"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     }
   }

@@ -69,9 +69,6 @@
       "online": {
         "name": "Online"
       },
-      "firmware_update": {
-        "name": "Firmwareuppdatering"
-      },
       "booster_available": {
         "name": "Extra luft tillgänglig"
       },
@@ -185,6 +182,11 @@
           "residual_heat": "Restvärme",
           "error": "Fel"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     }
   }

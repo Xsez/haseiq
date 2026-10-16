@@ -128,11 +128,13 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         value_fn=_flag("konstant_app", "bv"),
     ),
     IQStoveBinarySensorDescription(
-        # `ba`: the extra-air booster is currently running
+        # `ba`: the extra-air booster is currently running (the Extra air button
+        # already reflects this via its availability; this is just diagnostics)
         key="booster_active",
         translation_key="booster_active",
         node="konstant_app",
         device_class=BinarySensorDeviceClass.RUNNING,
+        entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=_flag("konstant_app", "ba"),
     ),
     IQStoveBinarySensorDescription(

@@ -69,9 +69,6 @@
       "online": {
         "name": "Online"
       },
-      "firing": {
-        "name": "Zatopení"
-      },
       "firmware_update": {
         "name": "Aktualizace firmwaru"
       }

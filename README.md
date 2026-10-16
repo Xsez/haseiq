@@ -93,7 +93,6 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 - **Extra air** (button) – triggers the stove's air booster, like the app's "Extra air". The integration turns it off again after 5 minutes as a safety net; the stove normally ends it on its own.
 - For the current or last firing: **Last firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
 - **Firings** – the number of firings the HASE cloud keeps
-- **Firing** – running from the firing start until shortly after residual heat
 - **App notification** – an event each time the stove has the HASE iQ app notified (so far: when wood should be added)
 - **Online** – off when the stove has not reported for 3 minutes; **Last connection**; **IP address** (informative only); the firmware version is shown on the device page
 - **Firmware update** – on while an update waits to be installed, with the download progress as attribute

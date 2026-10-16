@@ -374,9 +374,10 @@ GEN2_DEDICATED: dict[str, set[str]] = {
     "liveData": {"T", "TQUER", "TC", "F", "P", "PL", "SL", "N"},
     # l/s: the LED brightness numbers, u: the firmware update binary sensor
     "konstant": {"l", "s", "u"},
-    # sensors (tsfc, ip), binary sensors (ping: online, bv: firing, f: firmware
-    # update progress) and the app notification event (n)
-    "konstant_app": {"ping", "tsfc", "ip", "bv", "f", "n"},
+    # sensors (tsfc, ip), binary sensors (ping: online, f: firmware update
+    # progress) and the app notification event (n). bv stays a raw sensor: it
+    # is an unknown flag, the inverse of ba, not "firing".
+    "konstant_app": {"ping", "tsfc", "ip", "f", "n"},
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")

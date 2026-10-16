@@ -120,14 +120,6 @@ GEN2_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
         recheck=timedelta(seconds=30),
     ),
     IQStoveBinarySensorDescription(
-        # on from the firing start until shortly after residual heat
-        key="firing",
-        translation_key="firing",
-        node="konstant_app",
-        device_class=BinarySensorDeviceClass.RUNNING,
-        value_fn=_flag("konstant_app", "bv"),
-    ),
-    IQStoveBinarySensorDescription(
         # `u`: an update waits to be installed; `f`: download progress in %
         key="firmware_update",
         translation_key="firmware_update",

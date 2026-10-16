@@ -69,9 +69,6 @@
       "online": {
         "name": "En línea"
       },
-      "firing": {
-        "name": "Encendido"
-      },
       "firmware_update": {
         "name": "Actualización de firmware"
       }

@@ -69,9 +69,6 @@
       "online": {
         "name": "Tilkoblet"
       },
-      "firing": {
-        "name": "Fyring"
-      },
       "firmware_update": {
         "name": "Fastvareoppdatering"
       }

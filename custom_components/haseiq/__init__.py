@@ -48,7 +48,7 @@ REMOVED_GEN1_KEYS = ("appPTx", "appP30Tx", "appIQDarst", "appPT", "appP30T")
 # Gen 2 raw sensors of earlier betas: liveData keys that do not exist (B, S) or
 # now have a dedicated entity (F: phase, TQUER/TC: temperatures, l/s: LED
 # numbers, u/f: firmware update, ping: online, tsfc: last connection,
-# ip: IP address, bv: firing, n: app notification)
+# ip: IP address, n: app notification)
 REMOVED_GEN2_KEYS = (
     "raw-liveData-B",
     "raw-liveData-F",
@@ -58,7 +58,6 @@ REMOVED_GEN2_KEYS = (
     "raw-konstant-l",
     "raw-konstant-s",
     "raw-konstant-u",
-    "raw-konstant_app-bv",
     "raw-konstant_app-f",
     "raw-konstant_app-ip",
     "raw-konstant_app-n",

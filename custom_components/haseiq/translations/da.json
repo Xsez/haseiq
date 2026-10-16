@@ -69,9 +69,6 @@
       "online": {
         "name": "Online"
       },
-      "firing": {
-        "name": "Fyring"
-      },
       "firmware_update": {
         "name": "Firmwareopdatering"
       }

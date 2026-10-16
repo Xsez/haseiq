@@ -343,12 +343,16 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _firing(data).get("wood_loads"),
     ),
     IQStoveSensorDescription(
+        # the controller's last heartbeat/write; `tsfc` is null on these stoves,
+        # so use `ping` (which advances ~every minute) and fall back to tsfc
         key="last_connection",
         translation_key="last_connection",
         node="konstant_app",
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda data: _datetime(app_data(data).get("tsfc")),
+        value_fn=lambda data: _datetime(
+            app_data(data).get("ping") or app_data(data).get("tsfc")
+        ),
     ),
     IQStoveSensorDescription(
         # the stove's address in its Wi-Fi; informative only, Gen 2 has no local API
@@ -372,12 +376,13 @@ LOG_LINES = 20  # log lines kept in the attributes of the log sensor
 # Keys with a dedicated entity, per node; they get no raw sensor
 GEN2_DEDICATED: dict[str, set[str]] = {
     "liveData": {"T", "TQUER", "TC", "F", "P", "PL", "SL", "N"},
-    # l/s: the LED brightness numbers, u: the firmware update binary sensor
-    "konstant": {"l", "s", "u"},
-    # sensors (tsfc, ip), binary sensors (ping: online, f: firmware update
-    # progress, bv: booster available, ba: booster active) and the app
-    # notification event (n)
-    "konstant_app": {"ping", "tsfc", "ip", "f", "n", "bv", "ba"},
+    # l/s: LED brightness numbers; u: start-update command (not exposed);
+    # r: remove-stove / delete-data command (never expose), b: booster pulse
+    "konstant": {"l", "s", "u", "r", "b"},
+    # sensors (tsfc, ip), binary sensors (ping: online, v: firmware update,
+    # f: firmware update progress, bv: booster available, ba: booster active)
+    # and the app notification event (n)
+    "konstant_app": {"ping", "tsfc", "ip", "v", "f", "n", "bv", "ba"},
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")

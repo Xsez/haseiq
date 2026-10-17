@@ -502,6 +502,12 @@ class IQstoveCloud:
                 }
         return None
 
+    async def async_get_month_stats(self, year: int, month: int) -> Any:
+        """Return the month summary from `statistik_monat_tage`, or None."""
+        return await self.async_get(
+            f"statistik_monat_tage/{self.oven_id}/{year}/{month}/monat"
+        )
+
     async def async_get_error_log(self) -> Any:
         """Return the error log (see `ERROR_LOG_PATH`)."""
         return await self._async_request(

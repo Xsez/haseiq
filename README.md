@@ -93,6 +93,8 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 - **Extra air** (button) – requests the stove's air booster, like the app's "Extra air" (a short pulse; the stove runs it and returns to iQ mode on its own). Available only while the stove offers it. **Extra air available** / **Extra air active** show the booster status.
 - For the current or last firing: **Last firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
 - **Firings** – the number of firings the HASE cloud keeps
+- **This month**: firings, burn time, average ECO and average temperature (refreshed every 30 min)
+- **Target temperature** – the model's reference average temperature (diagnostic)
 - **App notification** – an event each time the stove has the HASE iQ app notified (so far: when wood should be added)
 - **Online** – off when the stove has not reported for 3 minutes; **Last connection**; **IP address** (informative only); the firmware version is shown on the device page
 - **Firmware** – a Home Assistant update entity: shows when an update is available, installs it on request, and reports the progress

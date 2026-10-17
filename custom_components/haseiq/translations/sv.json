@@ -182,6 +182,21 @@
           "residual_heat": "Restvärme",
           "error": "Fel"
         }
+      },
+      "month_firings": {
+        "name": "Eldningar denna månad"
+      },
+      "month_burn_time": {
+        "name": "Brinntid denna månad"
+      },
+      "month_eco_average": {
+        "name": "Genomsnittlig ECO denna månad"
+      },
+      "month_temperature_average": {
+        "name": "Medeltemperatur denna månad"
+      },
+      "target_temperature": {
+        "name": "Måltemperatur"
       }
     },
     "update": {

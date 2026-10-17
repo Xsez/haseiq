@@ -132,6 +132,12 @@ def _firing(data: dict[str, Any]) -> dict[str, Any]:
     return firing if isinstance(firing, dict) else {}
 
 
+def _month(data: dict[str, Any]) -> dict[str, Any]:
+    """Return the current month's statistics (see the cloud coordinator)."""
+    month = data.get("month")
+    return month if isinstance(month, dict) else {}
+
+
 def _air_threshold(data: dict[str, Any]) -> int:
     """Return the model's air-flap threshold K (fallback to the app's default)."""
     k = data.get("air_flap_threshold")
@@ -341,6 +347,47 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         node="historienliste",
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _firing(data).get("wood_loads"),
+    ),
+    IQStoveSensorDescription(
+        key="month_firings",
+        translation_key="month_firings",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(_month(data).get("anz_abbrnd")),
+    ),
+    IQStoveSensorDescription(
+        key="month_burn_time",
+        translation_key="month_burn_time",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        suggested_display_precision=1,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(_month(data).get("anz_s")),
+    ),
+    IQStoveSensorDescription(
+        key="month_eco_average",
+        translation_key="month_eco_average",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(_month(data).get("p")),
+    ),
+    IQStoveSensorDescription(
+        key="month_temperature_average",
+        translation_key="month_temperature_average",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(_month(data).get("t")),
+    ),
+    IQStoveSensorDescription(
+        # the model's reference average temperature (stove_models)
+        key="target_temperature",
+        translation_key="target_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: _number(data.get("target_temperature")),
     ),
     IQStoveSensorDescription(
         # the controller's last heartbeat/write; `tsfc` is null on these stoves,

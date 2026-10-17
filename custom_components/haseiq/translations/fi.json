@@ -182,6 +182,21 @@
           "residual_heat": "Jälkilämpö",
           "error": "Virhe"
         }
+      },
+      "month_firings": {
+        "name": "Lämmitykset tässä kuussa"
+      },
+      "month_burn_time": {
+        "name": "Palamisaika tässä kuussa"
+      },
+      "month_eco_average": {
+        "name": "ECO-keskiarvo tässä kuussa"
+      },
+      "month_temperature_average": {
+        "name": "Keskilämpötila tässä kuussa"
+      },
+      "target_temperature": {
+        "name": "Tavoitelämpötila"
       }
     },
     "update": {

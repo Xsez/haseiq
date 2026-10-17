@@ -182,6 +182,21 @@
           "residual_heat": "Ciepło resztkowe",
           "error": "Błąd"
         }
+      },
+      "month_firings": {
+        "name": "Palenia w tym miesiącu"
+      },
+      "month_burn_time": {
+        "name": "Czas palenia w tym miesiącu"
+      },
+      "month_eco_average": {
+        "name": "Średnie ECO w tym miesiącu"
+      },
+      "month_temperature_average": {
+        "name": "Średnia temperatura w tym miesiącu"
+      },
+      "target_temperature": {
+        "name": "Temperatura docelowa"
       }
     },
     "update": {

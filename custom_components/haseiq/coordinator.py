@@ -21,7 +21,9 @@ from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .cloud import HaseCloudError, IQstoveCloud, firing_stats
 from .const import CONF_KEEPALIVE_HELD, DOMAIN, GEN1, GEN2, MANUFACTURER
@@ -36,6 +38,7 @@ PUSH_DELAY = 0.3  # batch frames/events arriving close together into one update
 
 GEN2_READY_TIMEOUT = 10  # seconds to wait for the first snapshot of every node
 GEN2_KEEPALIVE_RETRY = 60  # min seconds between keep-alive repairs
+GEN2_MONTH_INTERVAL = timedelta(minutes=30)  # how often to refresh month statistics
 
 
 class IQStoveCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -180,6 +183,8 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._sw_version: str | None = None
         self._air_flap_threshold: int | None = None
         self._model: dict[str, Any] | None = None
+        self._month: dict[str, Any] | None = None
+        self._unsub_month: CALLBACK_TYPE | None = None
         # pulses of `konstant_app/n` seen so far (see `_check_notification`)
         self.notification_count = 0
         self._notification_pending = False
@@ -249,6 +254,22 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise UpdateFailed("Cannot stream from the HASE cloud")
 
         await self._async_load_model()
+        await self._async_load_month()
+        self._unsub_month = async_track_time_interval(
+            self.hass, self._async_load_month, GEN2_MONTH_INTERVAL
+        )
+
+    async def _async_load_month(self, _now: Any = None) -> None:
+        """Fetch the current month's statistics (burn time, firings, averages)."""
+        now = dt_util.now()
+        try:
+            stats = await self.client.async_get_month_stats(now.year, now.month)
+        except HaseCloudError as err:
+            _LOGGER.debug("Cannot load the month statistics: %s", err)
+            return
+        if isinstance(stats, dict):
+            self._month = stats
+            self._schedule_push()
 
     async def _async_load_model(self) -> None:
         """Look up the stove model once (name, air-flap threshold K, image, docs)."""
@@ -315,6 +336,8 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             **self.client.data,
             "firing": self._firing,
             "air_flap_threshold": self._air_flap_threshold,
+            "month": self._month,
+            "target_temperature": (self._model or {}).get("estimated_average_temperature"),
         }
 
     def _on_client_change(self, node: str) -> None:
@@ -425,6 +448,9 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if self._push_handle is not None:
             self._push_handle.cancel()
             self._push_handle = None
+        if self._unsub_month is not None:
+            self._unsub_month()
+            self._unsub_month = None
         if self._unsub_client is not None:
             self._unsub_client()
             self._unsub_client = None

@@ -182,6 +182,21 @@
           "residual_heat": "Restwarmte",
           "error": "Fout"
         }
+      },
+      "month_firings": {
+        "name": "Stookbeurten deze maand"
+      },
+      "month_burn_time": {
+        "name": "Brandduur deze maand"
+      },
+      "month_eco_average": {
+        "name": "Gemiddelde ECO deze maand"
+      },
+      "month_temperature_average": {
+        "name": "Gemiddelde temperatuur deze maand"
+      },
+      "target_temperature": {
+        "name": "Doeltemperatuur"
       }
     },
     "update": {

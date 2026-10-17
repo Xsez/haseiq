@@ -182,6 +182,21 @@
           "residual_heat": "Zbytkové teplo",
           "error": "Chyba"
         }
+      },
+      "month_firings": {
+        "name": "Zatopení tento měsíc"
+      },
+      "month_burn_time": {
+        "name": "Doba hoření tento měsíc"
+      },
+      "month_eco_average": {
+        "name": "Průměrné ECO tento měsíc"
+      },
+      "month_temperature_average": {
+        "name": "Průměrná teplota tento měsíc"
+      },
+      "target_temperature": {
+        "name": "Cílová teplota"
       }
     },
     "update": {

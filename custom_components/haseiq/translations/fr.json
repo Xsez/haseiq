@@ -182,6 +182,21 @@
           "residual_heat": "Chaleur résiduelle",
           "error": "Erreur"
         }
+      },
+      "month_firings": {
+        "name": "Flambées ce mois"
+      },
+      "month_burn_time": {
+        "name": "Durée de combustion ce mois"
+      },
+      "month_eco_average": {
+        "name": "ECO moyen ce mois"
+      },
+      "month_temperature_average": {
+        "name": "Température moyenne ce mois"
+      },
+      "target_temperature": {
+        "name": "Température cible"
       }
     },
     "update": {

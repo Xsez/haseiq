@@ -147,19 +147,19 @@
         "name": "Flambées"
       },
       "last_firing": {
-        "name": "Dernière flambée début"
+        "name": "Flambée début"
       },
       "firing_duration": {
-        "name": "Dernière flambée durée"
+        "name": "Flambée durée"
       },
       "firing_max_temperature": {
-        "name": "Dernière flambée température max."
+        "name": "Flambée température max."
       },
       "firing_average_temperature": {
-        "name": "Dernière flambée température moyenne"
+        "name": "Flambée température moyenne"
       },
       "firing_wood_loads": {
-        "name": "Dernière flambée rechargements"
+        "name": "Flambée rechargements"
       },
       "last_connection": {
         "name": "Dernière connexion"

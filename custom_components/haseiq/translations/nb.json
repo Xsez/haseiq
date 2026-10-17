@@ -147,19 +147,19 @@
         "name": "Fyringer"
       },
       "last_firing": {
-        "name": "Siste fyring start"
+        "name": "Fyring start"
       },
       "firing_duration": {
-        "name": "Siste fyring varighet"
+        "name": "Fyring varighet"
       },
       "firing_max_temperature": {
-        "name": "Siste fyring maks. temperatur"
+        "name": "Fyring maks. temperatur"
       },
       "firing_average_temperature": {
-        "name": "Siste fyring gjennomsnittstemperatur"
+        "name": "Fyring gjennomsnittstemperatur"
       },
       "firing_wood_loads": {
-        "name": "Siste fyring vedpåfyllinger"
+        "name": "Fyring vedpåfyllinger"
       },
       "last_connection": {
         "name": "Siste tilkobling"

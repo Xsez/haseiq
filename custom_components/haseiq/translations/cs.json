@@ -147,19 +147,19 @@
         "name": "Zatopení"
       },
       "last_firing": {
-        "name": "Poslední zatopení začátek"
+        "name": "Zatopení začátek"
       },
       "firing_duration": {
-        "name": "Poslední zatopení doba"
+        "name": "Zatopení doba"
       },
       "firing_max_temperature": {
-        "name": "Poslední zatopení max. teplota"
+        "name": "Zatopení max. teplota"
       },
       "firing_average_temperature": {
-        "name": "Poslední zatopení průměrná teplota"
+        "name": "Zatopení průměrná teplota"
       },
       "firing_wood_loads": {
-        "name": "Poslední zatopení přiložení dřeva"
+        "name": "Zatopení přiložení dřeva"
       },
       "last_connection": {
         "name": "Poslední připojení"

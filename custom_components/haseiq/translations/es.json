@@ -147,19 +147,19 @@
         "name": "Encendidos"
       },
       "last_firing": {
-        "name": "Último encendido inicio"
+        "name": "Encendido inicio"
       },
       "firing_duration": {
-        "name": "Último encendido duración"
+        "name": "Encendido duración"
       },
       "firing_max_temperature": {
-        "name": "Último encendido temperatura máxima"
+        "name": "Encendido temperatura máxima"
       },
       "firing_average_temperature": {
-        "name": "Último encendido temperatura media"
+        "name": "Encendido temperatura media"
       },
       "firing_wood_loads": {
-        "name": "Último encendido cargas de leña"
+        "name": "Encendido cargas de leña"
       },
       "last_connection": {
         "name": "Última conexión"

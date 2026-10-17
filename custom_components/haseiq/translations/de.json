@@ -147,19 +147,19 @@
         "name": "Abbrände"
       },
       "last_firing": {
-        "name": "Letzter Abbrand Start"
+        "name": "Abbrand Start"
       },
       "firing_duration": {
-        "name": "Letzter Abbrand Dauer"
+        "name": "Abbrand Dauer"
       },
       "firing_max_temperature": {
-        "name": "Letzter Abbrand Höchsttemperatur"
+        "name": "Abbrand Höchsttemperatur"
       },
       "firing_average_temperature": {
-        "name": "Letzter Abbrand Durchschnittstemperatur"
+        "name": "Abbrand Durchschnittstemperatur"
       },
       "firing_wood_loads": {
-        "name": "Letzter Abbrand Nachlegevorgänge"
+        "name": "Abbrand Nachlegevorgänge"
       },
       "last_connection": {
         "name": "Letzte Verbindung"

@@ -147,19 +147,19 @@
         "name": "Stookbeurten"
       },
       "last_firing": {
-        "name": "Laatste stookbeurt start"
+        "name": "Stookbeurt start"
       },
       "firing_duration": {
-        "name": "Laatste stookbeurt duur"
+        "name": "Stookbeurt duur"
       },
       "firing_max_temperature": {
-        "name": "Laatste stookbeurt maximumtemperatuur"
+        "name": "Stookbeurt maximumtemperatuur"
       },
       "firing_average_temperature": {
-        "name": "Laatste stookbeurt gemiddelde temperatuur"
+        "name": "Stookbeurt gemiddelde temperatuur"
       },
       "firing_wood_loads": {
-        "name": "Laatste stookbeurt houtbijvullingen"
+        "name": "Stookbeurt houtbijvullingen"
       },
       "last_connection": {
         "name": "Laatste verbinding"

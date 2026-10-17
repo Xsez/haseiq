@@ -147,19 +147,19 @@
         "name": "Eldningar"
       },
       "last_firing": {
-        "name": "Senaste eldning start"
+        "name": "Eldning start"
       },
       "firing_duration": {
-        "name": "Senaste eldning längd"
+        "name": "Eldning längd"
       },
       "firing_max_temperature": {
-        "name": "Senaste eldning max. temperatur"
+        "name": "Eldning max. temperatur"
       },
       "firing_average_temperature": {
-        "name": "Senaste eldning medeltemperatur"
+        "name": "Eldning medeltemperatur"
       },
       "firing_wood_loads": {
-        "name": "Senaste eldning vedpåfyllningar"
+        "name": "Eldning vedpåfyllningar"
       },
       "last_connection": {
         "name": "Senaste anslutning"

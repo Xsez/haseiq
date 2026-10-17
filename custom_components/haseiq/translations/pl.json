@@ -147,19 +147,19 @@
         "name": "Rozpalenia"
       },
       "last_firing": {
-        "name": "Ostatnie palenie początek"
+        "name": "Palenie początek"
       },
       "firing_duration": {
-        "name": "Ostatnie palenie czas"
+        "name": "Palenie czas"
       },
       "firing_max_temperature": {
-        "name": "Ostatnie palenie maks. temperatura"
+        "name": "Palenie maks. temperatura"
       },
       "firing_average_temperature": {
-        "name": "Ostatnie palenie średnia temperatura"
+        "name": "Palenie średnia temperatura"
       },
       "firing_wood_loads": {
-        "name": "Ostatnie palenie dokładania drewna"
+        "name": "Palenie dokładania drewna"
       },
       "last_connection": {
         "name": "Ostatnie połączenie"

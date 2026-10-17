@@ -91,7 +91,7 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 - **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
 - **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)
 - **Extra air** (button) – requests the stove's air booster, like the app's "Extra air" (a short pulse; the stove runs it and returns to iQ mode on its own). Available only while the stove offers it. **Extra air available** / **Extra air active** show the booster status.
-- For the current or last firing: **Last firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
+- For the current or last firing: **Firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
 - **Firings** – the number of firings the HASE cloud keeps
 - **This month**: firings, burn time, average ECO and average temperature (refreshed every 30 min)
 - **Target temperature** – the model's reference average temperature (diagnostic)

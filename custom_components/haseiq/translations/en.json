@@ -147,19 +147,19 @@
         "name": "Firings"
       },
       "last_firing": {
-        "name": "Last firing start"
+        "name": "Firing start"
       },
       "firing_duration": {
-        "name": "Last firing duration"
+        "name": "Firing duration"
       },
       "firing_max_temperature": {
-        "name": "Last firing peak temperature"
+        "name": "Firing peak temperature"
       },
       "firing_average_temperature": {
-        "name": "Last firing average temperature"
+        "name": "Firing average temperature"
       },
       "firing_wood_loads": {
-        "name": "Last firing wood loads"
+        "name": "Firing wood loads"
       },
       "last_connection": {
         "name": "Last connection"

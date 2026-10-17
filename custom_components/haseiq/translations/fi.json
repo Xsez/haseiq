@@ -147,19 +147,19 @@
         "name": "Lämmityskerrat"
       },
       "last_firing": {
-        "name": "Viimeisin lämmitys alku"
+        "name": "Lämmitys alku"
       },
       "firing_duration": {
-        "name": "Viimeisin lämmitys kesto"
+        "name": "Lämmitys kesto"
       },
       "firing_max_temperature": {
-        "name": "Viimeisin lämmitys huippulämpötila"
+        "name": "Lämmitys huippulämpötila"
       },
       "firing_average_temperature": {
-        "name": "Viimeisin lämmitys keskilämpötila"
+        "name": "Lämmitys keskilämpötila"
       },
       "firing_wood_loads": {
-        "name": "Viimeisin lämmitys puiden lisäykset"
+        "name": "Lämmitys puiden lisäykset"
       },
       "last_connection": {
         "name": "Viimeisin yhteys"

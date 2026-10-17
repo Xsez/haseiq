@@ -147,19 +147,19 @@
         "name": "Accensioni"
       },
       "last_firing": {
-        "name": "Ultima accensione inizio"
+        "name": "Accensione inizio"
       },
       "firing_duration": {
-        "name": "Ultima accensione durata"
+        "name": "Accensione durata"
       },
       "firing_max_temperature": {
-        "name": "Ultima accensione temperatura massima"
+        "name": "Accensione temperatura massima"
       },
       "firing_average_temperature": {
-        "name": "Ultima accensione temperatura media"
+        "name": "Accensione temperatura media"
       },
       "firing_wood_loads": {
-        "name": "Ultima accensione carichi di legna"
+        "name": "Accensione carichi di legna"
       },
       "last_connection": {
         "name": "Ultima connessione"

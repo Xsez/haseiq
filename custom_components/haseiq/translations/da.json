@@ -147,19 +147,19 @@
         "name": "Fyringer"
       },
       "last_firing": {
-        "name": "Seneste fyring start"
+        "name": "Fyring start"
       },
       "firing_duration": {
-        "name": "Seneste fyring varighed"
+        "name": "Fyring varighed"
       },
       "firing_max_temperature": {
-        "name": "Seneste fyring maks. temperatur"
+        "name": "Fyring maks. temperatur"
       },
       "firing_average_temperature": {
-        "name": "Seneste fyring gennemsnitstemperatur"
+        "name": "Fyring gennemsnitstemperatur"
       },
       "firing_wood_loads": {
-        "name": "Seneste fyring brændepåfyldninger"
+        "name": "Fyring brændepåfyldninger"
       },
       "last_connection": {
         "name": "Seneste forbindelse"

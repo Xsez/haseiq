@@ -197,6 +197,9 @@
       },
       "target_temperature": {
         "name": "Tavoitelämpötila"
+      },
+      "article_number": {
+        "name": "Tuotenumero"
       }
     },
     "update": {

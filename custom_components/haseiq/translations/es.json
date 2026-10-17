@@ -197,6 +197,9 @@
       },
       "target_temperature": {
         "name": "Temperatura objetivo"
+      },
+      "article_number": {
+        "name": "Número de artículo"
       }
     },
     "update": {

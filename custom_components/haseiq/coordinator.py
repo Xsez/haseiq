@@ -198,7 +198,8 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     def device_info(self) -> DeviceInfo:
         """Return the device registry info for this stove."""
         app = self.client.data.get("konstant_app")
-        model_id = app.get("ofen") if isinstance(app, dict) else None
+        # the article number is the meaningful model identifier (ofen is just 6)
+        model_id = app.get("a") if isinstance(app, dict) else None
         # prefer the real model name from stove_models; fall back to the verz tag
         konstant = self.client.data.get("konstant")
         model = (self._model or {}).get("name") or (

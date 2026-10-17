@@ -197,6 +197,9 @@
       },
       "target_temperature": {
         "name": "Måltemperatur"
+      },
+      "article_number": {
+        "name": "Artikkelnummer"
       }
     },
     "update": {

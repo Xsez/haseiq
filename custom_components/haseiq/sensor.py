@@ -402,6 +402,14 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         ),
     ),
     IQStoveSensorDescription(
+        # konstant_app/a: the article number used for the stove_models lookup
+        key="article_number",
+        translation_key="article_number",
+        node="konstant_app",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: app_data(data).get("a") or None,
+    ),
+    IQStoveSensorDescription(
         # the stove's address in its Wi-Fi; informative only, Gen 2 has no local API
         key="ip_address",
         translation_key="ip_address",
@@ -429,7 +437,7 @@ GEN2_DEDICATED: dict[str, set[str]] = {
     # sensors (tsfc, ip), binary sensors (ping: online, v: firmware update,
     # f: firmware update progress, bv: booster available, ba: booster active)
     # and the app notification event (n)
-    "konstant_app": {"ping", "tsfc", "ip", "v", "f", "n", "bv", "ba"},
+    "konstant_app": {"ping", "tsfc", "ip", "a", "v", "f", "n", "bv", "ba"},
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")

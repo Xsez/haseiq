@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Eldning vedpåfyllningar"
       },
-      "last_connection": {
-        "name": "Senaste anslutning"
-      },
       "ip_address": {
         "name": "IP-adress"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Artikelnummer"
+      },
+      "last_seen": {
+        "name": "Senast sedd"
+      },
+      "data_written": {
+        "name": "Data senast skriven"
       }
     },
     "update": {

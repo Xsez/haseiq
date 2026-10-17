@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Zatopení přiložení dřeva"
       },
-      "last_connection": {
-        "name": "Poslední připojení"
-      },
       "ip_address": {
         "name": "IP adresa"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Číslo výrobku"
+      },
+      "last_seen": {
+        "name": "Naposledy spatřen"
+      },
+      "data_written": {
+        "name": "Data naposledy zapsána"
       }
     },
     "update": {

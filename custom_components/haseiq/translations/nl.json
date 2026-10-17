@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Stookbeurt houtbijvullingen"
       },
-      "last_connection": {
-        "name": "Laatste verbinding"
-      },
       "ip_address": {
         "name": "IP-adres"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Artikelnummer"
+      },
+      "last_seen": {
+        "name": "Laatst gezien"
+      },
+      "data_written": {
+        "name": "Gegevens laatst geschreven"
       }
     },
     "update": {

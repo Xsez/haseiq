@@ -96,7 +96,7 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 - **This month**: firings, burn time, average ECO and average temperature (refreshed every 30 min)
 - **Target temperature** – the model's reference average temperature (diagnostic)
 - **App notification** – an event each time the stove has the HASE iQ app notified (so far: when wood should be added)
-- **Online** – off when the stove has not reported for 3 minutes; **Last connection**; **IP address** (informative only); the firmware version is shown on the device page
+- **Online** – off when the stove has not reported for 3 minutes; **Last seen** (controller heartbeat); **Data last written**; **IP address**; **Article number** (the firmware version and model are on the device page)
 - **Firmware** – a Home Assistant update entity: shows when an update is available, installs it on request, and reports the progress
 - **Last log entry** – the newest line of the stove's own log (restarts, firmware updates); the latest 20 lines are in its attributes
 - Every other value the cloud delivers is added as a raw sensor (`Live …`, `Konstant …`, `App …`) to help work out what it means.

@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Flambée rechargements"
       },
-      "last_connection": {
-        "name": "Dernière connexion"
-      },
       "ip_address": {
         "name": "Adresse IP"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Numéro d'article"
+      },
+      "last_seen": {
+        "name": "Vu pour la dernière fois"
+      },
+      "data_written": {
+        "name": "Données écrites en dernier"
       }
     },
     "update": {

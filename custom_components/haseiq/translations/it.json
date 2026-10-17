@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Accensione carichi di legna"
       },
-      "last_connection": {
-        "name": "Ultima connessione"
-      },
       "ip_address": {
         "name": "Indirizzo IP"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Numero articolo"
+      },
+      "last_seen": {
+        "name": "Visto l'ultima volta"
+      },
+      "data_written": {
+        "name": "Dati scritti l'ultima volta"
       }
     },
     "update": {

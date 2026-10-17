@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Firing wood loads"
       },
-      "last_connection": {
-        "name": "Last connection"
-      },
       "ip_address": {
         "name": "IP address"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Article number"
+      },
+      "last_seen": {
+        "name": "Last seen"
+      },
+      "data_written": {
+        "name": "Data last written"
       }
     },
     "update": {

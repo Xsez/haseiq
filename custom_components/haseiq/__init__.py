@@ -63,6 +63,7 @@ REMOVED_GEN2_KEYS = (
     "raw-konstant-b",
     "raw-konstant_app-v",
     "raw-konstant_app-a",
+    "raw-konstant_app-dashiergeschrieben",
     "raw-konstant_app-f",
     "raw-konstant_app-bv",
     "raw-konstant_app-ba",

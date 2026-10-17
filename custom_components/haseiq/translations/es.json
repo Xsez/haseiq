@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Encendido cargas de leña"
       },
-      "last_connection": {
-        "name": "Última conexión"
-      },
       "ip_address": {
         "name": "Dirección IP"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Número de artículo"
+      },
+      "last_seen": {
+        "name": "Visto por última vez"
+      },
+      "data_written": {
+        "name": "Datos escritos por última vez"
       }
     },
     "update": {

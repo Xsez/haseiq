@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Lämmitys puiden lisäykset"
       },
-      "last_connection": {
-        "name": "Viimeisin yhteys"
-      },
       "ip_address": {
         "name": "IP-osoite"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Tuotenumero"
+      },
+      "last_seen": {
+        "name": "Viimeksi nähty"
+      },
+      "data_written": {
+        "name": "Tiedot viimeksi kirjoitettu"
       }
     },
     "update": {

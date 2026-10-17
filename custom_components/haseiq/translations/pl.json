@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Palenie dokładania drewna"
       },
-      "last_connection": {
-        "name": "Ostatnie połączenie"
-      },
       "ip_address": {
         "name": "Adres IP"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Numer artykułu"
+      },
+      "last_seen": {
+        "name": "Ostatnio widziany"
+      },
+      "data_written": {
+        "name": "Dane ostatnio zapisane"
       }
     },
     "update": {

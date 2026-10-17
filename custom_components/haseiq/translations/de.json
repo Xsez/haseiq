@@ -161,9 +161,6 @@
       "firing_wood_loads": {
         "name": "Abbrand Nachlegevorgänge"
       },
-      "last_connection": {
-        "name": "Letzte Verbindung"
-      },
       "ip_address": {
         "name": "IP-Adresse"
       },
@@ -200,6 +197,12 @@
       },
       "article_number": {
         "name": "Artikelnummer"
+      },
+      "last_seen": {
+        "name": "Zuletzt gesehen"
+      },
+      "data_written": {
+        "name": "Daten zuletzt geschrieben"
       }
     },
     "update": {

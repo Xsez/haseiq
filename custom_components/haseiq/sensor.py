@@ -391,16 +391,26 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _number(data.get("target_temperature")),
     ),
     IQStoveSensorDescription(
-        # the controller's last heartbeat/write; `tsfc` is null on these stoves,
-        # so use `ping` (which advances ~every minute) and fall back to tsfc
+        # `ping` is the controller heartbeat (advances ~every minute while online),
+        # so this is really "last seen"; `tsfc` is null on these stoves
         key="last_connection",
-        translation_key="last_connection",
+        translation_key="last_seen",
         node="konstant_app",
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda data: _datetime(
             app_data(data).get("ping") or app_data(data).get("tsfc")
         ),
+    ),
+    IQStoveSensorDescription(
+        # `dashiergeschrieben`: when the konstant_app node was last rewritten
+        # (reconnect, firing start, backend write) — not a heartbeat
+        key="data_written",
+        translation_key="data_written",
+        node="konstant_app",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: _datetime(app_data(data).get("dashiergeschrieben")),
     ),
     IQStoveSensorDescription(
         # konstant_app/a: the article number used for the stove_models lookup
@@ -438,7 +448,9 @@ GEN2_DEDICATED: dict[str, set[str]] = {
     # sensors (tsfc, ip), binary sensors (ping: online, v: firmware update,
     # f: firmware update progress, bv: booster available, ba: booster active)
     # and the app notification event (n)
-    "konstant_app": {"ping", "tsfc", "ip", "a", "v", "f", "n", "bv", "ba"},
+    "konstant_app": {
+        "ping", "tsfc", "ip", "a", "v", "f", "n", "bv", "ba", "dashiergeschrieben",
+    },
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")

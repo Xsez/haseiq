@@ -315,11 +315,10 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         key="last_firing_value",
         translation_key="firing_duration",
         node="historienliste",
-        # stove sends seconds; show hours (a duration sensor has no auto h:m format)
+        # shown in whole seconds (precision 0); a duration sensor has no auto h:m format
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.SECONDS,
-        suggested_unit_of_measurement=UnitOfTime.HOURS,
-        suggested_display_precision=1,
+        suggested_display_precision=0,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=_last_firing_duration,
     ),

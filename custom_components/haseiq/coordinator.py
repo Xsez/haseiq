@@ -85,11 +85,16 @@ class IQStoveCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         try:
             await self.stove.connect()
             await self._async_request(
-                self.stove.Commands.info + self.stove.Commands.state
+                self.stove.Commands.info
+                + self.stove.Commands.state
+                + self.stove.Commands.info_optional
+                + self.stove.Commands.state_optional
             )
         except Exception as err:
             raise UpdateFailed(f"Cannot connect to the stove: {err}") from err
 
+        # only the core keys gate setup; optional keys are not answered by every
+        # stove/firmware and must never block the integration from loading
         required = self.stove.Commands.info + self.stove.Commands.state
         deadline = time.monotonic() + GEN1_SETUP_TIMEOUT
         while not all(self.stove.values.get(key) is not None for key in required):
@@ -105,7 +110,9 @@ class IQStoveCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         try:
             if not self.stove.connected:
                 await self.stove.connect()
-            await self._async_request(self.stove.Commands.state)
+            await self._async_request(
+                self.stove.Commands.state + self.stove.Commands.state_optional
+            )
         except Exception as err:
             raise UpdateFailed(f"Cannot reach the stove: {err}") from err
 

@@ -196,6 +196,42 @@ GEN1_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _number(data.get("appAufheiz")),
     ),
+    IQStoveSensorDescription(
+        # VerblZeit: remaining time until the stove wants more wood. Unit not yet
+        # confirmed from a running stove (likely minutes); kept unitless for now.
+        key="reload_time_rest",
+        translation_key="reload_time_rest",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(data.get("VerblZeit")),
+    ),
+    IQStoveSensorDescription(
+        # appProg: burn progress. Scale not yet confirmed on a running stove;
+        # kept unitless (no PERCENTAGE) until verified with the WS probe.
+        key="burn_progress",
+        translation_key="burn_progress",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: _number(data.get("appProg")),
+    ),
+    IQStoveSensorDescription(
+        # appKat: catalytic-converter (Katalysator) state. Meaning of the value
+        # is unconfirmed (status code); exposed raw as a diagnostic for now.
+        key="cat_state",
+        translation_key="cat_state",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: _number(data.get("appKat")),
+    ),
+    IQStoveSensorDescription(
+        key="ctrl_sw_version",
+        translation_key="ctrl_sw_version",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: data.get("CSoftw") or None,
+    ),
+    IQStoveSensorDescription(
+        key="wlan_chip_version",
+        translation_key="wlan_chip_version",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: data.get("WSoftw") or None,
+    ),
 )
 
 # Gen 2 temperatures (T, TQUER) arrive in whole degrees

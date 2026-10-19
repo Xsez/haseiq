@@ -46,6 +46,8 @@ class _Commands:
         "_wversion",
         "_oemser",
         "_ledBri",
+        "CSoftw",  # controller software version (app: SOFTWARE_CTRL_VERSION)
+        "WSoftw",  # WLAN chip version (app: WLAN_CHIP_VERSION)
     )
 
     # Live state
@@ -55,7 +57,10 @@ class _Commands:
         "appAufheiz",  # heating up (0/1 or percentage)
         "appP",  # performance
         "appNach",
-        "appErr",
+        "appErr",  # fault bitfield: 1 motor-L, 2 motor-R, 4 sensor, 8 clean-cat
+        "VerblZeit",  # remaining time until reload (app: REALOAD_TIME_REST)
+        "appProg",  # burn progress (app: BURN_PROGRESS)
+        "appKat",  # catalytic-converter (Katalysator) state (app: KAT_STATE)
     )
 
     # Statistics / history

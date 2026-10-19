@@ -74,6 +74,18 @@
       },
       "booster_active": {
         "name": "Extra air active"
+      },
+      "motor_left": {
+        "name": "Motor left fault"
+      },
+      "motor_right": {
+        "name": "Motor right fault"
+      },
+      "temperature_sensor": {
+        "name": "Temperature sensor fault"
+      },
+      "clean_cat": {
+        "name": "Clean catalytic converter"
       }
     },
     "button": {
@@ -203,6 +215,21 @@
       },
       "data_written": {
         "name": "Data last written"
+      },
+      "reload_time_rest": {
+        "name": "Reload time remaining"
+      },
+      "burn_progress": {
+        "name": "Burn progress"
+      },
+      "cat_state": {
+        "name": "Catalytic converter state"
+      },
+      "ctrl_sw_version": {
+        "name": "Controller software version"
+      },
+      "wlan_chip_version": {
+        "name": "WLAN chip version"
       }
     },
     "update": {

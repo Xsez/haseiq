@@ -47,11 +47,26 @@ def _flag(node: str, key: str) -> Callable[[dict[str, Any]], bool | None]:
     return value
 
 
-def _gen1_error(data: dict[str, Any]) -> bool | None:
+def _gen1_errcode(data: dict[str, Any]) -> int | None:
     try:
-        return bool(int(float(data["appErr"])))
+        return int(float(data["appErr"]))
     except (KeyError, TypeError, ValueError):
         return None
+
+
+def _gen1_error(data: dict[str, Any]) -> bool | None:
+    code = _gen1_errcode(data)
+    return bool(code) if code is not None else None
+
+
+def _gen1_err_bit(bit: int) -> Callable[[dict[str, Any]], bool | None]:
+    """Value function for one bit of the Gen 1 `appErr` fault bitfield."""
+
+    def value(data: dict[str, Any]) -> bool | None:
+        code = _gen1_errcode(data)
+        return bool(code & bit) if code is not None else None
+
+    return value
 
 
 # `konstant_app/ecode` is a bitmask; each set bit is one fault (app settings/error).
@@ -94,10 +109,40 @@ def _gen2_online(data: dict[str, Any]) -> bool | None:
 
 GEN1_BINARY_SENSORS: tuple[IQStoveBinarySensorDescription, ...] = (
     IQStoveBinarySensorDescription(
+        # aggregate: any bit of appErr set (app: getErrorAsStringArray)
         key="error",
         translation_key="error",
         device_class=BinarySensorDeviceClass.PROBLEM,
         value_fn=_gen1_error,
+    ),
+    IQStoveBinarySensorDescription(
+        key="motor_left",
+        translation_key="motor_left",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_gen1_err_bit(1),  # ENGINE_LEFT
+    ),
+    IQStoveBinarySensorDescription(
+        key="motor_right",
+        translation_key="motor_right",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_gen1_err_bit(2),  # ENGINE_RIGHT
+    ),
+    IQStoveBinarySensorDescription(
+        key="temperature_sensor",
+        translation_key="temperature_sensor",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_gen1_err_bit(4),  # SENSOR
+    ),
+    IQStoveBinarySensorDescription(
+        # CLEAN_CAT: catalytic converter (Katalysator) needs cleaning
+        key="clean_cat",
+        translation_key="clean_cat",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_gen1_err_bit(8),
     ),
 )
 

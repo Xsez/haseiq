@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Urgentie bijvullen"
       },
-      "firing_count": {
-        "name": "Stookbeurten"
-      },
       "last_firing": {
         "name": "Stookbeurt start"
       },

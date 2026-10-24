@@ -155,9 +155,6 @@
       "refuel": {
         "name": "Nachlegedringlichkeit"
       },
-      "firing_count": {
-        "name": "Abbrände"
-      },
       "last_firing": {
         "name": "Abbrand Start"
       },

@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Urgence de rechargement"
       },
-      "firing_count": {
-        "name": "Flambées"
-      },
       "last_firing": {
         "name": "Flambée début"
       },

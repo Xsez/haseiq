@@ -111,8 +111,20 @@ def _last_firing_start(data: dict[str, Any]) -> datetime | None:
 
 
 def _last_firing_duration(data: dict[str, Any]) -> Any:
+    """Return how long the newest firing has been burning, or lasted.
+
+    The stove counts the seconds in `historienliste` up while it burns and
+    resets them to 0 when the firing ends; the duration from the firing's
+    samples keeps the length after that.
+    """
     last = _last_firing(data)
-    return _number(last[1]) if last else None
+    if not last:
+        return None
+    durations = [_number(last[1])]
+    firing = _firing(data)
+    if firing.get("start") == str(last[0]):
+        durations.append(_number(firing.get("duration")))
+    return max((d for d in durations if d is not None), default=None)
 
 
 def _log_entries(data: dict[str, Any]) -> list[tuple[int, str]]:
@@ -267,6 +279,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         suggested_display_precision=1,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: (
             tc / 100 if (tc := _number(live_data(data).get("TC"))) is not None else None
         ),
@@ -331,15 +344,6 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _number(live_data(data).get("N")),
     ),
     IQStoveSensorDescription(
-        # firings kept in the cloud (`count` of the firing list is not a total);
-        # not TOTAL_INCREASING since the cloud may drop old firings
-        key="firing_count",
-        translation_key="firing_count",
-        node="historienliste",
-        state_class=SensorStateClass.TOTAL,
-        value_fn=lambda data: _firing(data).get("count"),
-    ),
-    IQStoveSensorDescription(
         key="last_firing",
         translation_key="last_firing",
         node="historienliste",
@@ -386,9 +390,11 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         value_fn=lambda data: _firing(data).get("wood_loads"),
     ),
     IQStoveSensorDescription(
+        # `anz_abbrnd` is not shown by the app; probably loads of wood, unconfirmed
         key="month_firings",
         translation_key="month_firings",
         state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: _number(_month(data).get("anz_abbrnd")),
     ),
     IQStoveSensorDescription(
@@ -424,6 +430,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         suggested_display_precision=0,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: _number(data.get("target_temperature")),
     ),
     IQStoveSensorDescription(
@@ -434,19 +441,21 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         node="konstant_app",
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: _datetime(
             app_data(data).get("ping") or app_data(data).get("tsfc")
         ),
     ),
     IQStoveSensorDescription(
         # `dashiergeschrieben`: when the konstant_app node was last rewritten
-        # (reconnect, firing start, backend write) — not a heartbeat
+        # (reconnect, firing start, backend write) — not a heartbeat; 0 = never
         key="data_written",
         translation_key="data_written",
         node="konstant_app",
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda data: _datetime(app_data(data).get("dashiergeschrieben")),
+        entity_registry_enabled_default=False,
+        value_fn=lambda data: _datetime(app_data(data).get("dashiergeschrieben") or None),
     ),
     IQStoveSensorDescription(
         # konstant_app/a: the article number used for the stove_models lookup
@@ -454,6 +463,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         translation_key="article_number",
         node="konstant_app",
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: app_data(data).get("a") or None,
     ),
     IQStoveSensorDescription(
@@ -462,6 +472,7 @@ GEN2_SENSORS: tuple[IQStoveSensorDescription, ...] = (
         translation_key="ip_address",
         node="konstant_app",
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: app_data(data).get("ip") or None,
     ),
 )
@@ -487,6 +498,18 @@ GEN2_DEDICATED: dict[str, set[str]] = {
     "konstant_app": {
         "ping", "tsfc", "ip", "a", "v", "f", "n", "bv", "ba", "dashiergeschrieben",
     },
+}
+# Keys that get no entity at all: internal or factory values, or already part of
+# another entity (raw sensors of earlier betas are removed, see __init__)
+GEN2_HIDDEN: dict[str, set[str]] = {
+    # T_ROH: the unrounded T
+    "liveData": {"T_ROH"},
+    # k: keep-alive counter; verz: model tag (device model); the rest are
+    # command channel, factory and database flags that never change
+    "konstant": {"k", "verz", "cmd", "d", "h", "su", "sim", "dbtyp", "sws", "skap", "k_manual"},
+    # vers/versu/verst/cz: firmware (update entity); ecode: error sensor;
+    # ofen: model code; c: service diagnostic tool; shareData: app sharing
+    "konstant_app": {"vers", "versu", "verst", "cz", "ecode", "ofen", "c", "shareData"},
 }
 # Gen 2 nodes whose leaves become raw sensors (historienliste has its own)
 GEN2_RAW_NODES = ("liveData", "konstant", "konstant_app")
@@ -519,7 +542,7 @@ async def async_setup_entry(
         new: list[IQStoveRawSensor] = []
         for node in GEN2_RAW_NODES:
             paths = set(_leaf_paths(coordinator.data.get(node) if coordinator.data else None))
-            paths -= GEN2_DEDICATED.get(node, set())
+            paths -= GEN2_DEDICATED.get(node, set()) | GEN2_HIDDEN.get(node, set())
             for path in sorted(paths):
                 if (node, path) in known:
                     continue
@@ -568,7 +591,6 @@ def _gen2_raw_sensor(
         # unknown liveData keys are numeric samples; elsewhere go by the value
         numeric=node == "liveData" and current is None
         or _number(current) is not None and not isinstance(current, (bool, str)),
-        category=None if node == "liveData" else EntityCategory.DIAGNOSTIC,
     )
 
 
@@ -616,7 +638,13 @@ class IQStoveLogSensor(IQStoveSensor):
 
 
 class IQStoveRawSensor(IQStoveEntity, SensorEntity):
-    """A stove value of unknown meaning, exposed as-is for debugging."""
+    """A stove value of unknown meaning, exposed as-is for debugging.
+
+    Disabled by default; enable one to investigate it.
+    """
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_entity_registry_enabled_default = False
 
     def __init__(
         self,
@@ -627,14 +655,12 @@ class IQStoveRawSensor(IQStoveEntity, SensorEntity):
         *,
         node: str | None = None,
         numeric: bool = False,
-        category: EntityCategory | None = EntityCategory.DIAGNOSTIC,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, key, node)
         self._value_fn = value_fn
         self._numeric = numeric
         self._attr_name = name
-        self._attr_entity_category = category
         if numeric:
             self._attr_state_class = SensorStateClass.MEASUREMENT
 

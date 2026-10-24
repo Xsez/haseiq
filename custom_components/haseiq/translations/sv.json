@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Brådska att fylla på"
       },
-      "firing_count": {
-        "name": "Eldningar"
-      },
       "last_firing": {
         "name": "Eldning start"
       },

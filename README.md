@@ -83,7 +83,7 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 
 ### Gen 2 (beta)
 
-- **Temperature**, **Load average temperature** (mean temperature since the last load of wood), **Controller temperature**
+- **Temperature**, **Load average temperature** (mean temperature since the last load of wood)
 - **Phase** – off, kindling, burning, add wood, heating up, residual heat, don't add wood, error
 - **ECO value** (the stove's 0–100 combustion-quality score) and **ECO rating** (ECO / ECO+ / ECO optimal, like the app's badge)
 - **Error** – on when the stove reports a fault; the active faults (motor, temperature sensor, battery) are listed in its attributes
@@ -91,15 +91,14 @@ For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet
 - **Refuel urgency** (0 while no wood is needed, then counts up the longer the stove waits for wood)
 - **Signal LED brightness**, **Switch LED brightness** (adjustable; written to the HASE cloud like the app does)
 - **Extra air** (button) – requests the stove's air booster, like the app's "Extra air" (a short pulse; the stove runs it and returns to iQ mode on its own). Available only while the stove offers it. **Extra air available** / **Extra air active** show the booster status.
-- For the current or last firing: **Firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**
-- **Firings** – the number of firings the HASE cloud keeps
-- **This month**: firings, burn time, average ECO and average temperature (refreshed every 30 min)
-- **Target temperature** – the model's reference average temperature (diagnostic)
+- For the current or last firing: **Firing start**, **duration**, **peak temperature**, **average temperature** and **wood loads**. The duration counts up while the stove burns and keeps the length of the last firing afterwards. A firing starts when the stove's controller starts, so a firmware update can start one, too.
+- **This month**: burn time, average ECO and average temperature (refreshed every 30 min)
 - **App notification** – an event each time the stove has the HASE iQ app notified (so far: when wood should be added)
-- **Online** – off when the stove has not reported for 3 minutes; **Last seen** (controller heartbeat); **Data last written**; **IP address**; **Article number** (the firmware version and model are on the device page)
+- **Online** – off when the stove has not reported for 3 minutes (the firmware version and model are on the device page)
 - **Firmware** – a Home Assistant update entity: shows when an update is available, installs it on request, and reports the progress
 - **Last log entry** – the newest line of the stove's own log (restarts, firmware updates); the latest 20 lines are in its attributes
-- Every other value the cloud delivers is added as a raw sensor (`Live …`, `Konstant …`, `App …`) to help work out what it means.
+- Disabled by default (enable them on the device page): **Controller temperature**, **Firings this month** (meaning not confirmed, probably loads of wood), **Target temperature** (the model's reference average temperature), **Last seen** (controller heartbeat), **Data last written**, **IP address**, **Article number**
+- Values the cloud delivers whose meaning is unknown are added as raw sensors (`Live …`, `Konstant …`, `App …`), disabled by default, to help work out what they mean. Internal values (keep-alive counter, factory flags, firmware details already shown elsewhere) get no entity.
 
 Field meanings for Gen 2 are still provisional.
 

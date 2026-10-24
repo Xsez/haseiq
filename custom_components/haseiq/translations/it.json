@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Urgenza di ricarica"
       },
-      "firing_count": {
-        "name": "Accensioni"
-      },
       "last_firing": {
         "name": "Accensione inizio"
       },

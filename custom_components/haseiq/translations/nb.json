@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Hast med påfylling"
       },
-      "firing_count": {
-        "name": "Fyringer"
-      },
       "last_firing": {
         "name": "Fyring start"
       },

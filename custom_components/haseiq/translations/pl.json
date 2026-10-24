@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Pilność dokładania"
       },
-      "firing_count": {
-        "name": "Rozpalenia"
-      },
       "last_firing": {
         "name": "Palenie początek"
       },

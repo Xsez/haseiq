@@ -156,9 +156,9 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     `data` maps every streamed node name (see `cloud.NODES`) to its current
     tree. Per-node availability is in `client.connected`. `data["firing"]`
-    holds statistics of the newest firing (see `cloud.firing_stats`) and the
-    number of firings the cloud keeps; it is reloaded whenever the firing
-    list changes, which happens every minute while the stove burns.
+    holds statistics of the newest firing (see `cloud.firing_stats`) and its
+    `start`; it is reloaded whenever the firing list changes, which happens
+    every minute while the stove burns.
 
     The keep-alive counter `k` is incremented once and the fact is stored in
     the config entry. It survives restarts (the stove keeps streaming while
@@ -184,8 +184,6 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._keepalive_repaired = 0.0
         self._keepalive_task: asyncio.Task | None = None
         self._firing: dict[str, Any] | None = None
-        self._firing_start: str | None = None
-        self._firing_count: int | None = None
         self._firing_task: asyncio.Task | None = None
         self._sw_version: str | None = None
         self._air_flap_threshold: int | None = None
@@ -410,14 +408,11 @@ class IQStoveCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             return
         newest = max(starts, key=int)
         try:
-            if newest != self._firing_start or self._firing_count is None:
-                self._firing_count = len(await self.client.async_get_firing_starts())
             samples = await self.client.async_get_firing(newest)
         except HaseCloudError as err:
             _LOGGER.debug("Cannot load the firing history: %s", err)
             return
-        self._firing_start = newest
-        self._firing = {"count": self._firing_count, **(firing_stats(samples) or {})}
+        self._firing = {"start": newest, **(firing_stats(samples) or {})}
         self._schedule_push()
 
     def _check_keepalive(self) -> None:

@@ -23,6 +23,7 @@ from .const import (
 )
 from .coordinator import IQStoveCloudCoordinator, IQStoveCoordinator
 from .IQstove import IQstove
+from .sensor import GEN2_HIDDEN
 
 _LOGGER = logging.getLogger(__name__)
 PLATFORMS: list[Platform] = [
@@ -71,6 +72,20 @@ REMOVED_GEN2_KEYS = (
     "raw-konstant_app-n",
     "raw-konstant_app-ping",
     "raw-konstant_app-tsfc",
+    # "Firings": the length of the stove's own firing list, not a count
+    "firing_count",
+    *(f"raw-{node}-{key}" for node, keys in GEN2_HIDDEN.items() for key in keys),
+)
+# Gen 2 entities that are disabled by default since 0.4.0b27; entries from
+# before are disabled once by the 1.3 migration
+DISABLED_GEN2_KEYS = (
+    "controller_temperature",
+    "month_firings",
+    "target_temperature",
+    "last_connection",
+    "data_written",
+    "article_number",
+    "ip_address",
 )
 
 
@@ -158,7 +173,30 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.config_entries.async_update_entry(
             entry, data={CONF_GENERATION: GEN1, **entry.data}, minor_version=2
         )
+    if entry.minor_version < 3:
+        if entry.data.get(CONF_GENERATION) == GEN2 and entry.unique_id:
+            _async_disable_gen2_entities(hass, entry)
+        hass.config_entries.async_update_entry(entry, minor_version=3)
     return True
+
+
+@callback
+def _async_disable_gen2_entities(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Disable the entities that new Gen 2 entries get disabled by default.
+
+    Earlier betas enabled every entity, including all raw sensors.
+    """
+    prefix = f"{entry.unique_id}-"
+    disabled = {f"{prefix}{key}" for key in DISABLED_GEN2_KEYS}
+    registry = er.async_get(hass)
+    for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
+        if entity.disabled_by is not None or not (
+            entity.unique_id in disabled or entity.unique_id.startswith(f"{prefix}raw-")
+        ):
+            continue
+        registry.async_update_entity(
+            entity.entity_id, disabled_by=er.RegistryEntryDisabler.INTEGRATION
+        )
 
 
 @callback

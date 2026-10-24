@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Urgencia de recarga"
       },
-      "firing_count": {
-        "name": "Encendidos"
-      },
       "last_firing": {
         "name": "Encendido inicio"
       },

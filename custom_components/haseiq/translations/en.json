@@ -155,9 +155,6 @@
       "refuel": {
         "name": "Refuel urgency"
       },
-      "firing_count": {
-        "name": "Firings"
-      },
       "last_firing": {
         "name": "Firing start"
       },

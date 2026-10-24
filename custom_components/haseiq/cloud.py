@@ -291,7 +291,9 @@ def firing_stats(samples: Any) -> Optional[Dict[str, Any]]:
 
     The stove writes a sample about every 60 s, keyed by the seconds since the
     firing started. Samples are delta-encoded: each one only holds the values
-    that changed since the previous sample.
+    that changed since the previous sample. `duration` is the key of the last
+    sample, so it stays when the stove resets the seconds in `historienliste`
+    to 0 at the end of the firing.
     """
     if isinstance(samples, list):
         samples = {str(i): v for i, v in enumerate(samples) if v is not None}
@@ -319,6 +321,7 @@ def firing_stats(samples: Any) -> Optional[Dict[str, Any]]:
     if not ordered:
         return None
     return {
+        "duration": ordered[-1][0],
         "max_temperature": max(temperatures, default=None),
         "average_temperature": (
             round(sum(temperatures) / len(temperatures), 1) if temperatures else None
@@ -451,11 +454,6 @@ class IQstoveCloud:
         return await self._async_request(
             "GET", path, params={"shallow": "true"} if shallow else None
         )
-
-    async def async_get_firing_starts(self) -> List[str]:
-        """Return the start timestamps of all firings kept in `historien`."""
-        starts = await self.async_get(HISTORY_PATH.format(oven_id=self.oven_id), shallow=True)
-        return [key for key in starts if key.isdigit()] if isinstance(starts, dict) else []
 
     async def async_get_firing(self, start: str) -> Any:
         """Return the samples of one firing (see `firing_stats`)."""

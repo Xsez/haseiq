@@ -143,9 +143,6 @@
       "refuel": {
         "name": "Puiden lisäyksen kiireellisyys"
       },
-      "firing_count": {
-        "name": "Lämmityskerrat"
-      },
       "last_firing": {
         "name": "Lämmitys alku"
       },

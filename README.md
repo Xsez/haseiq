@@ -1,4 +1,7 @@
 # Hase IQ Stove Home Assistant integration
+
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-support%20this%20project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/xsez1)
+
 Custom component to integrate [Hase IQ Stoves](https://www.hase.de/iq-technologie) into Home Assistant. 
 
 This allows you to monitor various states (current phase, temperature, performance) of the stove at all times and for example create a notification when the stove needs to be refilled.
@@ -110,3 +113,7 @@ Field meanings for Gen 2 are still provisional.
 
 - The **Phase** sensor now reports translated states. Its internal values changed (e.g. `heating up` → `heating_up`, `don't add wood` → `dont_add_wood`, `idle` → `off`). Update automations or dashboards that compare the phase text.
 - Entity IDs, history and customizations are kept. Internally the entities get new unique IDs based on the stove serial number, so several stoves can be added. Downgrading to 0.3 afterwards will create duplicate entities.
+
+## Support
+
+This integration is a hobby project. If it's useful to you, you can support its development on [Ko-fi](https://ko-fi.com/xsez1).

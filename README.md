@@ -9,7 +9,11 @@ This allows you to monitor various states (current phase, temperature, performan
 Two controller generations are supported:
 
 - **Gen 1** – connected directly over your local network.
-- **Gen 2** – HASE iQ controllers from November 2024 on (e.g. LIMA iQ). These have no local interface and are read through the HASE cloud, the same way the HASE iQ app does it. **Gen 2 support is in beta.**
+- **Gen 2** – HASE iQ controllers from November 2024 on (e.g. LIMA iQ). These have no local interface and are read through the HASE cloud, the same way the HASE iQ app does it.
+
+> [!NOTE]
+> **Not the same as the built-in "Hase iQ" integration.** Home Assistant 2026.11 ships its own integration, also called **Hase iQ** (domain `hase_iq`). It is a separate project: Gen 1 only, read-only, with phase, temperature, heat-up and performance. This one (domain `haseiq`) also supports Gen 2 stoves, the LED brightness, the extra-air booster, firmware updates and more sensors.
+> Both can be installed side by side, but don't add the same stove to both. In **Add integration**, this one is the entry marked as a custom integration.
 
 ## Installation
 
@@ -17,7 +21,17 @@ Two controller generations are supported:
 
 - **Home Assistant**: Version 2025.3 or higher
 
-### HACS Installation
+### Marketplace (Home Assistant 2026.11 and newer)
+
+From 2026.11 on, HACS is built into Home Assistant as the **Marketplace**. If you installed this integration with HACS before, it is moved over automatically and keeps getting updates.
+
+1. Go to **Settings** > **Marketplace** and choose **Add from link**.
+2. Enter `Xsez/haseiq` (or `https://github.com/Xsez/haseiq`). This needs the GitHub connection the Marketplace asks for.
+3. Install **Hase iQ** and restart Home Assistant.
+
+To try a beta version, turn on pre-releases for the repository in the Marketplace.
+
+### HACS (Home Assistant 2025.3 to 2026.10)
 
 1. **Install HACS** (if not already installed):
    - Follow the official [HACS installation guide](https://hacs.xyz/docs/installation/prerequisite).
@@ -56,7 +70,7 @@ This integration uses a **Config Flow**, so no manual `configuration.yaml` chang
 1. **Add the integration**:
    - Go to **Settings** > **Devices & Services** > **Integrations**.
    - Click the **+** icon at the bottom right.
-   - Search for `Hase IQ` and select it.
+   - Search for `Hase IQ` and select the entry marked as a custom integration (the other one is the built-in Gen 1 integration, see above).
 
 2. **Choose your stove generation**:
    - **Gen 1**: enter the IP address or hostname of the stove. Gen 1 stoves are also discovered automatically on your network.
@@ -76,7 +90,7 @@ The host (Gen 1) or share link (Gen 2) can be changed later with **Reconfigure**
 - **Temperature**
 - **Performance**
 - **Phase** – off, heating up, burning, add wood, don't add wood
-- **Error**
+- **Error** – plus diagnostic sensors for the single faults the stove reports: motor left, motor right, temperature sensor and clean catalytic converter
 - **Heating up**
 - **LED brightness** (adjustable)
 
@@ -84,7 +98,7 @@ Device information: serial number, firmware version, hardware model, model desig
 
 For Gen 2 the model name (e.g. "LIMA iQ") and a link to the technical-data sheet are looked up from the HASE cloud and shown on the device page.
 
-### Gen 2 (beta)
+### Gen 2
 
 - **Temperature**, **Load average temperature** (mean temperature since the last load of wood)
 - **Phase** – off, kindling, burning, add wood, heating up, residual heat, don't add wood, error

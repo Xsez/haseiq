@@ -58,19 +58,6 @@ class _Commands:
         "appErr",  # fault bitfield: 1 motor-L, 2 motor-R, 4 sensor, 8 clean-cat
     )
 
-    # Keys seen in the Gen 1 app but not implemented by every stove/firmware.
-    # These are requested but must NOT gate setup (older stoves never answer
-    # them). `info_optional` is static; `state_optional` is polled with state.
-    info_optional: List[str] = (
-        "CSoftw",  # controller software version (app: SOFTWARE_CTRL_VERSION)
-        "WSoftw",  # WLAN chip version (app: WLAN_CHIP_VERSION)
-    )
-    state_optional: List[str] = (
-        "VerblZeit",  # remaining time until reload (app: REALOAD_TIME_REST)
-        "appProg",  # burn progress (app: BURN_PROGRESS)
-        "appKat",  # catalytic-converter (Katalysator) state (app: KAT_STATE)
-    )
-
     # Statistics / history
     statistics: List[str] = (
         "appPTx",

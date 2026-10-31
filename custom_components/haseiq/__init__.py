@@ -45,8 +45,20 @@ LEGACY_GEN1_KEYS = {
     "appErr": "error",
     "_ledBri": "led_brightness",
 }
-# Gen 1 raw statistics sensors of 0.4.0b1, dropped again
-REMOVED_GEN1_KEYS = ("appPTx", "appP30Tx", "appIQDarst", "appPT", "appP30T")
+# Gen 1 raw statistics sensors of 0.4.0b1, and the 0.4.0b25 sensors for keys
+# the stove answers with "(?)" (not implemented), dropped again
+REMOVED_GEN1_KEYS = (
+    "appPTx",
+    "appP30Tx",
+    "appIQDarst",
+    "appPT",
+    "appP30T",
+    "reload_time_rest",
+    "burn_progress",
+    "cat_state",
+    "ctrl_sw_version",
+    "wlan_chip_version",
+)
 # Gen 2 raw sensors of earlier betas: liveData keys that do not exist (B, S) or
 # now have a dedicated entity (F: phase, TQUER/TC: temperatures, l/s: LED
 # numbers, u/f: firmware update, ping: online, tsfc: last connection,

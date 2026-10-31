@@ -212,21 +212,6 @@
       },
       "data_written": {
         "name": "Daten zuletzt geschrieben"
-      },
-      "reload_time_rest": {
-        "name": "Verbleibende Nachlegezeit"
-      },
-      "burn_progress": {
-        "name": "Brennfortschritt"
-      },
-      "cat_state": {
-        "name": "Katalysatorzustand"
-      },
-      "ctrl_sw_version": {
-        "name": "Controller-Softwareversion"
-      },
-      "wlan_chip_version": {
-        "name": "WLAN-Chip-Version"
       }
     },
     "update": {
